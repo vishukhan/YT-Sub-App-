@@ -3,99 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ytSocial Pro - Multi-Campaign</title>
+    <title>ytSocial Pro - Official</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.youtube.com/iframe_api"></script>
     <style>
         .hidden { display: none !important; }
         .active-tab { color: #ff0000; border-bottom: 3px solid #ff0000; }
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
-        .video-box { position: relative; width: 100%; padding-bottom: 177.77%; height: 0; background: #000; border-radius: 2rem; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); }
-        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); cursor: pointer; }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        .video-box { position: relative; width: 100%; padding-bottom: 177.77%; height: 0; background: #000; border-radius: 2rem; overflow: hidden; }
+        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6 bg-white">
         <div class="w-full max-w-sm text-center">
-            <div class="w-20 h-20 bg-red-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-red-200">
+            <div class="w-20 h-20 bg-red-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
                 <i class="fab fa-youtube text-4xl text-white"></i>
             </div>
-            <h1 class="text-3xl font-black mb-2 tracking-tighter italic">ytSocial Pro</h1>
+            <h1 class="text-3xl font-black italic">ytSocial Pro</h1>
             <div class="space-y-3 mt-8">
-                <input id="email" type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
+                <input id="email" type="email" placeholder="Email" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
                 <input id="pass" type="password" placeholder="Password" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
                 <div class="grid grid-cols-2 gap-3 pt-2">
-                    <button onclick="handleAuth('login')" class="bg-zinc-900 text-white py-4 rounded-2xl font-bold active:scale-95 transition-all">Login</button>
-                    <button onclick="handleAuth('signup')" class="border-2 border-zinc-900 py-4 rounded-2xl font-bold active:scale-95 transition-all">Sign Up</button>
+                    <button onclick="handleAuth('login')" class="bg-zinc-900 text-white py-4 rounded-2xl font-bold">Login</button>
+                    <button onclick="handleAuth('signup')" class="border-2 border-zinc-900 py-4 rounded-2xl font-bold">Sign Up</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="app-screen" class="hidden h-screen flex flex-col">
-        <header class="bg-white px-6 py-4 border-b flex justify-between items-center sticky top-0 z-50 shadow-sm">
+        <header class="bg-white px-6 py-4 border-b flex justify-between items-center sticky top-0 z-50">
             <span class="font-black text-xl text-red-600 italic">ytSocial</span>
-            <div class="flex items-center gap-3">
-                <div class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-black text-sm border border-red-100">
-                    🪙 <span id="coinDisplay">0</span>
-                </div>
-                <button onclick="logout()"><i class="fas fa-sign-out-alt text-gray-400 text-lg"></i></button>
+            <div class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-black text-sm border border-red-100">
+                🪙 <span id="coinDisplay">0</span>
             </div>
         </header>
 
         <main class="flex-1 overflow-y-auto p-4 pb-28 flex flex-col items-center">
             <div id="watch-tab" class="tab-content w-full max-w-[320px]">
-                <div class="video-box border-4 border-white">
+                <div class="video-box">
                     <div id="player"></div>
                     <div id="play-btn" class="play-overlay" onclick="startVideo()">
-                        <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30">
-                            <i class="fas fa-play text-white text-2xl ml-1"></i>
+                        <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
+                            <i class="fas fa-play text-white text-2xl"></i>
                         </div>
                     </div>
                 </div>
                 
                 <div class="mt-6 grid grid-cols-2 gap-4">
                     <div class="bg-white p-4 rounded-3xl text-center border shadow-sm">
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Time Left</p>
+                        <p class="text-[10px] font-black text-gray-400">SECONDS</p>
                         <p id="timer" class="text-3xl font-black text-zinc-800">60</p>
                     </div>
                     <div class="bg-white p-4 rounded-3xl text-center border shadow-sm">
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Points</p>
+                        <p class="text-[10px] font-black text-gray-400">REWARD</p>
                         <p class="text-3xl font-black text-green-600">+60</p>
                     </div>
                 </div>
-                <p class="text-center text-[10px] text-gray-400 mt-4 font-bold uppercase tracking-widest">Next Campaign Ready</p>
-            </div>
-
-            <div id="campaign-tab" class="tab-content hidden w-full max-w-sm">
-                <div class="bg-white p-8 rounded-[2.5rem] border shadow-sm">
-                    <h2 class="text-xl font-black mb-4">Promote Your Video</h2>
-                    <input id="videoUrl" type="text" placeholder="YouTube Shorts Link" class="w-full p-4 bg-gray-50 rounded-2xl mb-4 border outline-none">
-                    <button onclick="createCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold uppercase text-sm tracking-widest">Add Order (3000 ❤️)</button>
-                </div>
             </div>
         </main>
-
-        <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around p-4 pb-8 z-50 shadow-inner">
-            <button onclick="switchTab('watch', this)" class="flex flex-col items-center gap-1 active-tab">
-                <i class="fas fa-play-circle text-xl"></i><span class="text-[10px] font-black uppercase">View</span>
-            </button>
-            <button onclick="switchTab('campaign', this)" class="flex flex-col items-center gap-1 text-gray-300">
-                <i class="fas fa-plus-square text-xl"></i><span class="text-[10px] font-black uppercase">Campaign</span>
-            </button>
-        </nav>
     </div>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // Aapka exact config
-    const firebaseConfig = {
+        const firebaseConfig = {
         apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
         authDomain: "yt-sub-b5356.firebaseapp.com",
         projectId: "yt-sub-b5356",
@@ -104,87 +82,79 @@
         appId: "1:61877253734:web:45e16188720b34f1aadfa7"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-    const adminVideos = ['_icDutJ9qXg', 'jYTDfHiNjiQ', '71FZbSpicd8', 'Bm-CHcANTZY', 'a9Fz7w-6jfs', '1RllR_FVdVE', '7rkCu3LIC3o', 'OOKvdX-oZL4', 't6a-ajMstMI', '83LmdsI8AWg', '2ki-c-AuIB4'];
-    let player, timerId = null, timeLeft = 60, currentUID = null, isReady = false;
-    let currentVideoIndex = Math.floor(Math.random() * adminVideos.length);
+        const adminVideos = ['_icDutJ9qXg', 'jYTDfHiNjiQ', '71FZbSpicd8', 'Bm-CHcANTZY', 'a9Fz7w-6jfs', '1RllR_FVdVE', '7rkCu3LIC3o', 'OOKvdX-oZL4', 't6a-ajMstMI', '83LmdsI8AWg', '2ki-c-AuIB4'];
+        let player, timerId = null, timeLeft = 60, currentUID = null;
+        let videoId = adminVideos[Math.floor(Math.random() * adminVideos.length)];
 
-    // YouTube API Setup
-    window.onYouTubeIframeAPIReady = () => {
-        player = new YT.Player('player', {
-            height: '100%', width: '100%',
-            videoId: adminVideos[currentVideoIndex],
-            playerVars: { 'controls': 0, 'modestbranding': 1, 'playsinline': 1 },
-            events: { 
-                'onReady': () => { isReady = true; console.log("Player Ready"); },
-                'onStateChange': (e) => { if(e.data == 1) startCounter(); else stopCounter(); }
+        // Force initialize player
+        window.onYouTubeIframeAPIReady = function() {
+            player = new YT.Player('player', {
+                height: '100%', width: '100%', videoId: videoId,
+                playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'rel': 0 },
+                events: {
+                    'onReady': () => { console.log("Player Ready"); },
+                    'onStateChange': (e) => { 
+                        if(e.data == 1) startCounter(); 
+                        else stopCounter(); 
+                    }
+                }
+            });
+        };
+
+        window.startVideo = function() {
+            if(player && player.playVideo) {
+                player.playVideo();
+                document.getElementById('play-btn').classList.add('hidden');
+            } else {
+                alert("YouTube connect ho raha hai, please refresh karein.");
+            }
+        };
+
+        function startCounter() {
+            if(timerId) return;
+            timerId = setInterval(async () => {
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft;
+                if(timeLeft <= 0) {
+                    clearInterval(timerId);
+                    await updateDoc(doc(db, "users", currentUID), { Coins: increment(60) });
+                    alert("Success! 60 Coins Added.");
+                    location.reload();
+                }
+            }, 1000);
+        }
+
+        function stopCounter() { clearInterval(timerId); timerId = null; }
+
+        window.handleAuth = async (type) => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            try {
+                if(type === 'signup') {
+                    const res = await createUserWithEmailAndPassword(auth, e, p);
+                    await setDoc(doc(db, "users", res.user.uid), { Coins: 500 });
+                } else {
+                    await signInWithEmailAndPassword(auth, e, p);
+                }
+            } catch (err) { alert(err.message); }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if(user) {
+                currentUID = user.uid;
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.remove('hidden');
+                const snap = await getDoc(doc(db, "users", user.uid));
+                document.getElementById('coinDisplay').innerText = snap.data()?.Coins || 0;
+            } else {
+                document.getElementById('auth-screen').classList.remove('hidden');
+                document.getElementById('app-screen').classList.add('hidden');
             }
         });
-    };
-
-    window.startVideo = () => {
-        if(isReady && player && player.playVideo) {
-            player.playVideo();
-            document.getElementById('play-btn').classList.add('hidden');
-        } else {
-            alert("YouTube connect ho raha hai, 2-3 second rukein...");
-        }
-    };
-
-    function startCounter() {
-        if(timerId) return;
-        timerId = setInterval(async () => {
-            timeLeft--;
-            document.getElementById('timer').innerText = timeLeft;
-            if(timeLeft <= 0) {
-                clearInterval(timerId); timerId = null;
-                await updateDoc(doc(db, "users", currentUID), { Coins: increment(60) });
-                alert("Mubarak ho! 60 Coins mil gaye.");
-                location.reload(); 
-            }
-        }, 1000);
-    }
-
-    function stopCounter() { clearInterval(timerId); timerId = null; }
-
-    // Auth Logic
-    window.handleAuth = async (type) => {
-        const e = document.getElementById('email').value;
-        const p = document.getElementById('pass').value;
-        try {
-            if(type === 'signup') {
-                const res = await createUserWithEmailAndPassword(auth, e, p);
-                await setDoc(doc(db, "users", res.user.uid), { Coins: 500 });
-            } else {
-                await signInWithEmailAndPassword(auth, e, p);
-            }
-        } catch (err) { alert("Firebase Error: " + err.message); }
-    };
-
-    onAuthStateChanged(auth, async (user) => {
-        if(user) {
-            currentUID = user.uid;
-            document.getElementById('auth-screen').classList.add('hidden');
-            document.getElementById('app-screen').classList.remove('hidden');
-            const snap = await getDoc(doc(db, "users", user.uid));
-            document.getElementById('coinDisplay').innerText = snap.data()?.Coins || 0;
-        } else {
-            document.getElementById('auth-screen').classList.remove('hidden');
-            document.getElementById('app-screen').classList.add('hidden');
-        }
-    });
-
-    window.switchTab = (tab, btn) => {
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-        document.getElementById(tab + '-tab').classList.remove('hidden');
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active-tab'));
-        btn.classList.add('active-tab');
-    };
-    window.logout = () => signOut(auth);
-</script>
-
+    </script>
 </body>
 </html>
