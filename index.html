@@ -19,146 +19,6 @@
 
     <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6 bg-white">
         <div class="w-full max-w-sm text-center">
-            <div class="w-20 h-20 bg-red-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
-                <i class="fab fa-youtube text-4xl text-white"></i>
-            </div>
-            <h1 class="text-3xl font-black italic">ytSocial Pro</h1>
-            <div class="space-y-3 mt-8">
-                <input id="email" type="email" placeholder="Email" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
-                <input id="pass" type="password" placeholder="Password" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
-                <div class="grid grid-cols-2 gap-3 pt-2">
-                    <button onclick="handleAuth('login')" class="bg-zinc-900 text-white py-4 rounded-2xl font-bold">Login</button>
-                    <button onclick="handleAuth('signup')" class="border-2 border-zinc-900 py-4 rounded-2xl font-bold">Sign Up</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="app-screen" class="hidden min-h-screen flex flex-col">
-        <header class="bg-white px-6 py-4 border-b flex justify-between items-center sticky top-0 z-50">
-            <span class="font-black text-xl text-red-600 italic">ytSocial</span>
-            <div class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-black text-sm border border-red-100">
-                🪙 <span id="coinDisplay">0</span>
-            </div>
-        </header>
-
-        <main class="flex-1 p-4 flex flex-col items-center">
-            <div id="tab-view" class="tab-content w-full max-w-[320px]">
-                <h2 class="text-center font-bold mb-4">Watch & Earn Views</h2>
-                <div class="video-box shadow-xl">
-                    <div id="player"></div>
-                    <div id="play-btn" class="play-overlay" onclick="startVideo()">
-                        <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30">
-                            <i class="fas fa-play text-white text-2xl"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4 grid grid-cols-2 gap-4">
-                    <div class="bg-white p-3 rounded-2xl text-center border">
-                        <p class="text-[10px] font-bold text-gray-400">SECONDS</p>
-                        <p id="timer" class="text-2xl font-black text-zinc-800">60</p>
-                    </div>
-                    <div class="bg-white p-3 rounded-2xl text-center border">
-                        <p class="text-[10px] font-bold text-gray-400">REWARD</p>
-                        <p class="text-2xl font-black text-green-600">+60</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tab-like" class="tab-content hidden w-full max-w-[320px] text-center py-10">
-                <i class="fas fa-heart text-6xl text-red-200 mb-4"></i>
-                <h2 class="text-xl font-bold">Like Videos</h2>
-                <p class="text-gray-500 mb-6">Like others' videos to earn +100 coins</p>
-                <button class="bg-red-600 text-white px-8 py-3 rounded-full font-bold shadow-lg">Start Liking</button>
-            </div>
-
-            <div id="tab-campaign" class="tab-content hidden w-full max-w-sm">
-                <div class="bg-white p-6 rounded-3xl border shadow-sm mb-4">
-                    <h2 class="text-xl font-black mb-4">Create Campaign</h2>
-                    <input id="campUrl" type="text" placeholder="YouTube Shorts Link" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none mb-3">
-                    <div class="flex gap-2 mb-4">
-                        <select id="campType" class="flex-1 p-3 bg-gray-50 rounded-xl border font-bold">
-                            <option value="view">Views</option>
-                            <option value="like">Likes</option>
-                        </select>
-                        <input id="campQty" type="number" placeholder="Qty" class="w-24 p-3 bg-gray-50 rounded-xl border font-bold text-center">
-                    </div>
-                    <button onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-red-100">Add Campaign (3000 🪙)</button>
-                </div>
-            </div>
-        </main>
-
-        <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around items-center py-2 px-4 z-50">
-            <button onclick="switchTab('view')" class="nav-btn active flex flex-col items-center gap-1 p-2">
-                <i class="fas fa-eye text-lg"></i>
-                <span class="text-[10px] font-bold">Views</span>
-            </button>
-            <button onclick="switchTab('like')" class="nav-btn flex flex-col items-center gap-1 p-2 text-gray-400">
-                <i class="fas fa-heart text-lg"></i>
-                <span class="text-[10px] font-bold">Likes</span>
-            </button>
-            <button onclick="switchTab('campaign')" class="nav-btn flex flex-col items-center gap-1 p-2 text-gray-400">
-                <i class="fas fa-plus-circle text-lg"></i>
-                <span class="text-[10px] font-bold">Campaign</span>
-            </button>
-        </nav>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDETvfZ00aSzxOj8oAjqHxHSbnbINCjy4g",
-  authDomain: "yt-sub-app-b76a9.firebaseapp.com",
-  projectId: "yt-sub-app-b76a9",
-  storageBucket: "yt-sub-app-b76a9.firebasestorage.app",
-  messagingSenderId: "293476420",
-  appId: "1:293476420:web:a5111a8a6785dae4344411",
-  measurementId: "G-HZD5525H6C"
-};
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // UI Tabs Logic
-        window.switchTab = function(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active', 'text-gray-400'));
-            
-            document.getElementById('tab-' + tabName).classList.remove('hidden');
-            event.currentTarget.classList.add('active');
-        };
-
-        // --- Same YouTube logic as before (Fixed for GitHub) ---
-        const adminVideos = ['_icDutJ9qXg', 'jYTDfHiNjiQ', '71FZbSpicd8', 'Bm-CHcANTZY', 'a9Fz7w-6jfs', '1RllR_FVdVE', '7rkCu3LIC3o', 'OOKvdX-oZL4', 't6a-ajMstMI', '83LmdsI8AWg', '2ki-c-AuIB4'];
-        let player, timerId = null, timeLeft = 60, currentUID = null;
-        let videoId = adminVideos[Math.floor(Math.random() * adminVideos.length)];
-
-        var tag = document.createElement('script');<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ytSocial Pro - Official</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .hidden { display: none !important; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
-        .video-box { position: relative; width: 100%; padding-bottom: 177.77%; height: 0; background: #000; border-radius: 1.5rem; overflow: hidden; }
-        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .nav-btn.active { color: #ef4444; border-top: 2px solid #ef4444; }
-        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); cursor: pointer; }
-    </style>
-</head>
-<body class="pb-20">
-
-    <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6 bg-white">
-        <div class="w-full max-w-sm text-center">
             <div class="w-20 h-20 bg-red-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-red-100">
                 <i class="fab fa-youtube text-4xl text-white"></i>
             </div>
@@ -278,6 +138,7 @@ const firebaseConfig = {
   appId: "1:293476420:web:a5111a8a6785dae4344411",
   measurementId: "G-HZD5525H6C"
 };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -416,3 +277,4 @@ const firebaseConfig = {
     </script>
 </body>
 </html>
+
