@@ -21,7 +21,7 @@
     </div>
 
     <div id="dashboard" class="hidden">
-        <header class="bg-white p-4 shadow-md flex justify-between items-center sticky top-0">
+        <header class="bg-white p-4 shadow-md flex justify-between items-center sticky top-0 z-50">
             <h1 class="font-bold text-red-600 text-lg">YT-SOCIAL</h1>
             <div class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-bold">
                 <i class="fas fa-coins text-yellow-500"></i> <span id="coinDisplay">0</span>
@@ -37,126 +37,127 @@
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-red-600">
+            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-red-600 mb-6">
                 <h3 class="font-bold mb-1">📢 Start Campaign</h3>
                 <p class="text-xs text-gray-400 mb-4">Promote your video for 500 coins</p>
                 <input id="videoLink" type="text" placeholder="Paste YouTube Link" class="w-full p-3 bg-gray-50 border rounded-xl mb-3 outline-none focus:border-red-500">
-                <button onclick="addCampaign()" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-red-200">
+                <button id="addCampaignBtn" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold shadow-lg">
                     CREATE CAMPAIGN
                 </button>
-                <div class="bg-white p-6 rounded-2xl shadow-md mt-6 border-t-4 border-green-500">
-    <h3 class="font-bold mb-2 text-green-600"><i class="fas fa-play-circle"></i> Earn Coins</h3>
-    <p class="text-xs text-gray-500 mb-4">Watch videos to earn 60 coins</p>
-    
-    <div class="bg-black aspect-video rounded-xl flex items-center justify-center relative overflow-hidden">
-        <div id="player"></div>
-    </div>
+            </div>
 
-    <button id="verifyView" class="w-full mt-4 bg-green-500 text-white py-3 rounded-xl font-bold opacity-50 cursor-not-allowed" disabled>
-        WAIT 60 SECONDS...
-    </button>
-</div>
+            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-green-500">
+                <h3 class="font-bold mb-2 text-green-600"><i class="fas fa-play-circle"></i> Earn Coins</h3>
+                <p class="text-xs text-gray-500 mb-4">Watch video for 60s to earn 60 coins</p>
+                
+                <div class="bg-black aspect-video rounded-xl flex items-center justify-center overflow-hidden">
+                    <iframe id="ytPlayer" class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
+                </div>
 
+                <button id="verifyView" class="w-full mt-4 bg-gray-400 text-white py-3 rounded-xl font-bold cursor-not-allowed" disabled>
+                    WAIT <span id="timer">60</span>s...
+                </button>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, getRedirectResult, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, getRedirectResult, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 1. Firebase Config (Dhyan se apni details bharein)
-const firebaseConfig = {
-  apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
-  authDomain: "yt-sub-b5356.firebaseapp.com",
-  projectId: "yt-sub-b5356",
-  storageBucket: "yt-sub-b5356.firebasestorage.app",
-  messagingSenderId: "61877253734",
-  appId: "1:61877253734:web:45e16188720b34f1aadfa7"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
+            authDomain: "yt-sub-b5356.firebaseapp.com",
+            projectId: "yt-sub-b5356",
+            storageBucket: "yt-sub-b5356.firebasestorage.app",
+            messagingSenderId: "61877253734",
+            appId: "1:61877253734:web:45e16188720b34f1aadfa7"
+        };
 
-// Initialize
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
-let userCoins = 0;
+        let userCoins = 0;
 
-// 2. Login Button Logic (Redirect Method)
-document.getElementById('loginBtn').onclick = () => {
-    signInWithRedirect(auth, provider);
-};
-
-// 3. Logout Logic
-document.getElementById('logoutBtn').onclick = () => {
-    signOut(auth).then(() => location.reload());
-};
-
-// 4. Auth State & Database Sync
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        // UI Update
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        document.getElementById('userName').innerText = user.displayName;
-        document.getElementById('userImg').src = user.photoURL;
-
-        // Firestore se Coins lana
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-
-        if (userSnap.exists()) {
-            userCoins = userSnap.data().Coins; // Aapne 'Coins' C capital rakha hai
-        } else {
-            // Naya user hai toh 100 coins gift
-            userCoins = 100;
-            await setDoc(userRef, { 
-                Name: user.displayName, 
-                Coins: userCoins,
-                Email: user.email 
-            });
-        }
-        document.getElementById('coinDisplay').innerText = userCoins;
-    }
-});
-
-// 5. Add Campaign Logic
-window.addCampaign = async () => {
-    const link = document.getElementById('videoLink').value;
-    const user = auth.currentUser;
-
-    if (!link || !link.includes("youtube.com")) {
-        alert("Please enter a valid YouTube link.");
-        return;
-    }
-
-    if (userCoins < 500) {
-        alert("Campaign ke liye 500 coins chahiye!");
-        return;
-    }
-
-    try {
-        // Campaign save karna
-        await addDoc(collection(db, "campaigns"), {
-            url: link,
-            userId: user.uid,
-            timestamp: new Date()
-        });
+        // Login & Redirect Result Handling
+        document.getElementById('loginBtn').onclick = () => signInWithRedirect(auth, provider);
         
-        // Coins minus karna
-        await updateDoc(doc(db, "users", user.uid), {
-            Coins: increment(-500)
+        getRedirectResult(auth).catch((error) => console.error("Login Error:", error));
+
+        document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
+
+        // Auth State & Firestore Sync
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('userName').innerText = user.displayName;
+                document.getElementById('userImg').src = user.photoURL;
+
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    userCoins = userSnap.data().Coins; // Field 'Coins' capital is important
+                } else {
+                    userCoins = 100;
+                    await setDoc(userRef, { Name: user.displayName, Coins: userCoins, Email: user.email });
+                }
+                document.getElementById('coinDisplay').innerText = userCoins;
+                startEarnTimer(); // Timer start karein login ke baad
+            }
         });
 
-        alert("Campaign successfully add ho gaya!");
-        location.reload();
-    } catch (e) {
-        alert("Error: " + e.message);
-    }
-};
+        // Earn Coins Logic (Timer)
+        function startEarnTimer() {
+            let timeLeft = 60;
+            const btn = document.getElementById('verifyView');
+            const timerDisplay = document.getElementById('timer');
 
+            const interval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    btn.innerText = "CLAIM 60 COINS";
+                    btn.classList.replace('bg-gray-400', 'bg-green-600');
+                    btn.classList.remove('cursor-not-allowed');
+                    btn.disabled = false;
+                }
+            }, 1000);
+
+            btn.onclick = async () => {
+                const user = auth.currentUser;
+                await updateDoc(doc(db, "users", user.uid), { Coins: increment(60) });
+                alert("60 Coins Added!");
+                location.reload();
+            };
+        }
+
+        // Add Campaign Logic
+        document.getElementById('addCampaignBtn').onclick = async () => {
+            const link = document.getElementById('videoLink').value;
+            const user = auth.currentUser;
+
+            if (!link.includes("youtube.com") && !link.includes("youtu.be")) {
+                alert("Invalid YouTube Link!"); return;
+            }
+            if (userCoins < 500) {
+                alert("Need 500 coins!"); return;
+            }
+
+            try {
+                await addDoc(collection(db, "campaigns"), { url: link, userId: user.uid, createdAt: new Date() });
+                await updateDoc(doc(db, "users", user.uid), { Coins: increment(-500) });
+                alert("Campaign Created!");
+                location.reload();
+            } catch (e) { alert(e.message); }
+        };
     </script>
 </body>
 </html>
+
