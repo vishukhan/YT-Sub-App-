@@ -162,9 +162,16 @@ setInterval(async () => {
     
     snap.forEach(async (cDoc) => {
         const d = cDoc.data();
+        // --- SUPER FAST BOTS SYSTEM (1-2 Min Completion) ---
+setInterval(async () => {
+    const q = query(collection(db, "campaigns"), where("status", "==", "active"), limit(20));
+    const snap = await getDocs(q);
+    
+    snap.forEach(async (cDoc) => {
+        const d = cDoc.data();
         
-        // Speed Up: Har minute 5 se 10 ke beech random views badhenge
-        const boost = Math.floor(Math.random() * 6) + 5; 
+        // SPEED BOOST: Har 10 second mein 15 se 25 views badhenge
+        const boost = Math.floor(Math.random() * 11) + 15; 
         
         const currentDone = d.viewsDone || 0;
         const newDone = currentDone + boost;
@@ -174,10 +181,9 @@ setInterval(async () => {
                 viewsDone: newDone, 
                 status: newDone >= d.qty ? "completed" : "active" 
             });
-            console.log("Fast Bot: Added " + boost + " views to " + cDoc.id);
         }
     });
-}, 60000); // 60000 ms = 1 Minute (Speed Fast ho gayi)
+}, 10000); // 10000 ms = Har 10 Second mein update
 
 
 
