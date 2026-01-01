@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YT-Social Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-zinc-100 min-h-screen">
+
+    <div id="login-screen" class="flex items-center justify-center min-h-screen">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-80 text-center">
+            <i class="fab fa-youtube text-6xl text-red-600 mb-4"></i>
+            <h1 class="text-xl font-bold mb-6">YT-Social Login</h1>
+            <button id="loginBtn" class="w-full bg-white border border-gray-300 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-5">
+                Sign in with Google
+            </button>
+        </div>
+    </div>
+
+    <div id="dashboard" class="hidden">
+        <header class="bg-white p-4 shadow-md flex justify-between items-center sticky top-0">
+            <h1 class="font-bold text-red-600 text-lg">YT-SOCIAL</h1>
+            <div class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-bold">
+                <i class="fas fa-coins text-yellow-500"></i> <span id="coinDisplay">0</span>
+            </div>
+        </header>
+
+        <div class="p-4 max-w-md mx-auto">
+            <div class="bg-white p-4 rounded-xl shadow-sm mb-6 flex items-center gap-4">
+                <img id="userImg" src="" class="w-12 h-12 rounded-full border-2 border-red-500">
+                <div>
+                    <p class="font-bold text-sm" id="userName">User Name</p>
+                    <button id="logoutBtn" class="text-xs text-red-500 underline">Logout</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-red-600">
+                <h3 class="font-bold mb-1">📢 Start Campaign</h3>
+                <p class="text-xs text-gray-400 mb-4">Promote your video for 500 coins</p>
+                <input id="videoLink" type="text" placeholder="Paste YouTube Link" class="w-full p-3 bg-gray-50 border rounded-xl mb-3 outline-none focus:border-red-500">
+                <button onclick="addCampaign()" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-red-200">
+                    CREATE CAMPAIGN
+                </button>
+                <div class="bg-white p-6 rounded-2xl shadow-md mt-6 border-t-4 border-green-500">
+    <h3 class="font-bold mb-2 text-green-600"><i class="fas fa-play-circle"></i> Earn Coins</h3>
+    <p class="text-xs text-gray-500 mb-4">Watch videos to earn 60 coins</p>
+    
+    <div class="bg-black aspect-video rounded-xl flex items-center justify-center relative overflow-hidden">
+        <div id="player"></div>
+    </div>
+
+    <button id="verifyView" class="w-full mt-4 bg-green-500 text-white py-3 rounded-xl font-bold opacity-50 cursor-not-allowed" disabled>
+        WAIT 60 SECONDS...
+    </button>
+</div>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // YAHAN APNI CONFIG PASTE KAREIN
+        const firebaseConfig = {
+    apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
+  authDomain: "yt-sub-b5356.firebaseapp.com",
+  projectId: "yt-sub-b5356",
+  storageBucket: "yt-sub-b5356.firebasestorage.app",
+  messagingSenderId: "61877253734",
+  appId: "1:61877253734:web:45e16188720b34f1aadfa7"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentCoins = 0;
+
+        // Login Logic
+        document.getElementById('loginBtn').onclick = () => signInWithPopup(auth, provider);
+        document.getElementById('logoutBtn').onclick = () => signOut(auth);
+
+        // Auth State Change
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('userName').innerText = user.displayName;
+                document.getElementById('userImg').src = user.photoURL;
+
+                // Sync with Firestore
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    currentCoins = userSnap.data().coins;
+                } else {
+                    currentCoins = 100; // Joining bonus
+                    await setDoc(userRef, { name: user.displayName, coins: currentCoins });
+                }
+                document.getElementById('coinDisplay').innerText = currentCoins;
+            } else {
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('dashboard').classList.add('hidden');
+            }
+        });
+
+        // Add Campaign Logic
+        window.addCampaign = async () => {
+            const link = document.getElementById('videoLink').value;
+            const user = auth.currentUser;
+
+            if (currentCoins < 500) {
+                alert("Minimum 500 coins required!");
+                return;
+            }
+
+            if (link.includes("youtube.com") || link.includes("youtu.be")) {
+                try {
+                    await addDoc(collection(db, "campaigns"), {
+                        url: link,
+                        userId: user.uid,
+                        createdAt: new Date()
+                    });
+                    
+                    await updateDoc(doc(db, "users", user.uid), {
+                        coins: increment(-500)
+                    });
+
+                    alert("Campaign Added Successfully!");
+                    location.reload();
+                } catch (e) {
+                    alert("Error: " + e.message);
+                }
+            } else {
+                alert("Please enter a valid YouTube link.");
+            }
+        };
+    </script>
+</body>
+</html>
