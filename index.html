@@ -46,6 +46,10 @@
             <div class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-black text-sm border border-red-100">
                 🪙 <span id="coinDisplay">0</span>
             </div>
+            <button onclick="handleLogout()" class="nav-btn flex flex-col items-center gap-1 p-2 text-gray-400">
+    <i class="fas fa-sign-out-alt"></i><span class="text-[10px] font-bold uppercase">Logout</span>
+</button>
+
         </header>
 
         <main class="flex-1 p-4 flex flex-col items-center overflow-y-auto w-full">
@@ -190,6 +194,22 @@ setInterval(async () => {
                 }
             }, 15000); // 15 Seconds delay for verification
         };
+
+        //////////////////Logout
+        // --- LOGOUT LOGIC ---
+window.handleLogout = async () => {
+    if(confirm("Kya aap logout karna chahte hain?")) {
+        try {
+            await auth.signOut();
+            // Logout hote hi auth state listener (onAuthStateChanged) automatic screen badal dega
+            alert("Logged out successfully!");
+        } catch (error) {
+            alert("Error logging out: " + error.message);
+        }
+    }
+};
+
+    
 
         window.switchTab = (t) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
