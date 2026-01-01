@@ -62,101 +62,150 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, getRedirectResult, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, getRedirectResult, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
-            authDomain: "yt-sub-b5356.firebaseapp.com",
-            projectId: "yt-sub-b5356",
-            storageBucket: "yt-sub-b5356.firebasestorage.app",
-            messagingSenderId: "61877253734",
-            appId: "1:61877253734:web:45e16188720b34f1aadfa7"
-        };
+// 1. Firebase Config
+const firebaseConfig = {
+    apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
+    authDomain: "yt-sub-b5356.firebaseapp.com",
+    projectId: "yt-sub-b5356",
+    storageBucket: "yt-sub-b5356.firebasestorage.app",
+    messagingSenderId: "61877253734",
+    appId: "1:61877253734:web:45e16188720b34f1aadfa7"
+};
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-        let userCoins = 0;
+let userCoins = 0;
 
-        // Login & Redirect Result Handling
-        document.getElementById('loginBtn').onclick = () => signInWithRedirect(auth, provider);
+// 2. Login Logic - Redirect Method (HopWeb/Mobile Fix)
+document.getElementById('loginBtn').onclick = () => {
+    provider.setCustomParameters({ prompt: 'select_account' });
+    signInWithRedirect(auth, provider);
+};
+
+// 3. Logout Logic
+document.getElementById('logoutBtn').onclick = () => {
+    signOut(auth).then(() => location.reload());
+};
+
+// 4. Handle Redirect Result (Dashboard Load Fix)
+getRedirectResult(auth).then((result) => {
+    if (result) {
+        console.log("Logged in successfully via redirect");
+    }
+}).catch((error) => {
+    console.error("Login Error:", error.message);
+});
+
+// 5. Auth State & Database Sync
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        // UI Dashboard Show
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('userName').innerText = user.displayName;
+        document.getElementById('userImg').src = user.photoURL;
+
+        // Fetch User Data
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+            userCoins = userSnap.data().Coins; // Field name with Capital 'C'
+        } else {
+            // New user join bonus
+            userCoins = 100;
+            await setDoc(userRef, { 
+                Name: user.displayName, 
+                Coins: userCoins, 
+                Email: user.email 
+            });
+        }
+        document.getElementById('coinDisplay').innerText = userCoins;
         
-        getRedirectResult(auth).catch((error) => console.error("Login Error:", error));
+        // Start Earn Timer if dashboard is visible
+        startEarnTimer();
+    } else {
+        // UI Login Show
+        document.getElementById('login-screen').classList.remove('hidden');
+        document.getElementById('dashboard').classList.add('hidden');
+    }
+});
 
-        document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
+// 6. Earn Coins Timer Logic
+function startEarnTimer() {
+    let timeLeft = 60;
+    const btn = document.getElementById('verifyView');
+    const timerDisplay = document.getElementById('timer');
 
-        // Auth State & Firestore Sync
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
-                document.getElementById('userName').innerText = user.displayName;
-                document.getElementById('userImg').src = user.photoURL;
+    const interval = setInterval(() => {
+        timeLeft--;
+        if (timerDisplay) timerDisplay.innerText = timeLeft;
 
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            btn.innerText = "CLAIM 60 COINS";
+            btn.classList.replace('bg-gray-400', 'bg-green-600');
+            btn.classList.remove('cursor-not-allowed');
+            btn.disabled = false;
+        }
+    }, 1000);
 
-                if (userSnap.exists()) {
-                    userCoins = userSnap.data().Coins; // Field 'Coins' capital is important
-                } else {
-                    userCoins = 100;
-                    await setDoc(userRef, { Name: user.displayName, Coins: userCoins, Email: user.email });
-                }
-                document.getElementById('coinDisplay').innerText = userCoins;
-                startEarnTimer(); // Timer start karein login ke baad
-            }
+    btn.onclick = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        try {
+            await updateDoc(doc(db, "users", user.uid), { 
+                Coins: increment(60) 
+            });
+            alert("60 Coins Added Successfully!");
+            location.reload();
+        } catch (e) {
+            alert("Error adding coins: " + e.message);
+        }
+    };
+}
+
+// 7. Add Campaign Logic
+document.getElementById('addCampaignBtn').onclick = async () => {
+    const link = document.getElementById('videoLink').value;
+    const user = auth.currentUser;
+
+    if (!link.includes("youtube.com") && !link.includes("youtu.be")) {
+        alert("Please enter a valid YouTube link.");
+        return;
+    }
+
+    if (userCoins < 500) {
+        alert("Campaign ke liye 500 coins chahiye!");
+        return;
+    }
+
+    try {
+        await addDoc(collection(db, "campaigns"), {
+            url: link,
+            userId: user.uid,
+            createdAt: new Date()
+        });
+        
+        await updateDoc(doc(db, "users", user.uid), {
+            Coins: increment(-500)
         });
 
-        // Earn Coins Logic (Timer)
-        function startEarnTimer() {
-            let timeLeft = 60;
-            const btn = document.getElementById('verifyView');
-            const timerDisplay = document.getElementById('timer');
+        alert("Campaign Created!");
+        location.reload();
+    } catch (e) {
+        alert("Error: " + e.message);
+    }
+};
 
-            const interval = setInterval(() => {
-                timeLeft--;
-                timerDisplay.innerText = timeLeft;
-
-                if (timeLeft <= 0) {
-                    clearInterval(interval);
-                    btn.innerText = "CLAIM 60 COINS";
-                    btn.classList.replace('bg-gray-400', 'bg-green-600');
-                    btn.classList.remove('cursor-not-allowed');
-                    btn.disabled = false;
-                }
-            }, 1000);
-
-            btn.onclick = async () => {
-                const user = auth.currentUser;
-                await updateDoc(doc(db, "users", user.uid), { Coins: increment(60) });
-                alert("60 Coins Added!");
-                location.reload();
-            };
-        }
-
-        // Add Campaign Logic
-        document.getElementById('addCampaignBtn').onclick = async () => {
-            const link = document.getElementById('videoLink').value;
-            const user = auth.currentUser;
-
-            if (!link.includes("youtube.com") && !link.includes("youtu.be")) {
-                alert("Invalid YouTube Link!"); return;
-            }
-            if (userCoins < 500) {
-                alert("Need 500 coins!"); return;
-            }
-
-            try {
-                await addDoc(collection(db, "campaigns"), { url: link, userId: user.uid, createdAt: new Date() });
-                await updateDoc(doc(db, "users", user.uid), { Coins: increment(-500) });
-                alert("Campaign Created!");
-                location.reload();
-            } catch (e) { alert(e.message); }
-        };
     </script>
 </body>
 </html>
