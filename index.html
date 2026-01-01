@@ -3,117 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ytSocial Pro - Grow Together</title>
+    <title>ytSocial Pro - Multi-Campaign</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .hidden { display: none !important; }
-        .active-tab { color: #8b5cf6 !important; border-bottom: 2px solid #8b5cf6; }
-        .drawer-shadow { background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); transition: opacity 0.3s; }
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        ::-webkit-scrollbar { width: 0px; }
-        #drawer { transition: transform 0.3s ease-in-out; }
+        .active-tab { color: #ff0000; border-bottom: 3px solid #ff0000; }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
+        .video-box { position: relative; width: 100%; padding-bottom: 177.77%; height: 0; background: #000; border-radius: 2rem; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); }
+        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); cursor: pointer; }
     </style>
 </head>
-<body class="bg-gray-50 h-screen flex flex-col overflow-hidden">
+<body>
 
-    <div id="login-screen" class="fixed inset-0 flex items-center justify-center p-6 bg-white z-[200]">
+    <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6 bg-white">
         <div class="w-full max-w-sm text-center">
-            <div class="w-20 h-20 bg-red-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-red-200">
+            <div class="w-20 h-20 bg-red-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-red-200">
                 <i class="fab fa-youtube text-4xl text-white"></i>
             </div>
-            <h1 class="text-3xl font-black mb-2 tracking-tighter">ytSocial Pro</h1>
-            <p class="text-gray-400 text-sm mb-10 font-medium">Get views, likes and subscribers</p>
-            
-            <div class="space-y-4 mb-8">
-                <input id="emailInput" type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none focus:ring-2 focus:ring-red-500 transition-all">
-                <input id="passInput" type="password" placeholder="Password" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none focus:ring-2 focus:ring-red-500 transition-all">
-                <button id="emailAuthBtn" class="w-full bg-zinc-900 text-white py-4 rounded-2xl font-bold shadow-xl active:scale-95 transition-all">Sign In / Register</button>
-            </div>
-            
-            <div class="flex items-center gap-3 mb-8 text-gray-300 font-bold text-xs"><hr class="flex-1"><span>OR</span><hr class="flex-1"></div>
-            
-            <button id="googleBtn" class="w-full bg-white border border-gray-200 py-3.5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all font-bold text-sm">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-5"> Google Login
-            </button>
-        </div>
-    </div>
-
-    <div id="drawer-overlay" class="fixed inset-0 drawer-shadow z-[100] hidden opacity-0"></div>
-    
-    <div id="drawer" class="fixed top-0 left-0 w-80 h-full bg-white z-[101] shadow-2xl transform -translate-x-full flex flex-col">
-        <div class="p-6 border-b">
-            <div class="flex justify-end gap-4 mb-6 text-gray-500 text-lg">
-                <button id="logoutBtnTop" title="Logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="w-16 h-16 bg-zinc-800 rounded-2xl flex items-center justify-center text-2xl font-bold text-white shadow-lg" id="userInitial">U</div>
-                <div class="overflow-hidden">
-                    <p class="font-black text-gray-800 truncate" id="userNameMenu">Loading...</p>
-                    <p class="text-xs text-gray-500 truncate" id="userEmailMenu">...</p>
+            <h1 class="text-3xl font-black mb-2 tracking-tighter italic">ytSocial Pro</h1>
+            <div class="space-y-3 mt-8">
+                <input id="email" type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
+                <input id="pass" type="password" placeholder="Password" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button onclick="handleAuth('login')" class="bg-zinc-900 text-white py-4 rounded-2xl font-bold active:scale-95 transition-all">Login</button>
+                    <button onclick="handleAuth('signup')" class="border-2 border-zinc-900 py-4 rounded-2xl font-bold active:scale-95 transition-all">Sign Up</button>
                 </div>
             </div>
         </div>
-        <div class="flex-1 overflow-y-auto p-4 space-y-1 text-sm font-semibold">
-            <button class="w-full flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl"><i class="fas fa-plus-circle"></i> Buy Points</button>
-            <button class="w-full flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl"><i class="fas fa-award"></i> VIP Member</button>
-        </div>
-        <div class="p-6 border-t text-[10px] font-bold text-gray-400 uppercase">Version 2.4.8</div>
     </div>
 
-    <div id="dashboard" class="hidden h-screen flex flex-col">
-        <header class="bg-white px-5 py-4 border-b flex justify-between items-center shrink-0 shadow-sm z-50">
-            <div class="flex items-center gap-2">
-                <i class="fab fa-youtube text-red-600 text-2xl"></i>
-                <h1 class="font-black text-xl tracking-tighter">ytSocial</h1>
-            </div>
+    <div id="app-screen" class="hidden h-screen flex flex-col">
+        <header class="bg-white px-6 py-4 border-b flex justify-between items-center sticky top-0 z-50 shadow-sm">
+            <span class="font-black text-xl text-red-600 italic">ytSocial</span>
             <div class="flex items-center gap-3">
-                <div class="bg-purple-50 text-purple-700 px-4 py-2 rounded-full font-black text-sm flex items-center gap-2 border border-purple-100">
-                    <i class="fas fa-heart"></i> <span id="coinDisplay">0</span>
+                <div class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-black text-sm border border-red-100">
+                    🪙 <span id="coinDisplay">0</span>
                 </div>
-                <button id="openMenu" class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <button onclick="logout()"><i class="fas fa-sign-out-alt text-gray-400 text-lg"></i></button>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-4 pb-24">
-            <div id="tab-watch" class="tab-pane space-y-4">
-                <div class="bg-white rounded-[2.5rem] border p-2 shadow-sm">
-                    <div class="aspect-video bg-black rounded-[2rem] overflow-hidden">
-                        <iframe id="videoPlayer" class="w-full h-full" src="" frameborder="0"></iframe>
-                    </div>
-                    <div class="grid grid-cols-2 divide-x border-t mt-4 py-6">
-                        <div class="text-center">
-                            <h2 class="text-3xl font-black text-gray-800" id="earnPoints">48</h2>
-                            <p class="text-[10px] uppercase font-bold text-gray-400">Points</p>
-                        </div>
-                        <div class="text-center">
-                            <h2 class="text-3xl font-black text-gray-800" id="timer">60</h2>
-                            <p class="text-[10px] uppercase font-bold text-gray-400">Seconds</p>
+        <main class="flex-1 overflow-y-auto p-4 pb-28 flex flex-col items-center">
+            <div id="watch-tab" class="tab-content w-full max-w-[320px]">
+                <div class="video-box border-4 border-white">
+                    <div id="player"></div>
+                    <div id="play-btn" class="play-overlay" onclick="startVideo()">
+                        <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30">
+                            <i class="fas fa-play text-white text-2xl ml-1"></i>
                         </div>
                     </div>
-                    <button class="w-full bg-zinc-900 text-white py-5 rounded-3xl font-bold shadow-lg active:scale-95">NEXT VIDEO</button>
+                </div>
+                
+                <div class="mt-6 grid grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-3xl text-center border shadow-sm">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Time Left</p>
+                        <p id="timer" class="text-3xl font-black text-zinc-800">60</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-3xl text-center border shadow-sm">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Points</p>
+                        <p class="text-3xl font-black text-green-600">+60</p>
+                    </div>
+                </div>
+                <p class="text-center text-[10px] text-gray-400 mt-4 font-bold uppercase tracking-widest">Next Campaign Ready</p>
+            </div>
+
+            <div id="campaign-tab" class="tab-content hidden w-full max-w-sm">
+                <div class="bg-white p-8 rounded-[2.5rem] border shadow-sm">
+                    <h2 class="text-xl font-black mb-4">Promote Your Video</h2>
+                    <input id="videoUrl" type="text" placeholder="YouTube Shorts Link" class="w-full p-4 bg-gray-50 rounded-2xl mb-4 border outline-none">
+                    <button onclick="createCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold uppercase text-sm tracking-widest">Add Order (3000 ❤️)</button>
                 </div>
             </div>
-            <div id="tab-subscribe" class="tab-pane hidden p-10 text-center">Subscribe Section</div>
         </main>
 
-        <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around p-3 pb-6 shadow-lg z-50">
-            <button onclick="showTab('watch', this)" class="flex flex-col items-center gap-1 active-tab">
-                <i class="fas fa-play-circle text-xl"></i><span class="text-[9px] font-bold uppercase">Watch</span>
+        <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around p-4 pb-8 z-50 shadow-inner">
+            <button onclick="switchTab('watch', this)" class="flex flex-col items-center gap-1 active-tab">
+                <i class="fas fa-play-circle text-xl"></i><span class="text-[10px] font-black uppercase">View</span>
             </button>
-            <button onclick="showTab('subscribe', this)" class="flex flex-col items-center gap-1 text-gray-400">
-                <i class="fas fa-users text-xl"></i><span class="text-[9px] font-bold uppercase">Subscribe</span>
+            <button onclick="switchTab('campaign', this)" class="flex flex-col items-center gap-1 text-gray-300">
+                <i class="fas fa-plus-square text-xl"></i><span class="text-[10px] font-black uppercase">Campaign</span>
             </button>
         </nav>
     </div>
 
-
-    
+  <script src="https://www.youtube.com/iframe_api"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -122,115 +100,137 @@
   projectId: "yt-sub-app-96608",
   storageBucket: "yt-sub-app-96608.firebasestorage.app",
   messagingSenderId: "720551660948",
-  appId: "1:720551660948:web:a46520a557844d44079381"
+  appId: "1:720551660948:web:533d19b2dd951d78079381"
 };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const provider = new GoogleAuthProvider();
 
-    // --- 1. Auto-Count Animation Function ---
-    function animateValue(id, start, end, duration) {
-        const obj = document.getElementById(id);
-        if (!obj) return;
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            obj.innerHTML = Math.floor(progress * (end - start) + start);
-            if (progress < 1) window.requestAnimationFrame(step);
-        };
-        window.requestAnimationFrame(step);
+    const adminVideos = [
+        '_icDutJ9qXg', 'jYTDfHiNjiQ', '71FZbSpicd8', 'Bm-CHcANTZY',
+        'a9Fz7w-6jfs', '1RllR_FVdVE', '7rkCu3LIC3o', 'OOKvdX-oZL4',
+        't6a-ajMstMI', '83LmdsI8AWg', '2ki-c-AuIB4'
+    ];
+
+    let player;
+    let timeLeft = 60;
+    let timerId = null;
+    let currentUID = null;
+    let isPlayerReady = false;
+    let currentVideoIndex = Math.floor(Math.random() * adminVideos.length);
+
+    // YouTube API Initialization
+    window.onYouTubeIframeAPIReady = function() {
+        player = new YT.Player('player', {
+            height: '100%',
+            width: '100%',
+            videoId: adminVideos[currentVideoIndex],
+            playerVars: { 
+                'autoplay': 0, 
+                'controls': 0, 
+                'rel': 0, 
+                'modestbranding': 1, 
+                'playsinline': 1 
+            },
+            events: { 
+                'onReady': () => { 
+                    isPlayerReady = true; 
+                    console.log("YouTube Player is ready");
+                },
+                'onStateChange': onPlayerStateChange 
+            }
+        });
     }
 
-    // --- 2. Sidebar & Tab Logic ---
-    const drawer = document.getElementById('drawer');
-    const overlay = document.getElementById('drawer-overlay');
-    
-    // Menu Open/Close
-    document.getElementById('openMenu').onclick = () => { 
-        drawer.style.transform = 'translateX(0)'; 
-        overlay.classList.remove('hidden'); 
-    };
-    overlay.onclick = () => { 
-        drawer.style.transform = 'translateX(-100%)'; 
-        overlay.classList.add('hidden'); 
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING) { 
+            startCounter(); 
+        } else { 
+            stopCounter(); 
+        }
+    }
+
+    // Fixed Play Function (No more undefined error)
+    window.startVideo = function() {
+        if (isPlayerReady && player && typeof player.playVideo === "function") {
+            player.playVideo();
+            document.getElementById('play-btn').classList.add('hidden');
+        } else {
+            alert("Video abhi taiyaar ho rahi hai... 2 second ruk kar try karein!");
+        }
+    }
+
+    function startCounter() {
+        if (timerId) return;
+        timerId = setInterval(async () => {
+            timeLeft--;
+            document.getElementById('timer').innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timerId);
+                timerId = null;
+                try {
+                    await updateDoc(doc(db, "users", currentUID), { Coins: increment(60) });
+                    alert("Reward: +60 Coins!");
+                    
+                    // Reset for next video
+                    timeLeft = 60;
+                    document.getElementById('timer').innerText = "60";
+                    document.getElementById('play-btn').classList.remove('hidden');
+                    currentVideoIndex = (currentVideoIndex + 1) % adminVideos.length;
+                    player.loadVideoById(adminVideos[currentVideoIndex]);
+                    
+                    const snap = await getDoc(doc(db, "users", currentUID));
+                    document.getElementById('coinDisplay').innerText = snap.data().Coins;
+                } catch (e) {
+                    console.error("Coin Update Error:", e);
+                }
+            }
+        }, 1000);
+    }
+
+    function stopCounter() { 
+        clearInterval(timerId); 
+        timerId = null; 
+    }
+
+    // Auth & UI Logic
+    window.handleAuth = async (type) => {
+        const e = document.getElementById('email').value;
+        const p = document.getElementById('pass').value;
+        if(!e || !p) return alert("Email/Pass dalein");
+        try {
+            if (type === 'signup') {
+                const res = await createUserWithEmailAndPassword(auth, e, p);
+                await setDoc(doc(db, "users", res.user.uid), { Coins: 500 });
+            } else {
+                await signInWithEmailAndPassword(auth, e, p);
+            }
+        } catch (err) { alert(err.message); }
     };
 
-    // Tabs Switcher
-    window.showTab = (tabId, btn) => {
-        document.querySelectorAll('.tab-pane').forEach(t => t.classList.add('hidden'));
-        const targetTab = document.getElementById(`tab-${tabId}`);
-        if(targetTab) targetTab.classList.remove('hidden');
-        
-        document.querySelectorAll('nav button').forEach(b => {
-            b.classList.remove('active-tab', 'text-purple-600');
-            b.classList.add('text-gray-400');
-        });
-        btn.classList.add('active-tab', 'text-purple-600');
-    };
-
-    // --- 3. Auth Observer ---
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            
-            // Drawer UI Update
-            document.getElementById('userEmailMenu').innerText = user.email;
-            document.getElementById('userInitial').innerText = user.email[0].toUpperCase();
-            if(document.getElementById('userNameMenu')) document.getElementById('userNameMenu').innerText = user.displayName || "User";
-
-            const userRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(userRef);
-
-            if (userSnap.exists()) {
-                // Purana User: Normal display
-                document.getElementById('coinDisplay').innerText = userSnap.data().Coins || 0;
-            } else {
-                // Naya User: 1000 Welcome Bonus & Animation
-                const welcomeBonus = 1000;
-                await setDoc(userRef, { 
-                    Name: user.displayName || "User", 
-                    Coins: welcomeBonus, 
-                    Email: user.email,
-                    JoinedAt: new Date()
-                });
-                animateValue("coinDisplay", 0, welcomeBonus, 2500);
-            }
+            currentUID = user.uid;
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.remove('hidden');
+            const snap = await getDoc(doc(db, "users", user.uid));
+            if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins;
         } else {
-            document.getElementById('login-screen').classList.remove('hidden');
-            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('auth-screen').classList.remove('hidden');
+            document.getElementById('app-screen').classList.add('hidden');
         }
     });
 
-    // --- 4. Login Buttons Logic ---
-
-    // Google Login (Fix: Redirect ki jagah Popup)
-    document.getElementById('loginBtn').onclick = () => {
-        signInWithPopup(auth, provider).catch(err => alert("Google Error: " + err.message));
+    window.switchTab = (tab, btn) => {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        document.getElementById(tab + '-tab').classList.remove('hidden');
+        document.querySelectorAll('nav button').forEach(b => b.classList.replace('active-tab', 'text-gray-300'));
+        btn.classList.replace('text-gray-300', 'active-tab');
     };
 
-    // Email Login/Signup
-    document.getElementById('emailAuthBtn').onclick = async () => {
-        const email = document.getElementById('emailInput').value;
-        const pass = document.getElementById('passInput').value;
-        if(!email || !pass) return alert("Please fill fields");
-        
-        try {
-            await signInWithEmailAndPassword(auth, email, pass);
-        } catch (e) {
-            try {
-                const res = await createUserWithEmailAndPassword(auth, email, pass);
-                await setDoc(doc(db, "users", res.user.uid), { Name: "User", Coins: 1000, Email: email });
-                animateValue("coinDisplay", 0, 1000, 2000);
-            } catch (err) { alert(err.message); }
-        }
-    };
+    window.logout = () => signOut(auth);
+</script>
 
-    // Logout
-    document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
-
-        </script>
 </body>
 </html>
