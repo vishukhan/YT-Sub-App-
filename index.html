@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -71,10 +71,8 @@
             <div id="tab-campaign" class="tab-content hidden w-full max-w-sm">
                 <div class="bg-white p-6 rounded-3xl border shadow-sm mb-4">
                     <h2 class="text-xl font-black mb-6">Create Campaign</h2>
-                    
                     <label class="text-[10px] font-bold text-gray-400 uppercase px-1">Video Link</label>
                     <input id="campUrl" type="text" placeholder="https://youtube.com/..." class="w-full p-4 bg-gray-50 rounded-2xl border outline-none mb-4">
-                    
                     <div class="grid grid-cols-2 gap-3 mb-6">
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase px-1">Type</label>
@@ -87,46 +85,27 @@
                             <label class="text-[10px] font-bold text-gray-400 uppercase px-1">Quantity</label>
                             <select id="campQty" onchange="updatePrice()" class="w-full p-4 bg-gray-50 rounded-2xl border font-bold outline-none">
                                 <option value="100">100</option>
-                                <option value="200">200</option>
-                                <option value="300">300</option>
-                                <option value="400">400</option>
                                 <option value="500">500</option>
-                                <option value="600">600</option>
-                                <option value="700">700</option>
-                                <option value="800">800</option>
-                                <option value="900">900</option>
                                 <option value="1000">1000</option>
                             </select>
                         </div>
                     </div>
-
-                    <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-red-100 active:scale-95 transition-all">
-                        ADD CAMPAIGN (200 🪙)
-                    </button>
+                    <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold shadow-lg">ADD CAMPAIGN</button>
                 </div>
             </div>
         </main>
 
         <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around items-center py-2 px-4 z-50">
-            <button onclick="switchTab('view')" id="btn-view" class="nav-btn active flex flex-col items-center gap-1 p-2">
-                <i class="fas fa-eye text-lg"></i>
-                <span class="text-[10px] font-bold">Views</span>
-            </button>
-            <button onclick="switchTab('like')" id="btn-like" class="nav-btn flex flex-col items-center gap-1 p-2 text-gray-400">
-                <i class="fas fa-heart text-lg"></i>
-                <span class="text-[10px] font-bold">Likes</span>
-            </button>
-            <button onclick="switchTab('campaign')" id="btn-campaign" class="nav-btn flex flex-col items-center gap-1 p-2 text-gray-400">
-                <i class="fas fa-plus-circle text-lg"></i>
-                <span class="text-[10px] font-bold">Campaign</span>
-            </button>
+            <button onclick="switchTab('view')" id="btn-view" class="nav-btn active flex flex-col items-center gap-1 p-2"><i class="fas fa-eye"></i><span class="text-[10px] font-bold">Views</span></button>
+            <button onclick="switchTab('like')" id="btn-like" class="nav-btn flex flex-col items-center gap-1 p-2 text-gray-400"><i class="fas fa-heart"></i><span class="text-[10px] font-bold">Likes</span></button>
+            <button onclick="switchTab('campaign')" id="btn-campaign" class="nav-btn flex flex-col items-center gap-1 p-2 text-gray-400"><i class="fas fa-plus-circle"></i><span class="text-[10px] font-bold">Campaign</span></button>
         </nav>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -143,39 +122,43 @@ const firebaseConfig = {
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const adminVideos = ['_icDutJ9qXg', 'jYTDfHiNjiQ', '71FZbSpicd8', 'Bm-CHcANTZY', 'a9Fz7w-6jfs', '1RllR_FVdVE', '7rkCu3LIC3o', 'OOKvdX-oZL4', 't6a-ajMstMI', '83LmdsI8AWg', '2ki-c-AuIB4'];
+        const adminVideos = ['_icDutJ9qXg', 'jYTDfHiNjiQ', '71FZbSpicd8'];
         let player, timerId = null, timeLeft = 60, currentUID = null, currentMode = 'view', currentCoins = 0;
 
-        // UI Pricing Logic
-        window.updatePrice = function() {
-            const type = document.getElementById('campType').value;
-            const qty = parseInt(document.getElementById('campQty').value);
-            const rate = (type === 'view') ? 2 : 3;
-            const total = qty * rate;
-            document.getElementById('campBtn').innerText = `ADD CAMPAIGN (${total} 🪙)`;
-            return total;
-        };
+        // YouTube API Link se ID nikaalne wala tool
+        function extractVideoId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length == 11) ? match[2] : null;
+        }
 
-        window.switchTab = function(tab) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active', 'text-red-500'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.add('text-gray-400'));
+        // Database se Videos fetch karna (YAHI HAI MAIN CHANGE)
+        async function loadNextVideo() {
+            stopCounter();
+            timeLeft = 60;
+            document.getElementById('timer').innerText = "60";
+            document.getElementById('play-btn').classList.remove('hidden');
 
-            if(tab === 'view' || tab === 'like') {
-                document.getElementById('tab-main').classList.remove('hidden');
-                document.getElementById('btn-' + tab).classList.add('active', 'text-red-500');
-                currentMode = tab;
-                document.getElementById('tab-title').innerText = tab === 'view' ? "Watch & Earn Views" : "Like & Earn More";
-                document.getElementById('reward-text').innerText = tab === 'view' ? "+60" : "+100";
-                loadNextVideo();
-            } else {
-                document.getElementById('tab-campaign').classList.remove('hidden');
-                document.getElementById('btn-campaign').classList.add('active', 'text-red-500');
-                updatePrice();
-            }
-        };
+            try {
+                let videoPool = [...adminVideos];
+                // Campaigns fetch karein
+                const q = query(collection(db, "campaigns"), limit(10));
+                const querySnapshot = await getDocs(q);
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if(data.userId !== currentUID && data.type === currentMode) {
+                        let id = extractVideoId(data.url);
+                        if(id) videoPool.push(id);
+                    }
+                });
 
-        // YouTube Logic
+                let randomId = videoPool[Math.floor(Math.random() * videoPool.length)];
+                if(player && player.loadVideoById) player.loadVideoById(randomId);
+            } catch (e) { console.error(e); }
+        }
+
+        // --- Baki functions (YouTube API, Auth, etc.) pehle jaise hi rahenge ---
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -189,14 +172,6 @@ const firebaseConfig = {
             });
         };
 
-        function loadNextVideo() {
-            stopCounter(); timeLeft = 60;
-            document.getElementById('timer').innerText = "60";
-            document.getElementById('play-btn').classList.remove('hidden');
-            let vid = adminVideos[Math.floor(Math.random() * adminVideos.length)];
-            if(player && player.loadVideoById) player.loadVideoById(vid);
-        }
-
         window.startVideo = () => { if(player && player.playVideo) player.playVideo(); document.getElementById('play-btn').classList.add('hidden'); };
 
         function startCounter() {
@@ -209,7 +184,7 @@ const firebaseConfig = {
                     let rew = currentMode === 'view' ? 60 : 100;
                     await updateDoc(doc(db, "users", currentUID), { Coins: increment(rew) });
                     refreshCoins();
-                    alert("Points Added Successfully!");
+                    alert("Points Added!");
                     loadNextVideo();
                 }
             }, 1000);
@@ -225,20 +200,40 @@ const firebaseConfig = {
             }
         }
 
-        // Campaign Feature
+        window.switchTab = function(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active', 'text-red-500'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.add('text-gray-400'));
+            if(tab === 'view' || tab === 'like') {
+                document.getElementById('tab-main').classList.remove('hidden');
+                document.getElementById('btn-' + tab).classList.add('active', 'text-red-500');
+                currentMode = tab;
+                loadNextVideo();
+            } else {
+                document.getElementById('tab-campaign').classList.remove('hidden');
+                document.getElementById('btn-campaign').classList.add('active', 'text-red-500');
+            }
+        };
+
+        window.updatePrice = function() {
+            const type = document.getElementById('campType').value;
+            const qty = parseInt(document.getElementById('campQty').value);
+            const rate = (type === 'view') ? 2 : 3;
+            const total = qty * rate;
+            document.getElementById('campBtn').innerText = `ADD CAMPAIGN (${total} 🪙)`;
+            return total;
+        };
+
         window.addCampaign = async function() {
             const url = document.getElementById('campUrl').value;
             const cost = updatePrice();
-            if(!url.includes('youtube.com') && !url.includes('youtu.be')) return alert("Enter valid YouTube link");
-            
             if(currentCoins < cost) return alert("Not enough coins!");
-
             try {
                 await addDoc(collection(db, "campaigns"), {
                     userId: currentUID, url: url, 
                     type: document.getElementById('campType').value,
                     qty: document.getElementById('campQty').value,
-                    status: 'active', timestamp: new Date()
+                    timestamp: new Date()
                 });
                 await updateDoc(doc(db, "users", currentUID), { Coins: increment(-cost) });
                 alert("Campaign Live!");
@@ -247,10 +242,9 @@ const firebaseConfig = {
             } catch(e) { alert(e.message); }
         };
 
-        // Auth
         window.handleAuth = async (t) => {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            try { t === 'login' ? await signInWithEmailAndPassword(auth, e, p) : alert("Use Sign Up"); } catch(err) { alert(err.message); }
+            try { await signInWithEmailAndPassword(auth, e, p); } catch(err) { alert(err.message); }
         };
 
         window.signupUser = async () => {
