@@ -54,16 +54,17 @@
 
             <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-red-600 mb-6">
                 <h3 class="font-bold mb-1">📢 Start Campaign</h3>
+                <p class="text-xs text-gray-400 mb-4 text-left">Promote your video for 500 coins</p>
                 <input id="videoLink" type="text" placeholder="Paste YouTube Link" class="w-full p-3 bg-gray-50 border rounded-xl mb-3 outline-none focus:border-red-500">
-                <button id="addCampaignBtn" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold">CREATE CAMPAIGN</button>
+                <button id="addCampaignBtn" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold shadow-lg">CREATE CAMPAIGN</button>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
@@ -80,8 +81,9 @@
         const provider = new GoogleAuthProvider();
 
         let isLoginMode = true;
+        let userCoins = 0;
 
-        // Toggle Login/Signup
+        // Toggle Auth Mode
         document.getElementById('toggleAuth').onclick = () => {
             isLoginMode = !isLoginMode;
             document.getElementById('authTitle').innerText = isLoginMode ? "Login to YT-Social" : "Create Account";
@@ -90,27 +92,27 @@
             document.getElementById('toggleAuth').innerText = isLoginMode ? "Signup" : "Login";
         };
 
-        // Email/Pass Auth Logic
+        // Email Auth
         document.getElementById('emailAuthBtn').onclick = async () => {
             const email = document.getElementById('emailInput').value;
             const pass = document.getElementById('passInput').value;
-            if(!email || !pass) return alert("Fill all fields");
+            if(!email || !pass) return alert("Please enter email and password");
 
             try {
                 if (isLoginMode) {
                     await signInWithEmailAndPassword(auth, email, pass);
                 } else {
                     const res = await createUserWithEmailAndPassword(auth, email, pass);
-                    // Initial Data setup for new user
                     await setDoc(doc(db, "users", res.user.uid), { Name: "New User", Coins: 100, Email: email });
                 }
             } catch (e) { alert(e.message); }
         };
 
-        // Google Login
+        // Google Auth
         document.getElementById('loginBtn').onclick = () => signInWithRedirect(auth, provider);
+        getRedirectResult(auth).catch((e) => console.log(e.message));
 
-        // Auth State Listener
+        // Auth State & UI Sync
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 document.getElementById('login-screen').classList.add('hidden');
@@ -120,18 +122,56 @@
 
                 const userRef = doc(db, "users", user.uid);
                 const userSnap = await getDoc(userRef);
+                
                 if (userSnap.exists()) {
-                    document.getElementById('coinDisplay').innerText = userSnap.data().Coins;
+                    userCoins = userSnap.data().Coins; // Capital 'C'
+                } else {
+                    userCoins = 100;
+                    await setDoc(userRef, { Name: user.displayName || "New User", Coins: userCoins, Email: user.email });
                 }
+                document.getElementById('coinDisplay').innerText = userCoins;
             } else {
                 document.getElementById('login-screen').classList.remove('hidden');
                 document.getElementById('dashboard').classList.add('hidden');
             }
         });
 
+        // Campaign Button Logic (FIXED)
+        document.getElementById('addCampaignBtn').onclick = async () => {
+            const link = document.getElementById('videoLink').value;
+            const user = auth.currentUser;
+
+            if (!link || (!link.includes("youtube.com") && !link.includes("youtu.be"))) {
+                alert("Please enter a valid YouTube link.");
+                return;
+            }
+
+            if (userCoins < 500) {
+                alert("Campaign ke liye 500 coins chahiye!");
+                return;
+            }
+
+            try {
+                // Add to campaigns collection
+                await addDoc(collection(db, "campaigns"), {
+                    url: link,
+                    userId: user.uid,
+                    createdAt: new Date()
+                });
+                
+                // Deduct coins from user
+                await updateDoc(doc(db, "users", user.uid), {
+                    Coins: increment(-500)
+                });
+
+                alert("Campaign successfully add ho gaya!");
+                location.reload();
+            } catch (e) {
+                alert("Error: " + e.message);
+            }
+        };
+
         document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
     </script>
 </body>
 </html>
-
-
