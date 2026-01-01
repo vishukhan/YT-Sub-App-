@@ -3,105 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YT-Social Pro</title>
+    <title>ytSocial Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .hidden { display: none !important; }
-        body { overflow: hidden; } /* App feel ke liye scroll lock */
-        .bottom-nav-active { color: #ef4444; }
-        .tab-content { height: calc(100vh - 120px); overflow-y: auto; }
+        .active-tab { color: #8b5cf6; border-bottom: 2px solid #8b5cf6; }
+        .drawer-shadow { background: rgba(0,0,0,0.5); }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
-<body class="bg-zinc-50 min-h-screen text-zinc-800">
+<body class="bg-gray-50 h-screen flex flex-col overflow-hidden">
 
-    <div id="login-screen" class="flex items-center justify-center min-h-screen p-6">
-        <div class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center">
-            <div class="w-20 h-20 bg-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-red-200">
-                <i class="fab fa-youtube text-4xl text-white"></i>
+    <div id="drawer-overlay" class="fixed inset-0 drawer-shadow z-[100] hidden transition-opacity"></div>
+    <div id="drawer" class="fixed top-0 left-0 w-72 h-full bg-white z-[101] shadow-2xl transform -translate-x-full transition-transform duration-300">
+        <div class="p-6 border-b flex items-center gap-3">
+            <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold text-gray-600" id="userInitial">U</div>
+            <div>
+                <p class="font-bold text-sm" id="userEmailMenu">User Email</p>
+                <p class="text-xs text-purple-600 font-medium">Free Member</p>
             </div>
-            <h1 class="text-2xl font-bold mb-2">YT-Social Pro</h1>
-            <p class="text-zinc-400 text-sm mb-8">Increase your channel growth</p>
-            
-            <input id="emailInput" type="email" placeholder="Email Address" class="w-full p-4 bg-zinc-100 rounded-2xl mb-3 outline-none focus:ring-2 focus:ring-red-500 transition-all">
-            <input id="passInput" type="password" placeholder="Password" class="w-full p-4 bg-zinc-100 rounded-2xl mb-6 outline-none focus:ring-2 focus:ring-red-500 transition-all">
-            
-            <button id="emailAuthBtn" class="w-full bg-zinc-900 text-white py-4 rounded-2xl font-bold mb-4 active:scale-95 transition-transform">Get Started</button>
-            <div class="flex items-center gap-2 mb-4 text-zinc-300"><hr class="flex-1"><span>OR</span><hr class="flex-1"></div>
-            <button id="loginBtn" class="w-full bg-white border border-zinc-200 py-3 rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-transform font-medium">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-5"> Google Login
-            </button>
+        </div>
+        <div class="p-2 space-y-1 overflow-y-auto h-[calc(100%-100px)]">
+            <button class="w-full flex items-center gap-4 p-4 hover:bg-gray-50 rounded-xl text-sm"><i class="fas fa-shopping-cart text-purple-500"></i> Buy Points</button>
+            <button class="w-full flex items-center gap-4 p-4 hover:bg-gray-50 rounded-xl text-sm"><i class="fas fa-crown text-yellow-500"></i> Become a VIP Member</button>
+            <button class="w-full flex items-center gap-4 p-4 hover:bg-gray-50 rounded-xl text-sm"><i class="fas fa-cog text-gray-500"></i> Settings (Theme, Language)</button>
+            <button class="w-full flex items-center gap-4 p-4 hover:bg-gray-50 rounded-xl text-sm"><i class="fas fa-shield-alt text-gray-500"></i> Privacy Policy</button>
+            <button class="w-full flex items-center gap-4 p-4 hover:bg-gray-50 rounded-xl text-sm"><i class="fas fa-share-alt text-gray-500"></i> Share the App</button>
+            <button class="w-full flex items-center gap-4 p-4 hover:bg-gray-50 rounded-xl text-sm"><i class="fas fa-star text-gray-500"></i> Rate the App</button>
+            <button class="w-full flex items-center gap-4 p-4 hover:bg-gray-50 rounded-xl text-sm"><i class="fas fa-envelope text-gray-500"></i> Contact Us</button>
+            <hr class="my-2">
+            <button id="logoutBtn" class="w-full flex items-center gap-4 p-4 text-red-500 rounded-xl text-sm"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
     </div>
 
-    <div id="dashboard" class="hidden h-screen flex flex-col">
-        <header class="p-4 bg-white flex justify-between items-center border-b">
+    <div id="app-container" class="flex flex-col h-full hidden">
+        <header class="bg-white p-4 border-b flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center"><i class="fab fa-youtube text-white text-xs"></i></div>
-                <h1 class="font-bold text-lg tracking-tight">ytSocial</h1>
+                <i class="fab fa-youtube text-red-600 text-2xl"></i>
+                <h1 class="font-bold text-lg">ytSocial</h1>
             </div>
             <div class="flex items-center gap-3">
-                <div class="bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-2">
-                    <i class="fas fa-heart text-indigo-500"></i> <span id="coinDisplay">0</span>
+                <div class="bg-purple-100 text-purple-700 px-4 py-1.5 rounded-full font-bold text-sm flex items-center gap-2">
+                    <i class="fas fa-heart"></i> <span id="coinDisplay">0</span>
                 </div>
-                <button id="menuBtn" class="w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-100"><i class="fas fa-bars"></i></button>
+                <button id="openMenu" class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center"><i class="fas fa-bars"></i></button>
             </div>
         </header>
 
-        <main class="flex-1 tab-content p-4">
-            
-            <div id="tab-watch" class="space-y-4">
-                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-zinc-100">
-                    <div class="aspect-video bg-black flex items-center justify-center relative">
-                        <iframe id="mainPlayer" class="w-full h-full" src="" frameborder="0" allow="autoplay"></iframe>
+        <main class="flex-1 overflow-y-auto p-4 pb-24">
+            <div id="tab-watch" class="tab-pane space-y-4">
+                <div class="bg-white rounded-[2rem] shadow-sm border overflow-hidden p-2">
+                    <div class="aspect-video bg-black rounded-[1.5rem] overflow-hidden">
+                        <iframe id="videoPlayer" class="w-full h-full" src="" frameborder="0"></iframe>
                     </div>
-                    <div class="p-5 flex justify-around border-t">
+                    <div class="grid grid-cols-2 divide-x border-t mt-4 py-6">
                         <div class="text-center">
-                            <p class="text-2xl font-black text-zinc-900">60</p>
-                            <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Points</p>
+                            <h2 class="text-3xl font-black" id="earnPoints">48</h2>
+                            <p class="text-[10px] uppercase font-bold text-gray-400">Points</p>
                         </div>
-                        <div class="w-px bg-zinc-100"></div>
                         <div class="text-center">
-                            <p id="timerText" class="text-2xl font-black text-zinc-900">60</p>
-                            <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Seconds</p>
+                            <h2 class="text-3xl font-black" id="timer">60</h2>
+                            <p class="text-[10px] uppercase font-bold text-gray-400">Seconds</p>
                         </div>
                     </div>
-                    <div class="p-4 bg-zinc-50">
-                        <button id="actionBtn" class="w-full bg-zinc-900 text-white py-4 rounded-2xl font-bold shadow-xl active:scale-95 transition-all">NEXT VIDEO</button>
-                    </div>
+                    <button class="w-full bg-zinc-900 text-white py-5 rounded-3xl font-bold mb-2 shadow-lg active:scale-95 transition-all">NEXT VIDEO</button>
                 </div>
             </div>
 
-            <div id="tab-campaign" class="hidden space-y-6">
-                <div class="bg-white p-6 rounded-3xl border shadow-sm">
-                    <h2 class="font-bold text-lg mb-4">Create Campaign</h2>
-                    <input id="videoLink" type="text" placeholder="YouTube Video Link" class="w-full p-4 bg-zinc-50 rounded-2xl mb-4 outline-none border focus:border-red-500">
-                    <button id="addCampaignBtn" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-red-100">Add Video (500 ❤️)</button>
+            <div id="tab-campaign" class="tab-pane hidden space-y-4">
+                <div class="bg-white p-6 rounded-[2rem] border shadow-sm">
+                    <h3 class="font-bold mb-4 text-lg">New Campaign</h3>
+                    <input id="campaignLink" type="text" placeholder="YouTube Video URL" class="w-full p-4 bg-gray-50 border rounded-2xl mb-4 outline-none focus:border-purple-500">
+                    <button id="createCampaignBtn" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold shadow-xl shadow-red-100">Add Order (500 ❤️)</button>
+                </div>
+                <div id="myCampaigns" class="space-y-3">
+                    <p class="text-xs font-bold text-gray-400 uppercase ml-2">Your Orders</p>
                 </div>
             </div>
-
         </main>
 
-        <nav class="bg-white border-t px-6 py-3 flex justify-between items-center shadow-lg">
-            <button onclick="switchTab('campaign')" class="flex flex-col items-center gap-1 nav-item" id="nav-campaign">
-                <i class="fas fa-bullhorn text-lg"></i><span class="text-[10px] font-bold">Campaign</span>
-            </button>
-            <button onclick="switchTab('watch')" class="flex flex-col items-center gap-1 nav-item bottom-nav-active" id="nav-watch">
-                <i class="fas fa-play-circle text-lg"></i><span class="text-[10px] font-bold">Watch</span>
-            </button>
-            <button class="flex flex-col items-center gap-1 nav-item">
-                <i class="fas fa-users text-lg"></i><span class="text-[10px] font-bold">Subscribe</span>
-            </button>
-            <button class="flex flex-col items-center gap-1 nav-item">
-                <i class="fas fa-thumbs-up text-lg"></i><span class="text-[10px] font-bold">Like</span>
-            </button>
+        <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around p-2 pb-4 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+            <button onclick="showTab('campaign', this)" class="flex flex-col items-center gap-1 p-2 text-gray-400"><i class="fas fa-bullhorn"></i><span class="text-[10px] font-bold">Campaign</span></button>
+            <button onclick="showTab('watch', this)" class="flex flex-col items-center gap-1 p-2 active-tab"><i class="fas fa-play-circle"></i><span class="text-[10px] font-bold">Watch</span></button>
+            <button class="flex flex-col items-center gap-1 p-2 text-gray-400"><i class="fas fa-users"></i><span class="text-[10px] font-bold">Subscribe</span></button>
+            <button class="flex flex-col items-center gap-1 p-2 text-gray-400"><i class="fas fa-thumbs-up"></i><span class="text-[10px] font-bold">Like</span></button>
         </nav>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
@@ -116,44 +109,44 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // UI Tabs Logic
-        window.switchTab = (tab) => {
-            document.querySelectorAll('main > div').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('bottom-nav-active'));
-            document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            document.getElementById(`nav-${tab}`).classList.add('bottom-nav-active');
+        // Sidebar & Tab Logic
+        const drawer = document.getElementById('drawer');
+        const overlay = document.getElementById('drawer-overlay');
+        
+        document.getElementById('openMenu').onclick = () => {
+            drawer.style.transform = 'translateX(0)';
+            overlay.classList.remove('hidden');
         };
 
-        // Auth State
+        overlay.onclick = () => {
+            drawer.style.transform = 'translateX(-100%)';
+            overlay.classList.add('hidden');
+        };
+
+        window.showTab = (tabId, btn) => {
+            document.querySelectorAll('.tab-pane').forEach(t => t.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active-tab', 'text-gray-400'));
+            btn.classList.add('active-tab');
+        };
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
+                document.getElementById('app-container').classList.remove('hidden');
+                document.getElementById('userEmailMenu').innerText = user.email;
+                document.getElementById('userInitial').innerText = user.email[0].toUpperCase();
+                
+                const userSnap = await getDoc(doc(db, "users", user.uid));
                 if(userSnap.exists()) {
                     document.getElementById('coinDisplay').innerText = userSnap.data().Coins;
                 }
             } else {
-                document.getElementById('login-screen').classList.remove('hidden');
-                document.getElementById('dashboard').classList.add('hidden');
+                // Show your login screen here
+                window.location.href = "login.html"; // Optional redirection
             }
         });
 
-        // Simple Login Action
-        document.getElementById('emailAuthBtn').onclick = async () => {
-            const email = document.getElementById('emailInput').value;
-            const pass = document.getElementById('passInput').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-            } catch (e) {
-                const res = await createUserWithEmailAndPassword(auth, email, pass);
-                await setDoc(doc(db, "users", res.user.uid), { Name: "User", Coins: 100 });
-            }
-        };
-
-        document.getElementById('menuBtn').onclick = () => signOut(auth).then(() => location.reload());
-
+        document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
     </script>
 </body>
 </html>
