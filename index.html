@@ -2,65 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YT-Social Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style> .hidden { display: none !important; } </style>
+    <style>
+        .hidden { display: none !important; }
+        body { overflow: hidden; } /* App feel ke liye scroll lock */
+        .bottom-nav-active { color: #ef4444; }
+        .tab-content { height: calc(100vh - 120px); overflow-y: auto; }
+    </style>
 </head>
-<body class="bg-zinc-100 min-h-screen">
+<body class="bg-zinc-50 min-h-screen text-zinc-800">
 
-    <div id="login-screen" class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm text-center">
-            <i class="fab fa-youtube text-6xl text-red-600 mb-4"></i>
-            <h1 id="authTitle" class="text-xl font-bold mb-6">Login to YT-Social</h1>
-            <div id="emailForm" class="space-y-4 mb-6">
-                <input id="emailInput" type="email" placeholder="Email Address" class="w-full p-3 border rounded-xl outline-none focus:border-red-500">
-                <input id="passInput" type="password" placeholder="Password" class="w-full p-3 border rounded-xl outline-none focus:border-red-500">
-                <button id="emailAuthBtn" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold">Login</button>
-                <p class="text-sm text-gray-500">
-                    <span id="toggleText">Don't have an account?</span> 
-                    <button id="toggleAuth" class="text-red-600 font-bold underline">Signup</button>
-                </p>
+    <div id="login-screen" class="flex items-center justify-center min-h-screen p-6">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center">
+            <div class="w-20 h-20 bg-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-red-200">
+                <i class="fab fa-youtube text-4xl text-white"></i>
             </div>
-            <div class="border-t my-4 pt-4 text-gray-400 text-sm">OR</div>
-            <button id="loginBtn" class="w-full bg-white border border-gray-300 py-2 rounded-lg flex items-center justify-center gap-2">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-5"> Sign in with Google
+            <h1 class="text-2xl font-bold mb-2">YT-Social Pro</h1>
+            <p class="text-zinc-400 text-sm mb-8">Increase your channel growth</p>
+            
+            <input id="emailInput" type="email" placeholder="Email Address" class="w-full p-4 bg-zinc-100 rounded-2xl mb-3 outline-none focus:ring-2 focus:ring-red-500 transition-all">
+            <input id="passInput" type="password" placeholder="Password" class="w-full p-4 bg-zinc-100 rounded-2xl mb-6 outline-none focus:ring-2 focus:ring-red-500 transition-all">
+            
+            <button id="emailAuthBtn" class="w-full bg-zinc-900 text-white py-4 rounded-2xl font-bold mb-4 active:scale-95 transition-transform">Get Started</button>
+            <div class="flex items-center gap-2 mb-4 text-zinc-300"><hr class="flex-1"><span>OR</span><hr class="flex-1"></div>
+            <button id="loginBtn" class="w-full bg-white border border-zinc-200 py-3 rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-transform font-medium">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-5"> Google Login
             </button>
         </div>
     </div>
 
-    <div id="dashboard" class="hidden pb-20">
-        <header class="bg-white p-4 shadow-md flex justify-between items-center sticky top-0 z-50">
-            <h1 class="font-bold text-red-600 text-lg">YT-SOCIAL</h1>
-            <div class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-bold">
-                <i class="fas fa-coins text-yellow-500"></i> <span id="coinDisplay">0</span>
+    <div id="dashboard" class="hidden h-screen flex flex-col">
+        <header class="p-4 bg-white flex justify-between items-center border-b">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center"><i class="fab fa-youtube text-white text-xs"></i></div>
+                <h1 class="font-bold text-lg tracking-tight">ytSocial</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-2">
+                    <i class="fas fa-heart text-indigo-500"></i> <span id="coinDisplay">0</span>
+                </div>
+                <button id="menuBtn" class="w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-100"><i class="fas fa-bars"></i></button>
             </div>
         </header>
 
-        <div class="p-4 max-w-md mx-auto space-y-6">
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-red-600">
-                <h3 class="font-bold mb-1">📢 Start Campaign</h3>
-                <input id="videoLink" type="text" placeholder="Paste YouTube Link" class="w-full p-3 bg-gray-50 border rounded-xl mb-3 outline-none focus:border-red-500">
-                <button id="addCampaignBtn" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold">CREATE CAMPAIGN (500 Coins)</button>
+        <main class="flex-1 tab-content p-4">
+            
+            <div id="tab-watch" class="space-y-4">
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-zinc-100">
+                    <div class="aspect-video bg-black flex items-center justify-center relative">
+                        <iframe id="mainPlayer" class="w-full h-full" src="" frameborder="0" allow="autoplay"></iframe>
+                    </div>
+                    <div class="p-5 flex justify-around border-t">
+                        <div class="text-center">
+                            <p class="text-2xl font-black text-zinc-900">60</p>
+                            <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Points</p>
+                        </div>
+                        <div class="w-px bg-zinc-100"></div>
+                        <div class="text-center">
+                            <p id="timerText" class="text-2xl font-black text-zinc-900">60</p>
+                            <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Seconds</p>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-zinc-50">
+                        <button id="actionBtn" class="w-full bg-zinc-900 text-white py-4 rounded-2xl font-bold shadow-xl active:scale-95 transition-all">NEXT VIDEO</button>
+                    </div>
+                </div>
             </div>
 
-            <h3 class="font-bold text-gray-700 mt-6"><i class="fas fa-play-circle text-green-500"></i> Earn Coins (Watch & Subscribe)</h3>
-            <div id="campaignList" class="space-y-4">
-                <p class="text-center text-gray-400 py-10">Searching for videos...</p>
+            <div id="tab-campaign" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border shadow-sm">
+                    <h2 class="font-bold text-lg mb-4">Create Campaign</h2>
+                    <input id="videoLink" type="text" placeholder="YouTube Video Link" class="w-full p-4 bg-zinc-50 rounded-2xl mb-4 outline-none border focus:border-red-500">
+                    <button id="addCampaignBtn" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-red-100">Add Video (500 ❤️)</button>
+                </div>
             </div>
-        </div>
 
-        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-3 text-gray-500">
-            <button class="flex flex-col items-center text-red-600"><i class="fas fa-home"></i><span class="text-xs">Home</span></button>
-            <button id="logoutBtn" class="flex flex-col items-center"><i class="fas fa-sign-out-alt"></i><span class="text-xs">Logout</span></button>
+        </main>
+
+        <nav class="bg-white border-t px-6 py-3 flex justify-between items-center shadow-lg">
+            <button onclick="switchTab('campaign')" class="flex flex-col items-center gap-1 nav-item" id="nav-campaign">
+                <i class="fas fa-bullhorn text-lg"></i><span class="text-[10px] font-bold">Campaign</span>
+            </button>
+            <button onclick="switchTab('watch')" class="flex flex-col items-center gap-1 nav-item bottom-nav-active" id="nav-watch">
+                <i class="fas fa-play-circle text-lg"></i><span class="text-[10px] font-bold">Watch</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 nav-item">
+                <i class="fas fa-users text-lg"></i><span class="text-[10px] font-bold">Subscribe</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 nav-item">
+                <i class="fas fa-thumbs-up text-lg"></i><span class="text-[10px] font-bold">Like</span>
+            </button>
         </nav>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
@@ -74,78 +115,13 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
 
-        let userCoins = 0;
-        let isLoginMode = true;
-
-        // Toggle Login/Signup
-        document.getElementById('toggleAuth').onclick = () => {
-            isLoginMode = !isLoginMode;
-            document.getElementById('authTitle').innerText = isLoginMode ? "Login to YT-Social" : "Create Account";
-            document.getElementById('emailAuthBtn').innerText = isLoginMode ? "Login" : "Register";
-            document.getElementById('toggleAuth').innerText = isLoginMode ? "Signup" : "Login";
-        };
-
-        // Email Auth
-        document.getElementById('emailAuthBtn').onclick = async () => {
-            const email = document.getElementById('emailInput').value;
-            const pass = document.getElementById('passInput').value;
-            try {
-                if (isLoginMode) await signInWithEmailAndPassword(auth, email, pass);
-                else {
-                    const res = await createUserWithEmailAndPassword(auth, email, pass);
-                    await setDoc(doc(db, "users", res.user.uid), { Name: "User", Coins: 100, Email: email });
-                }
-            } catch (e) { alert(e.message); }
-        };
-
-        // Google Auth
-        document.getElementById('loginBtn').onclick = () => signInWithRedirect(auth, provider);
-
-        // Load Campaigns (Sub-4-Sub Feature)
-        async function loadCampaigns() {
-            const listDiv = document.getElementById('campaignList');
-            const q = query(collection(db, "campaigns"), orderBy("createdAt", "desc"), limit(10));
-            const querySnapshot = await getDocs(q);
-            
-            listDiv.innerHTML = "";
-            if (querySnapshot.empty) {
-                listDiv.innerHTML = "<p class='text-center text-gray-400'>No campaigns available.</p>";
-                return;
-            }
-
-            querySnapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const videoId = data.url.split('v=')[1] || data.url.split('/').pop();
-                
-                const card = document.createElement('div');
-                card.className = "bg-white p-4 rounded-xl shadow-sm border border-gray-100";
-                card.innerHTML = `
-                    <div class="flex gap-3">
-                        <img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" class="w-24 rounded-lg">
-                        <div class="flex-1">
-                            <p class="text-sm font-bold line-clamp-1">Watch & Earn</p>
-                            <p class="text-xs text-green-600 font-bold">+60 Coins</p>
-                            <button onclick="window.open('${data.url}', '_blank'); earnCoins('${docSnap.id}')" 
-                                    class="mt-2 bg-green-500 text-white text-xs px-4 py-2 rounded-lg font-bold">
-                                WATCH VIDEO
-                            </button>
-                        </div>
-                    </div>
-                `;
-                listDiv.appendChild(card);
-            });
-        }
-
-        // Earn Coins Logic
-        window.earnCoins = async (campaignId) => {
-            const user = auth.currentUser;
-            if(!user) return;
-            alert("Watching started! Coins will be added after verification.");
-            // Reality mein yahan 60s ka timer lagana hoga
-            await updateDoc(doc(db, "users", user.uid), { Coins: increment(60) });
-            location.reload();
+        // UI Tabs Logic
+        window.switchTab = (tab) => {
+            document.querySelectorAll('main > div').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('bottom-nav-active'));
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            document.getElementById(`nav-${tab}`).classList.add('bottom-nav-active');
         };
 
         // Auth State
@@ -153,32 +129,31 @@
             if (user) {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
-                const userSnap = await getDoc(doc(db, "users", user.uid));
-                if (userSnap.exists()) {
-                    userCoins = userSnap.data().Coins;
-                    document.getElementById('coinDisplay').innerText = userCoins;
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                if(userSnap.exists()) {
+                    document.getElementById('coinDisplay').innerText = userSnap.data().Coins;
                 }
-                loadCampaigns();
             } else {
                 document.getElementById('login-screen').classList.remove('hidden');
                 document.getElementById('dashboard').classList.add('hidden');
             }
         });
 
-        // Add Campaign
-        document.getElementById('addCampaignBtn').onclick = async () => {
-            const link = document.getElementById('videoLink').value;
-            const user = auth.currentUser;
-            if (userCoins < 500) return alert("Not enough coins!");
+        // Simple Login Action
+        document.getElementById('emailAuthBtn').onclick = async () => {
+            const email = document.getElementById('emailInput').value;
+            const pass = document.getElementById('passInput').value;
             try {
-                await addDoc(collection(db, "campaigns"), { url: link, userId: user.uid, createdAt: new Date() });
-                await updateDoc(doc(db, "users", user.uid), { Coins: increment(-500) });
-                alert("Campaign Live!");
-                location.reload();
-            } catch (e) { alert(e.message); }
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (e) {
+                const res = await createUserWithEmailAndPassword(auth, email, pass);
+                await setDoc(doc(db, "users", res.user.uid), { Name: "User", Coins: 100 });
+            }
         };
 
-        document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
+        document.getElementById('menuBtn').onclick = () => signOut(auth).then(() => location.reload());
+
     </script>
 </body>
 </html>
