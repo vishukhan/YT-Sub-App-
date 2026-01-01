@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +14,6 @@
         <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm text-center">
             <i class="fab fa-youtube text-6xl text-red-600 mb-4"></i>
             <h1 id="authTitle" class="text-xl font-bold mb-6">Login to YT-Social</h1>
-            
             <div id="emailForm" class="space-y-4 mb-6">
                 <input id="emailInput" type="email" placeholder="Email Address" class="w-full p-3 border rounded-xl outline-none focus:border-red-500">
                 <input id="passInput" type="password" placeholder="Password" class="w-full p-3 border rounded-xl outline-none focus:border-red-500">
@@ -25,17 +23,14 @@
                     <button id="toggleAuth" class="text-red-600 font-bold underline">Signup</button>
                 </p>
             </div>
-
             <div class="border-t my-4 pt-4 text-gray-400 text-sm">OR</div>
-
-            <button id="loginBtn" class="w-full bg-white border border-gray-300 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-5">
-                Sign in with Google
+            <button id="loginBtn" class="w-full bg-white border border-gray-300 py-2 rounded-lg flex items-center justify-center gap-2">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-5"> Sign in with Google
             </button>
         </div>
     </div>
 
-    <div id="dashboard" class="hidden">
+    <div id="dashboard" class="hidden pb-20">
         <header class="bg-white p-4 shadow-md flex justify-between items-center sticky top-0 z-50">
             <h1 class="font-bold text-red-600 text-lg">YT-SOCIAL</h1>
             <div class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-bold">
@@ -43,28 +38,29 @@
             </div>
         </header>
 
-        <div class="p-4 max-w-md mx-auto">
-            <div class="bg-white p-4 rounded-xl shadow-sm mb-6 flex items-center gap-4">
-                <img id="userImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-12 h-12 rounded-full border-2 border-red-500">
-                <div>
-                    <p class="font-bold text-sm" id="userName">User</p>
-                    <button id="logoutBtn" class="text-xs text-red-500 underline">Logout</button>
-                </div>
+        <div class="p-4 max-w-md mx-auto space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-red-600">
+                <h3 class="font-bold mb-1">📢 Start Campaign</h3>
+                <input id="videoLink" type="text" placeholder="Paste YouTube Link" class="w-full p-3 bg-gray-50 border rounded-xl mb-3 outline-none focus:border-red-500">
+                <button id="addCampaignBtn" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold">CREATE CAMPAIGN (500 Coins)</button>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-red-600 mb-6">
-                <h3 class="font-bold mb-1">📢 Start Campaign</h3>
-                <p class="text-xs text-gray-400 mb-4 text-left">Promote your video for 500 coins</p>
-                <input id="videoLink" type="text" placeholder="Paste YouTube Link" class="w-full p-3 bg-gray-50 border rounded-xl mb-3 outline-none focus:border-red-500">
-                <button id="addCampaignBtn" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold shadow-lg">CREATE CAMPAIGN</button>
+            <h3 class="font-bold text-gray-700 mt-6"><i class="fas fa-play-circle text-green-500"></i> Earn Coins (Watch & Subscribe)</h3>
+            <div id="campaignList" class="space-y-4">
+                <p class="text-center text-gray-400 py-10">Searching for videos...</p>
             </div>
         </div>
+
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-3 text-gray-500">
+            <button class="flex flex-col items-center text-red-600"><i class="fas fa-home"></i><span class="text-xs">Home</span></button>
+            <button id="logoutBtn" class="flex flex-col items-center"><i class="fas fa-sign-out-alt"></i><span class="text-xs">Logout</span></button>
+        </nav>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
@@ -80,15 +76,14 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        let isLoginMode = true;
         let userCoins = 0;
+        let isLoginMode = true;
 
-        // Toggle Auth Mode
+        // Toggle Login/Signup
         document.getElementById('toggleAuth').onclick = () => {
             isLoginMode = !isLoginMode;
             document.getElementById('authTitle').innerText = isLoginMode ? "Login to YT-Social" : "Create Account";
             document.getElementById('emailAuthBtn').innerText = isLoginMode ? "Login" : "Register";
-            document.getElementById('toggleText').innerText = isLoginMode ? "Don't have an account?" : "Already have an account?";
             document.getElementById('toggleAuth').innerText = isLoginMode ? "Signup" : "Login";
         };
 
@@ -96,79 +91,91 @@
         document.getElementById('emailAuthBtn').onclick = async () => {
             const email = document.getElementById('emailInput').value;
             const pass = document.getElementById('passInput').value;
-            if(!email || !pass) return alert("Please enter email and password");
-
             try {
-                if (isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, pass);
-                } else {
+                if (isLoginMode) await signInWithEmailAndPassword(auth, email, pass);
+                else {
                     const res = await createUserWithEmailAndPassword(auth, email, pass);
-                    await setDoc(doc(db, "users", res.user.uid), { Name: "New User", Coins: 100, Email: email });
+                    await setDoc(doc(db, "users", res.user.uid), { Name: "User", Coins: 100, Email: email });
                 }
             } catch (e) { alert(e.message); }
         };
 
         // Google Auth
         document.getElementById('loginBtn').onclick = () => signInWithRedirect(auth, provider);
-        getRedirectResult(auth).catch((e) => console.log(e.message));
 
-        // Auth State & UI Sync
+        // Load Campaigns (Sub-4-Sub Feature)
+        async function loadCampaigns() {
+            const listDiv = document.getElementById('campaignList');
+            const q = query(collection(db, "campaigns"), orderBy("createdAt", "desc"), limit(10));
+            const querySnapshot = await getDocs(q);
+            
+            listDiv.innerHTML = "";
+            if (querySnapshot.empty) {
+                listDiv.innerHTML = "<p class='text-center text-gray-400'>No campaigns available.</p>";
+                return;
+            }
+
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const videoId = data.url.split('v=')[1] || data.url.split('/').pop();
+                
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-xl shadow-sm border border-gray-100";
+                card.innerHTML = `
+                    <div class="flex gap-3">
+                        <img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" class="w-24 rounded-lg">
+                        <div class="flex-1">
+                            <p class="text-sm font-bold line-clamp-1">Watch & Earn</p>
+                            <p class="text-xs text-green-600 font-bold">+60 Coins</p>
+                            <button onclick="window.open('${data.url}', '_blank'); earnCoins('${docSnap.id}')" 
+                                    class="mt-2 bg-green-500 text-white text-xs px-4 py-2 rounded-lg font-bold">
+                                WATCH VIDEO
+                            </button>
+                        </div>
+                    </div>
+                `;
+                listDiv.appendChild(card);
+            });
+        }
+
+        // Earn Coins Logic
+        window.earnCoins = async (campaignId) => {
+            const user = auth.currentUser;
+            if(!user) return;
+            alert("Watching started! Coins will be added after verification.");
+            // Reality mein yahan 60s ka timer lagana hoga
+            await updateDoc(doc(db, "users", user.uid), { Coins: increment(60) });
+            location.reload();
+        };
+
+        // Auth State
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
-                document.getElementById('userName').innerText = user.displayName || user.email;
-                if(user.photoURL) document.getElementById('userImg').src = user.photoURL;
-
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
-                
+                const userSnap = await getDoc(doc(db, "users", user.uid));
                 if (userSnap.exists()) {
-                    userCoins = userSnap.data().Coins; // Capital 'C'
-                } else {
-                    userCoins = 100;
-                    await setDoc(userRef, { Name: user.displayName || "New User", Coins: userCoins, Email: user.email });
+                    userCoins = userSnap.data().Coins;
+                    document.getElementById('coinDisplay').innerText = userCoins;
                 }
-                document.getElementById('coinDisplay').innerText = userCoins;
+                loadCampaigns();
             } else {
                 document.getElementById('login-screen').classList.remove('hidden');
                 document.getElementById('dashboard').classList.add('hidden');
             }
         });
 
-        // Campaign Button Logic (FIXED)
+        // Add Campaign
         document.getElementById('addCampaignBtn').onclick = async () => {
             const link = document.getElementById('videoLink').value;
             const user = auth.currentUser;
-
-            if (!link || (!link.includes("youtube.com") && !link.includes("youtu.be"))) {
-                alert("Please enter a valid YouTube link.");
-                return;
-            }
-
-            if (userCoins < 500) {
-                alert("Campaign ke liye 500 coins chahiye!");
-                return;
-            }
-
+            if (userCoins < 500) return alert("Not enough coins!");
             try {
-                // Add to campaigns collection
-                await addDoc(collection(db, "campaigns"), {
-                    url: link,
-                    userId: user.uid,
-                    createdAt: new Date()
-                });
-                
-                // Deduct coins from user
-                await updateDoc(doc(db, "users", user.uid), {
-                    Coins: increment(-500)
-                });
-
-                alert("Campaign successfully add ho gaya!");
+                await addDoc(collection(db, "campaigns"), { url: link, userId: user.uid, createdAt: new Date() });
+                await updateDoc(doc(db, "users", user.uid), { Coins: increment(-500) });
+                alert("Campaign Live!");
                 location.reload();
-            } catch (e) {
-                alert("Error: " + e.message);
-            }
+            } catch (e) { alert(e.message); }
         };
 
         document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => location.reload());
