@@ -83,9 +83,16 @@
 
         let currentCoins = 0;
 
-        // Login Logic
-        document.getElementById('loginBtn').onclick = () => signInWithPopup(auth, provider);
-        document.getElementById('logoutBtn').onclick = () => signOut(auth);
+         import { getAuth, signInWithRedirect, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+// Login button logic
+document.getElementById('loginBtn').onclick = () => {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    // Popup ki jagah redirect use karein
+    signInWithRedirect(auth, provider);
+};
+
 
         // Auth State Change
         onAuthStateChanged(auth, async (user) => {
