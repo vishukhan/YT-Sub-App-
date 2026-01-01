@@ -150,16 +150,30 @@ const firebaseConfig = {
         const adminVideos = ['_icDutJ9qXg', 'jYTDfHiNjiQ', '71FZbSpicd8'];
         let player, timerId = null, timeLeft = 60, currentUID = null, currentMode = 'view', currentVideoId = '';
 
-        // BOTS SYSTEM
-        setInterval(async () => {
-            const q = query(collection(db, "campaigns"), where("status", "==", "active"), limit(5));
-            const snap = await getDocs(q);
-            snap.forEach(async d => {
-                const b = Math.floor(Math.random() * 2) + 1;
-                const nd = (d.data().viewsDone || 0) + b;
-                await updateDoc(doc(db, "campaigns", d.id), { viewsDone: nd, status: nd >= d.data().qty ? "completed" : "active" });
+        // --- UPDATED BOTS SYSTEM (Views + Likes) ---
+setInterval(async () => {
+    // 5 active campaigns ko random boost dene ke liye
+    const q = query(collection(db, "campaigns"), where("status", "==", "active"), limit(5));
+    const snap = await getDocs(q);
+    
+    snap.forEach(async cDoc => {
+        const d = cDoc.data();
+        const boost = Math.floor(Math.random() * 2) + 1; // 1-2 ka boost
+        const currentDone = d.viewsDone || 0;
+        const newDone = currentDone + boost;
+        
+        // Agar campaign abhi poora nahi hua hai toh progress badhao
+        if (currentDone < d.qty) {
+            await updateDoc(doc(db, "campaigns", cDoc.id), { 
+                viewsDone: newDone, 
+                // Agar target poora ho gaya toh status 'completed' kar do
+                status: newDone >= d.qty ? "completed" : "active" 
             });
-        }, 300000);
+            console.log(`Bot: Added ${boost} ${d.type} to ${cDoc.id}`);
+        }
+    });
+}, 300000); // Har 5 minute mein bots kaam karenge
+
 
         // LIKE VERIFICATION LOGIC
         window.verifyLike = async () => {
