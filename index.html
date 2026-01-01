@@ -179,14 +179,6 @@ setInterval(async () => {
 }, 300000); // Har 5 minute mein bots kaam karenge
 
 
-        // Function ke andar ye logic dalein
-const isAdmin = auth.currentUser.email === ADMIN_EMAIL;
-const cost = isAdmin ? 0 : (qty * (type === 'view' ? 2 : 3));
-
-// Check karein coins hain ya nahi (Admin ke liye hamesha true hoga kyunki cost 0 hai)
-if (!isAdmin && userSnap.data().Coins < cost) {
-    return alert("Low Coins");
-}
 
         
         // LIKE VERIFICATION LOGIC
