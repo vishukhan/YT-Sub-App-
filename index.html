@@ -4,22 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title>ytSocial Pro - Official</title>
-    <meta property="og:title" content="ytSocial Pro - Grow YouTube Fast">
-    <meta property="og:description" content="Get Real Views and Likes instantly. Best community for creators.">
-    <meta property="og:image" content="logo.png"> <meta property="og:type" content="website">
+    <title>ytSocial Pro - Grow Together</title>
+    <meta property="og:title" content="ytSocial Pro">
+    <meta property="og:description" content="Get Real YouTube Views and Likes.">
+    <meta property="og:image" content="logo.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         .hidden { display: none !important; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
         .video-box { position: relative; width: 100%; padding-bottom: 177.77%; height: 0; background: #000; border-radius: 1.5rem; overflow: hidden; border: 4px solid white; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
         .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .nav-btn.active { color: #ef4444; border-top: 2px solid #ef4444; }
         .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); cursor: pointer; }
-        .progress-bar { transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
 <body class="pb-24">
@@ -29,14 +28,13 @@
             <div class="w-20 h-20 bg-red-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-xl">
                 <i class="fab fa-youtube text-4xl text-white"></i>
             </div>
-            <h1 class="text-3xl font-black italic tracking-tighter">ytSocial Pro</h1>
-            <p class="text-gray-400 text-sm mt-2 font-medium">Earn Views & Likes Instantly</p>
+            <h1 class="text-3xl font-black italic">ytSocial Pro</h1>
             <div class="space-y-3 mt-8">
-                <input id="email" type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 rounded-2xl border border-gray-100 outline-none focus:border-red-500">
-                <input id="pass" type="password" placeholder="Password" class="w-full p-4 bg-gray-50 rounded-2xl border border-gray-100 outline-none focus:border-red-500">
+                <input id="email" type="email" placeholder="Email" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
+                <input id="pass" type="password" placeholder="Password" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
                 <div class="grid grid-cols-2 gap-3 pt-2">
-                    <button onclick="handleAuth('login')" class="bg-zinc-900 text-white py-4 rounded-2xl font-bold active:scale-95 transition">Login</button>
-                    <button onclick="signupUser()" class="border-2 border-zinc-900 py-4 rounded-2xl font-bold active:scale-95 transition">Sign Up</button>
+                    <button onclick="handleAuth('login')" class="bg-zinc-900 text-white py-4 rounded-2xl font-bold">Login</button>
+                    <button onclick="signupUser()" class="border-2 border-zinc-900 py-4 rounded-2xl font-bold">Sign Up</button>
                 </div>
             </div>
         </div>
@@ -44,16 +42,16 @@
 
     <div id="app-screen" class="hidden min-h-screen flex flex-col">
         <header class="bg-white px-6 py-4 border-b flex justify-between items-center sticky top-0 z-50">
-            <span class="font-black text-xl text-red-600 italic tracking-tighter">ytSocial</span>
-            <div class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-black text-sm border border-red-100 flex items-center gap-2">
+            <span class="font-black text-xl text-red-600 italic">ytSocial</span>
+            <div class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-black text-sm border border-red-100">
                 🪙 <span id="coinDisplay">0</span>
             </div>
         </header>
 
-        <main class="flex-1 p-4 flex flex-col items-center overflow-y-auto">
+        <main class="flex-1 p-4 flex flex-col items-center overflow-y-auto w-full">
             
             <div id="tab-main" class="tab-content w-full max-w-[320px]">
-                <h2 id="tab-title" class="text-center font-bold mb-4 text-zinc-600 italic">Watch & Earn Views</h2>
+                <h2 id="tab-title" class="text-center font-bold mb-4 text-zinc-600 italic uppercase text-xs tracking-widest">Watch & Earn</h2>
                 <div class="video-box">
                     <div id="player"></div>
                     <div id="play-btn" class="play-overlay" onclick="startVideo()">
@@ -62,9 +60,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-4 grid grid-cols-2 gap-4 text-center">
-                    <div class="bg-white p-3 rounded-2xl border shadow-sm"><p class="text-[10px] font-bold text-gray-400 tracking-widest">SECONDS</p><p id="timer" class="text-2xl font-black">60</p></div>
-                    <div class="bg-white p-3 rounded-2xl border shadow-sm"><p class="text-[10px] font-bold text-gray-400 tracking-widest">REWARD</p><p id="reward-text" class="text-2xl font-black text-green-600">+60</p></div>
+                
+                <div id="watch-stats" class="mt-4 grid grid-cols-2 gap-4 text-center">
+                    <div class="bg-white p-3 rounded-2xl border shadow-sm"><p class="text-[10px] font-bold text-gray-400">SECONDS</p><p id="timer" class="text-2xl font-black">60</p></div>
+                    <div class="bg-white p-3 rounded-2xl border shadow-sm"><p class="text-[10px] font-bold text-gray-400">REWARD</p><p id="reward-text" class="text-2xl font-black text-green-600">+60</p></div>
+                </div>
+
+                <div id="like-area" class="hidden mt-6">
+                    <button onclick="verifyLike()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-black shadow-lg shadow-red-100 flex items-center justify-center gap-3 active:scale-95 transition">
+                        <i class="fas fa-heart"></i> LIKE & VERIFY (+100 🪙)
+                    </button>
+                    <p class="text-[10px] text-center mt-3 text-gray-400">Pehle video Like karein, fir 15 sec baad wapas aayein.</p>
                 </div>
             </div>
 
@@ -72,20 +78,19 @@
                 <div class="bg-white p-6 rounded-3xl border shadow-sm text-center">
                     <h2 class="text-2xl font-black mb-6">Coin Store 🪙</h2>
                     <div class="bg-blue-50 p-4 rounded-2xl mb-6 border border-blue-100">
-                        <div class="w-44 h-44 bg-white mx-auto mb-3 flex items-center justify-center rounded-xl shadow-inner overflow-hidden">
-                            <img src="payment-qr.png" alt="Scan QR" class="w-full h-full object-contain" onerror="this.src='https://via.placeholder.com/150?text=Upload+QR+to+Github'">
+                        <div class="w-44 h-44 bg-white mx-auto mb-3 flex items-center justify-center rounded-xl overflow-hidden shadow-inner">
+                            <img src="payment-qr.png" alt="Scan QR" class="w-full h-full object-contain" onerror="this.src='https://via.placeholder.com/200?text=Upload+QR+To+Github'">
                         </div>
-                        <p class="text-xs font-bold text-blue-400 uppercase">UPI ID (Tap to copy)</p>
-                        <p class="text-sm font-black text-blue-700 select-all cursor-pointer">yourname@upi</p>
+                        <p class="text-xs font-bold text-blue-400 uppercase mb-1">UPI ID</p>
+                        <p class="text-sm font-black text-blue-700 select-all">vishu@upi</p>
                     </div>
                     <div class="space-y-4 text-left">
                         <select id="payAmount" class="w-full p-4 bg-gray-50 rounded-2xl border font-bold">
                             <option value="5000">5,000 Coins - ₹10</option>
                             <option value="12000">12,000 Coins - ₹20</option>
-                            <option value="50000">50,000 Coins - ₹50</option>
                         </select>
-                        <input id="payId" type="text" placeholder="Transaction ID (12 Digits)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none font-mono">
-                        <button onclick="submitOrder()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200">Submit Payment</button>
+                        <input id="payId" type="text" placeholder="Transaction ID (12 Digits)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
+                        <button onclick="submitOrder()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Submit Payment</button>
                     </div>
                 </div>
             </div>
@@ -93,33 +98,31 @@
             <div id="tab-campaign" class="tab-content hidden w-full max-w-sm">
                 <div class="bg-white p-6 rounded-3xl border mb-6 shadow-sm">
                     <h2 class="text-xl font-black mb-4">New Campaign</h2>
-                    <input id="campUrl" type="text" placeholder="YouTube Video Link" class="w-full p-4 bg-gray-50 rounded-2xl border border-gray-100 outline-none mb-4">
+                    <input id="campUrl" type="text" placeholder="Paste Video Link" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none mb-4">
                     <div class="grid grid-cols-2 gap-3 mb-4">
                         <select id="campType" onchange="updatePrice()" class="p-4 bg-gray-50 rounded-2xl border font-bold"><option value="view">Views</option><option value="like">Likes</option></select>
-                        <select id="campQty" onchange="updatePrice()" class="p-4 bg-gray-50 rounded-2xl border font-bold">
-                            <option value="100">100</option><option value="200">200</option><option value="500">500</option><option value="1000">1000</option>
-                        </select>
+                        <select id="campQty" onchange="updatePrice()" class="p-4 bg-gray-50 rounded-2xl border font-bold"><option value="100">100</option><option value="500">500</option></select>
                     </div>
-                    <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-red-100">ADD CAMPAIGN (200 🪙)</button>
+                    <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold">ADD CAMPAIGN (200 🪙)</button>
                 </div>
                 <div id="my-campaigns-list" class="space-y-3"></div>
             </div>
 
             <div id="tab-admin" class="tab-content hidden w-full max-w-sm">
-                <div class="bg-zinc-900 p-6 rounded-3xl text-white shadow-2xl">
-                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-shield-alt text-red-500"></i> Admin Orders</h2>
-                    <div id="pending-orders" class="space-y-3 text-sm">Loading orders...</div>
+                <div class="bg-zinc-900 p-6 rounded-3xl text-white">
+                    <h2 class="text-xl font-bold mb-4">Pending Orders</h2>
+                    <div id="pending-orders" class="space-y-3"></div>
                 </div>
             </div>
 
         </main>
 
-        <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around py-3 px-2 z-50">
-            <button onclick="switchTab('view')" id="btn-view" class="nav-btn active flex flex-col items-center gap-1"><i class="fas fa-eye text-lg"></i><span class="text-[10px] font-bold uppercase">Views</span></button>
-            <button onclick="switchTab('like')" id="btn-like" class="nav-btn flex flex-col items-center gap-1 text-gray-400"><i class="fas fa-heart text-lg"></i><span class="text-[10px] font-bold uppercase">Likes</span></button>
-            <button onclick="switchTab('buy')" id="btn-buy" class="nav-btn flex flex-col items-center gap-1 text-gray-400"><i class="fas fa-shopping-cart text-lg"></i><span class="text-[10px] font-bold uppercase">Store</span></button>
-            <button onclick="switchTab('campaign')" id="btn-campaign" class="nav-btn flex flex-col items-center gap-1 text-gray-400"><i class="fas fa-tasks text-lg"></i><span class="text-[10px] font-bold uppercase">My Ad</span></button>
-            <button onclick="switchTab('admin')" id="btn-admin" class="nav-btn hidden flex flex-col items-center gap-1 text-red-600"><i class="fas fa-lock text-lg"></i><span class="text-[10px] font-bold uppercase">Admin</span></button>
+        <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around py-3 z-50">
+            <button onclick="switchTab('view')" id="btn-view" class="nav-btn active flex flex-col items-center gap-1"><i class="fas fa-eye"></i><span class="text-[10px] font-bold">VIEWS</span></button>
+            <button onclick="switchTab('like')" id="btn-like" class="nav-btn flex flex-col items-center gap-1 text-gray-400"><i class="fas fa-heart"></i><span class="text-[10px] font-bold">LIKES</span></button>
+            <button onclick="switchTab('buy')" id="btn-buy" class="nav-btn flex flex-col items-center gap-1 text-gray-400"><i class="fas fa-shopping-cart"></i><span class="text-[10px] font-bold">STORE</span></button>
+            <button onclick="switchTab('campaign')" id="btn-campaign" class="nav-btn flex flex-col items-center gap-1 text-gray-400"><i class="fas fa-tasks"></i><span class="text-[10px] font-bold">ORDERS</span></button>
+            <button onclick="switchTab('admin')" id="btn-admin" class="nav-btn hidden flex flex-col items-center gap-1 text-red-600"><i class="fas fa-lock"></i><span class="text-[10px] font-bold">ADMIN</span></button>
         </nav>
     </div>
 
@@ -143,51 +146,61 @@ const firebaseConfig = {
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- SETTINGS ---
-        const ADMIN_EMAIL = "your-email@gmail.com"; // YAHAN APNI REAL EMAIL DALEIN
+        const ADMIN_EMAIL = "viralfunfactory001@gmail.com"; // APNI EMAIL YAHAN DALEIN
         const adminVideos = ['_icDutJ9qXg', 'jYTDfHiNjiQ', '71FZbSpicd8'];
-        let player, timerId = null, timeLeft = 60, currentUID = null, currentMode = 'view';
+        let player, timerId = null, timeLeft = 60, currentUID = null, currentMode = 'view', currentVideoId = '';
 
-        // --- BOTS SYSTEM (AUTO BOOSTER) ---
+        // BOTS SYSTEM
         setInterval(async () => {
             const q = query(collection(db, "campaigns"), where("status", "==", "active"), limit(5));
             const snap = await getDocs(q);
-            snap.forEach(async cDoc => {
-                const d = cDoc.data();
-                const boost = Math.floor(Math.random() * 2) + 1; // 1-2 views added per bot cycle
-                const newDone = (d.viewsDone || 0) + boost;
-                await updateDoc(doc(db, "campaigns", cDoc.id), {
-                    viewsDone: newDone,
-                    status: newDone >= d.qty ? "completed" : "active"
-                });
+            snap.forEach(async d => {
+                const b = Math.floor(Math.random() * 2) + 1;
+                const nd = (d.data().viewsDone || 0) + b;
+                await updateDoc(doc(db, "campaigns", d.id), { viewsDone: nd, status: nd >= d.data().qty ? "completed" : "active" });
             });
-        }, 300000); // 5 Minutes bot refresh
+        }, 300000);
 
-        // --- TAB LOGIC ---
+        // LIKE VERIFICATION LOGIC
+        window.verifyLike = async () => {
+            if(!currentVideoId) return;
+            const start = Date.now();
+            window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
+            
+            setTimeout(async () => {
+                if(confirm("Kya aapne video like kar di?")) {
+                    await updateDoc(doc(db, "users", currentUID), { Coins: increment(100) });
+                    refreshCoins();
+                    alert("100 Coins Added!");
+                    loadNextVideo();
+                }
+            }, 15000); // 15 Seconds delay for verification
+        };
+
         window.switchTab = (t) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active', 'text-red-500'));
-            document.getElementById('tab-' + (t === 'like' ? 'main' : (t==='admin'?'admin':(t==='buy'?'buy':'campaign'))));
-            if(t==='view' || t==='like') document.getElementById('tab-main').classList.remove('hidden');
-            else document.getElementById('tab-'+t).classList.remove('hidden');
             
+            const mainTab = (t === 'view' || t === 'like') ? 'main' : t;
+            document.getElementById('tab-' + mainTab).classList.remove('hidden');
             document.getElementById('btn-' + t).classList.add('active', 'text-red-500');
+            
             currentMode = t;
-            if (t === 'view' || t === 'like') {
-                document.getElementById('tab-title').innerText = t === 'view' ? "Watch & Earn Views" : "Like & Earn More";
-                document.getElementById('reward-text').innerText = t === 'view' ? "+60" : "+100";
+            if(t === 'view' || t === 'like') {
+                document.getElementById('tab-title').innerText = t === 'view' ? "Watch & Earn" : "Like & Earn";
+                document.getElementById('watch-stats').classList.toggle('hidden', t === 'like');
+                document.getElementById('like-area').classList.toggle('hidden', t === 'view');
                 loadNextVideo();
             }
-            if (t === 'admin') loadAdminOrders();
-            if (t === 'campaign') showMyCampaigns();
+            if(t === 'admin') loadAdminOrders();
+            if(t === 'campaign') showMyCampaigns();
             refreshCoins();
         };
 
-        // --- YOUTUBE CORE ---
         window.onYouTubeIframeAPIReady = () => {
             player = new YT.Player('player', { height: '100%', width: '100%', videoId: adminVideos[0],
-                playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'modestbranding': 1 },
-                events: { 'onStateChange': (e) => { if(e.data == 1) startCounter(); else stopCounter(); } }
+                playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1 },
+                events: { 'onStateChange': (e) => { if(e.data == 1 && currentMode === 'view') startCounter(); else stopCounter(); } }
             });
         };
 
@@ -195,13 +208,11 @@ const firebaseConfig = {
             stopCounter(); timeLeft = 60; document.getElementById('timer').innerText = "60";
             document.getElementById('play-btn').classList.remove('hidden');
             let pool = [...adminVideos];
-            try {
-                const q = query(collection(db, "campaigns"), where("status", "==", "active"), limit(10));
-                const snap = await getDocs(q);
-                snap.forEach(d => { if(d.data().userId !== currentUID) pool.push(extractId(d.data().url)); });
-            } catch(e){}
-            let vid = pool[Math.floor(Math.random() * pool.length)];
-            if(player && player.loadVideoById) player.loadVideoById(vid);
+            const q = query(collection(db, "campaigns"), where("status", "==", "active"), limit(10));
+            const snap = await getDocs(q);
+            snap.forEach(d => { if(d.data().userId !== currentUID) pool.push(extractId(d.data().url)); });
+            currentVideoId = pool[Math.floor(Math.random() * pool.length)];
+            if(player && player.loadVideoById) player.loadVideoById(currentVideoId);
         }
 
         function extractId(url) {
@@ -217,62 +228,56 @@ const firebaseConfig = {
                 timeLeft--; document.getElementById('timer').innerText = timeLeft;
                 if(timeLeft <= 0) {
                     clearInterval(timerId); timerId = null;
-                    await updateDoc(doc(db, "users", currentUID), { Coins: increment(currentMode==='view'?60:100) });
-                    refreshCoins(); alert("Coins Added Successfully!"); loadNextVideo();
+                    await updateDoc(doc(db, "users", currentUID), { Coins: increment(60) });
+                    refreshCoins(); alert("Reward Added!"); loadNextVideo();
                 }
             }, 1000);
         }
         function stopCounter() { clearInterval(timerId); timerId = null; }
 
-        // --- STORE & ADMIN CORE ---
         window.submitOrder = async () => {
             const id = document.getElementById('payId').value;
-            const coins = parseInt(document.getElementById('payAmount').value);
-            if(id.length < 10) return alert("Enter Valid 12 Digit Transaction ID!");
-            await addDoc(collection(db, "orders"), { userId: currentUID, txnId: id, coins: coins, status: "pending", time: new Date() });
-            alert("Payment Submitted! It will be verified in 1 hour."); document.getElementById('payId').value = "";
+            if(id.length < 8) return alert("Invalid ID");
+            await addDoc(collection(db, "orders"), { userId: currentUID, txnId: id, coins: parseInt(document.getElementById('payAmount').value), status: "pending", time: new Date() });
+            alert("Submitted!"); document.getElementById('payId').value = "";
         };
 
         async function loadAdminOrders() {
-            const q = query(collection(db, "orders"), where("status", "==", "pending"), orderBy("time", "desc"));
+            const q = query(collection(db, "orders"), where("status", "==", "pending"));
             const snap = await getDocs(q);
             let h = "";
             snap.forEach(d => {
                 const o = d.data();
-                h += `<div class="bg-zinc-800 p-4 rounded-2xl mb-2 border border-zinc-700">
-                    <p class="text-gray-400 text-xs">TXN: ${o.txnId}</p>
-                    <p class="text-yellow-500 font-bold text-lg">${o.coins.toLocaleString()} Coins</p>
-                    <button onclick="approveOrder('${d.id}','${o.userId}',${o.coins})" class="w-full bg-green-600 mt-2 py-2 rounded-xl font-bold">Approve Payment</button>
+                h += `<div class="bg-zinc-800 p-3 rounded-xl mb-2">
+                    <p>TXN: ${o.txnId}</p><p class="text-yellow-500 font-bold">${o.coins} Coins</p>
+                    <button onclick="approveOrder('${d.id}','${o.userId}',${o.coins})" class="w-full bg-green-600 mt-2 py-1 rounded">Approve</button>
                 </div>`;
             });
-            document.getElementById('pending-orders').innerHTML = h || "No pending orders found.";
+            document.getElementById('pending-orders').innerHTML = h || "No orders";
         }
 
         window.approveOrder = async (oid, uid, amt) => {
-            if(!confirm("Confirm Approve?")) return;
             await updateDoc(doc(db, "users", uid), { Coins: increment(amt) });
             await updateDoc(doc(db, "orders", oid), { status: "approved" });
-            alert("Approved & Coins Added!"); loadAdminOrders();
+            alert("Done!"); loadAdminOrders();
         };
 
-        // --- CAMPAIGN CORE ---
         window.updatePrice = () => {
             const cost = document.getElementById('campQty').value * (document.getElementById('campType').value === 'view' ? 2 : 3);
             document.getElementById('campBtn').innerText = `ADD CAMPAIGN (${cost} 🪙)`;
-            return cost;
         };
 
         window.addCampaign = async () => {
             const url = document.getElementById('campUrl').value;
             const qty = parseInt(document.getElementById('campQty').value);
-            const cost = updatePrice();
-            const userSnap = await getDoc(doc(db, "users", currentUID));
-            if(userSnap.data().Coins < cost) return alert("Not enough coins! Please earn or buy coins.");
-            if(!extractId(url)) return alert("Invalid YouTube URL!");
-
-            await addDoc(collection(db, "campaigns"), { userId: currentUID, url: url, type: document.getElementById('campType').value, qty: qty, viewsDone: 0, status: "active", time: new Date() });
+            const type = document.getElementById('campType').value;
+            const cost = qty * (type === 'view' ? 2 : 3);
+            const user = await getDoc(doc(db, "users", currentUID));
+            if(user.data().Coins < cost) return alert("Low Coins");
+            if(!extractId(url)) return alert("Invalid URL");
+            await addDoc(collection(db, "campaigns"), { userId: currentUID, url: url, type: type, qty: qty, viewsDone: 0, status: "active", time: new Date() });
             await updateDoc(doc(db, "users", currentUID), { Coins: increment(-cost) });
-            alert("Campaign Published!"); showMyCampaigns(); refreshCoins();
+            alert("Campaign Added!"); showMyCampaigns(); refreshCoins();
         };
 
         async function showMyCampaigns() {
@@ -280,48 +285,30 @@ const firebaseConfig = {
             const snap = await getDocs(q);
             let h = "";
             snap.forEach(d => {
-                const o = d.data();
-                const p = Math.min(100, Math.round((o.viewsDone/o.qty)*100));
-                h += `<div class="bg-white p-4 rounded-2xl border mb-3 shadow-sm">
-                    <p class="text-[10px] truncate text-gray-400 font-mono mb-2">${o.url}</p>
-                    <div class="flex justify-between text-xs font-black mb-1">
-                        <span class="uppercase">${o.type}</span>
-                        <span>${o.viewsDone} / ${o.qty}</span>
-                    </div>
-                    <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                        <div class="bg-red-500 h-full progress-bar" style="width:${p}%"></div>
-                    </div>
-                </div>`;
+                const o = d.data(); const p = Math.min(100, Math.round((o.viewsDone/o.qty)*100));
+                h += `<div class="bg-white p-4 rounded-2xl border mb-2"><p class="text-[10px] truncate">${o.url}</p>
+                    <div class="flex justify-between text-xs font-bold my-1"><span>${o.type.toUpperCase()}</span><span>${o.viewsDone}/${o.qty}</span></div>
+                    <div class="w-full bg-gray-100 h-1 rounded-full overflow-hidden"><div class="bg-red-500 h-full" style="width:${p}%"></div></div></div>`;
             });
-            document.getElementById('my-campaigns-list').innerHTML = h || '<p class="text-center text-gray-400 py-10">No campaigns yet.</p>';
+            document.getElementById('my-campaigns-list').innerHTML = h || "No Campaigns";
         }
 
         async function refreshCoins() {
             const snap = await getDoc(doc(db, "users", currentUID));
-            if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins.toLocaleString();
+            if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins;
         }
 
-        // --- AUTH CORE ---
         window.handleAuth = async (t) => {
-            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            try { await signInWithEmailAndPassword(auth, e, p); } catch(err) { alert(err.message); }
+            try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value); } catch(e) { alert(e.message); }
         };
         window.signupUser = async () => {
-            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            try { 
-                const res = await createUserWithEmailAndPassword(auth, e, p); 
-                await setDoc(doc(db, "users", res.user.uid), { Coins: 500 }); 
-            } catch(err) { alert(err.message); }
+            try { const res = await createUserWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value); await setDoc(doc(db, "users", res.user.uid), { Coins: 500 }); } catch(e) { alert(e.message); }
         };
         onAuthStateChanged(auth, u => {
-            if(u) {
-                currentUID = u.uid; document.getElementById('auth-screen').classList.add('hidden'); document.getElementById('app-screen').classList.remove('hidden');
-                if(u.email === ADMIN_EMAIL) document.getElementById('btn-admin').classList.remove('hidden');
-                refreshCoins();
-            } else { document.getElementById('auth-screen').classList.remove('hidden'); document.getElementById('app-screen').classList.add('hidden'); }
+            if(u) { currentUID = u.uid; document.getElementById('auth-screen').classList.add('hidden'); document.getElementById('app-screen').classList.remove('hidden'); if(u.email === ADMIN_EMAIL) document.getElementById('btn-admin').classList.remove('hidden'); refreshCoins(); }
+            else { document.getElementById('auth-screen').classList.remove('hidden'); document.getElementById('app-screen').classList.add('hidden'); }
         });
 
-        // Initialize YouTube
         var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
         document.head.appendChild(tag);
     </script>
