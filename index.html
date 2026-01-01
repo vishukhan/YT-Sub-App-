@@ -63,12 +63,12 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, getRedirectResult, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // YAHAN APNI CONFIG PASTE KAREIN
-        const firebaseConfig = {
-    apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
+// 1. Firebase Config (Dhyan se apni details bharein)
+const firebaseConfig = {
+  apiKey: "AIzaSyDFsJQ0qvcl8qATznqVedjzGI5RZvhe07U",
   authDomain: "yt-sub-b5356.firebaseapp.com",
   projectId: "yt-sub-b5356",
   storageBucket: "yt-sub-b5356.firebasestorage.app",
@@ -76,80 +76,87 @@
   appId: "1:61877253734:web:45e16188720b34f1aadfa7"
 };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
+// Initialize
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-        let currentCoins = 0;
+let userCoins = 0;
 
-         import { getAuth, signInWithRedirect, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-// Login button logic
+// 2. Login Button Logic (Redirect Method)
 document.getElementById('loginBtn').onclick = () => {
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider();
-    // Popup ki jagah redirect use karein
     signInWithRedirect(auth, provider);
 };
 
+// 3. Logout Logic
+document.getElementById('logoutBtn').onclick = () => {
+    signOut(auth).then(() => location.reload());
+};
 
-        // Auth State Change
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
-                document.getElementById('userName').innerText = user.displayName;
-                document.getElementById('userImg').src = user.photoURL;
+// 4. Auth State & Database Sync
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        // UI Update
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('userName').innerText = user.displayName;
+        document.getElementById('userImg').src = user.photoURL;
 
-                // Sync with Firestore
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
+        // Firestore se Coins lana
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
 
-                if (userSnap.exists()) {
-                    currentCoins = userSnap.data().coins;
-                } else {
-                    currentCoins = 100; // Joining bonus
-                    await setDoc(userRef, { name: user.displayName, coins: currentCoins });
-                }
-                document.getElementById('coinDisplay').innerText = currentCoins;
-            } else {
-                document.getElementById('login-screen').classList.remove('hidden');
-                document.getElementById('dashboard').classList.add('hidden');
-            }
+        if (userSnap.exists()) {
+            userCoins = userSnap.data().Coins; // Aapne 'Coins' C capital rakha hai
+        } else {
+            // Naya user hai toh 100 coins gift
+            userCoins = 100;
+            await setDoc(userRef, { 
+                Name: user.displayName, 
+                Coins: userCoins,
+                Email: user.email 
+            });
+        }
+        document.getElementById('coinDisplay').innerText = userCoins;
+    }
+});
+
+// 5. Add Campaign Logic
+window.addCampaign = async () => {
+    const link = document.getElementById('videoLink').value;
+    const user = auth.currentUser;
+
+    if (!link || !link.includes("youtube.com")) {
+        alert("Please enter a valid YouTube link.");
+        return;
+    }
+
+    if (userCoins < 500) {
+        alert("Campaign ke liye 500 coins chahiye!");
+        return;
+    }
+
+    try {
+        // Campaign save karna
+        await addDoc(collection(db, "campaigns"), {
+            url: link,
+            userId: user.uid,
+            timestamp: new Date()
+        });
+        
+        // Coins minus karna
+        await updateDoc(doc(db, "users", user.uid), {
+            Coins: increment(-500)
         });
 
-        // Add Campaign Logic
-        window.addCampaign = async () => {
-            const link = document.getElementById('videoLink').value;
-            const user = auth.currentUser;
+        alert("Campaign successfully add ho gaya!");
+        location.reload();
+    } catch (e) {
+        alert("Error: " + e.message);
+    }
+};
 
-            if (currentCoins < 500) {
-                alert("Minimum 500 coins required!");
-                return;
-            }
-
-            if (link.includes("youtube.com") || link.includes("youtu.be")) {
-                try {
-                    await addDoc(collection(db, "campaigns"), {
-                        url: link,
-                        userId: user.uid,
-                        createdAt: new Date()
-                    });
-                    
-                    await updateDoc(doc(db, "users", user.uid), {
-                        coins: increment(-500)
-                    });
-
-                    alert("Campaign Added Successfully!");
-                    location.reload();
-                } catch (e) {
-                    alert("Error: " + e.message);
-                }
-            } else {
-                alert("Please enter a valid YouTube link.");
-            }
-        };
     </script>
 </body>
 </html>
