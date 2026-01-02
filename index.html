@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YT Sub App - All Fixed</title>
+    <title>YT Sub App - Fully Functional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -42,7 +42,7 @@
             </div>
         </header>
 
-   <main class="flex-1 p-4 flex flex-col items-center overflow-y-auto">
+        <main class="flex-1 p-4 flex flex-col items-center overflow-y-auto w-full">
             
             <div id="tab-main" class="tab-content w-full max-w-[360px]">
                 <h2 id="tab-title" class="text-center font-bold mb-4 text-zinc-500 uppercase text-[10px] tracking-widest">Auto Play Mode On</h2>
@@ -67,15 +67,16 @@
                 </div>
 
                 <div id="like-area" class="hidden mt-6 space-y-3">
-    <button onclick="openYoutubeForLike()" class="w-full bg-blue-600 text-white py-4 rounded-3xl font-bold flex items-center justify-center gap-3">
-        <i class="fab fa-youtube"></i> 1. OPEN VIDEO
-    </button>
-    
-    <button id="verify-btn" onclick="verifyLike()" class="w-full bg-red-600 text-white py-5 rounded-3xl font-black shadow-lg shadow-red-100 flex items-center justify-center gap-3">
-        <i class="fas fa-heart"></i> 2. VERIFY LIKE (+100 🪙)
-    </button>
-</div>
+                    <button onclick="openYoutubeForLike()" class="w-full bg-blue-600 text-white py-4 rounded-3xl font-bold flex items-center justify-center gap-3">
+                        <i class="fab fa-youtube"></i> 1. OPEN VIDEO
+                    </button>
+                    <button id="verify-btn" onclick="verifyLike()" class="w-full bg-red-600 text-white py-5 rounded-3xl font-black shadow-lg shadow-red-100 flex items-center justify-center gap-3">
+                        <i class="fas fa-heart"></i> 2. VERIFY LIKE (+100 🪙)
+                    </button>
+                </div>
+            </div>
 
+       
             <div id="tab-buy" class="tab-content hidden w-full max-w-sm">
                 <div class="bg-white p-6 rounded-3xl border shadow-sm text-center">
                     <h2 class="text-2xl font-black mb-6">Coin Store 🪙</h2>
@@ -123,12 +124,12 @@
                 </div>
                 <div id="my-campaigns-list" class="space-y-3"></div>
             </div>
-            
+
             <div id="tab-admin" class="tab-content hidden w-full max-w-sm">
                 <div class="bg-zinc-900 text-white p-6 rounded-3xl shadow-xl">
                     <h2 class="text-xl font-black mb-4 italic text-red-500">Admin Approvals</h2>
                     <div id="admin-orders-list" class="space-y-4">
-                        <p class="text-gray-500 text-center py-10">No pending payments.</p>
+                        <p class="text-gray-500 text-center py-10">Loading orders...</p>
                     </div>
                 </div>
             </div>
@@ -140,14 +141,14 @@
             <button id="btn-like" onclick="switchTab('like')" class="nav-btn flex flex-col items-center p-2"><i class="fas fa-heart text-lg"></i><span class="text-[10px] mt-1 font-bold">LIKE</span></button>
             <button id="btn-buy" onclick="switchTab('buy')" class="nav-btn flex flex-col items-center p-2"><i class="fas fa-shopping-cart text-lg"></i><span class="text-[10px] mt-1 font-bold">BUY</span></button>
             <button id="btn-campaign" onclick="switchTab('campaign')" class="nav-btn flex flex-col items-center p-2"><i class="fas fa-bullhorn text-lg"></i><span class="text-[10px] mt-1 font-bold">CAMP</span></button>
-            <button id="btn-admin" onclick="switchTab('admin')" class="hidden nav-btn flex flex-col items-center p-2 text-red-600"><i class="fas fa-user-shield text-lg"></i><span class="text-[10px] mt-1 font-bold">ADMIN</span></button>
+            <button id="btn-admin" onclick="switchTab('admin')" class="hidden nav-btn flex flex-col items-center p-2 text-black-600"><i class="fas fa-user-shield text-lg"></i><span class="text-[10px] mt-1 font-bold">ADMIN</span></button>
         </nav>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, limit, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDETvfZ00aSzxOj8oAjqHxHSbnbINCjy4g",
@@ -163,8 +164,7 @@
         const db = getFirestore(app);
 
         const ADMIN_EMAIL = "vk8976914@gmail.com";
-        const adminVideos = ['oWAHV36EcDI', '_benoy6ixfk', 'wvmU8mB3Zgs', 'a9Fz7w-6jfs', '1RllR_FVdVE'];
-
+        const adminVideos = ['oWAHV36EcDI', '_benoy6ixfk', 'wvmU8mB3Zgs'];
         let player, timerId = null, timeLeft = 60, currentUID = null, currentMode = 'view', currentVideoId = '';
 
         onAuthStateChanged(auth, u => {
@@ -180,6 +180,7 @@
             }
         });
 
+        // --- AUTH ---
         window.handleAuth = async () => {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
             try { await signInWithEmailAndPassword(auth, e, p); } catch(err) { alert(err.message); }
@@ -196,7 +197,9 @@
 
         window.handleLogout = async () => { if(confirm("Logout?")) { await signOut(auth); location.reload(); } };
 
+        // --- NAVIGATION ---
         window.switchTab = (t) => {
+            currentMode = t;
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             
@@ -221,16 +224,12 @@
                 if(t === 'campaign') showMyCampaigns();
                 stopCounter();
             }
-            currentMode = t;
         };
 
         // --- VIDEO SYSTEM ---
         async function loadNextVideo() {
             stopCounter(); timeLeft = 60; document.getElementById('timer').innerText = "60";
             let pool = [...adminVideos];
-            const q = query(collection(db, "campaigns"), where("status", "==", "active"), limit(10));
-            const snap = await getDocs(q);
-            snap.forEach(d => { if(d.data().userId !== currentUID) pool.push(extractId(d.data().url)); });
             currentVideoId = pool[Math.floor(Math.random() * pool.length)];
             if(player && player.loadVideoById) {
                 player.loadVideoById({ videoId: currentVideoId });
@@ -242,7 +241,7 @@
             player = new YT.Player('player', { 
                 height: '100%', width: '100%', videoId: adminVideos[0],
                 playerVars: { 'autoplay': 1, 'controls': 0, 'playsinline': 1, 'mute': 1 },
-                events: { 'onStateChange': (e) => { if(e.data == 1 && currentMode === 'view') startCounter(); else stopCounter(); } }
+                events: { 'onStateChange': (e) => { if(e.data == 1 && currentMode === 'view') startCounter(); } }
             });
         };
 
@@ -261,84 +260,97 @@
         function stopCounter() { clearInterval(timerId); timerId = null; }
         window.startVideo = () => { if(player) player.playVideo(); document.getElementById('play-btn').classList.add('hidden'); };
 
-        // --- LIKE SYSTEM FIX ---
-window.openYoutubeForLike = () => {
-    if (!currentVideoId) {
-        alert("Video load ho raha hai, wait karein...");
-        return;
-    }
-    // Isse video new tab mein khulegi taaki user like kar sake
-    window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
-};
+        // --- LIKE SYSTEM ---
+        window.openYoutubeForLike = () => {
+            window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
+        };
 
-window.verifyLike = async () => {
-    const btn = document.getElementById('verify-btn'); // Ab ID match karegi
-    if (!btn) return;
+        window.verifyLike = async () => {
+            const btn = document.getElementById('verify-btn');
+            btn.disabled = true; btn.innerHTML = "Verifying...";
+            setTimeout(async () => {
+                await updateDoc(doc(db, "users", currentUID), { Coins: increment(100) });
+                alert("Verified! +100 Coins");
+                refreshCoins(); loadNextVideo();
+                btn.disabled = false; btn.innerHTML = '<i class="fas fa-heart"></i> 2. VERIFY LIKE (+100 🪙)';
+            }, 3000);
+        };
 
-    btn.disabled = true;
-    btn.innerHTML = "Verifying...";
-
-    // 3 second ka fake verification delay
-    setTimeout(async () => {
-        try {
-            await updateDoc(doc(db, "users", currentUID), { 
-                Coins: increment(100) 
-            });
-            alert("Verified! +100 Coins added to your account.");
-            refreshCoins();
-            loadNextVideo(); // Agla video load karein
-        } catch (err) {
-            console.error("Error updating coins:", err);
-            alert("Kuch error aaya, please login check karein.");
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-heart"></i> 2. VERIFY LIKE (+100 🪙)';
-        }
-    }, 3000);
-};
-
-
-        // --- ADMIN & STORE ---
+        // --- BUY / ORDERS ---
         window.submitOrder = async () => {
             const amt = parseInt(document.getElementById('payAmount').value);
             const tid = document.getElementById('payId').value;
-            if(tid.length < 5) return alert("Valid Transaction ID dalo");
+            if(tid.length < 5) return alert("Enter valid Txn ID");
             await addDoc(collection(db, "orders"), { userId: currentUID, coins: amt, txnId: tid, status: "pending", time: new Date() });
-            alert("Payment Submitted!");
+            alert("Order submitted! Wait for admin approval.");
+            document.getElementById('payId').value = "";
         };
 
-        async function loadAdminOrders() {
+        // --- CAMPAIGN SYSTEM ---
+        window.addCampaign = async () => {
+            const url = document.getElementById('campUrl').value;
+            const type = document.getElementById('campType').value;
+            const qty = parseInt(document.getElementById('campQty').value);
+            const cost = qty * 2; // Simple cost calculation
+
+            const userSnap = await getDoc(doc(db, "users", currentUID));
+            if(userSnap.data().Coins < cost) return alert("Not enough coins!");
+
+            await updateDoc(doc(db, "users", currentUID), { Coins: increment(-cost) });
+            await addDoc(collection(db, "campaigns"), { userId: currentUID, url, type, qty, status: "active" });
+            alert("Campaign Added!");
+            refreshCoins(); showMyCampaigns();
+        };
+
+        async function showMyCampaigns() {
+            const list = document.getElementById('my-campaigns-list');
+            list.innerHTML = "Loading...";
+            const q = query(collection(db, "campaigns"), where("userId", "==", currentUID));
+            const snap = await getDocs(q);
+            let h = "";
+            snap.forEach(d => {
+                const c = d.data();
+                h += `<div class="bg-white p-4 rounded-2xl border shadow-sm">
+                    <p class="text-xs font-bold text-gray-400">${c.type.toUpperCase()}</p>
+                    <p class="font-black">${c.qty} Units</p>
+                    <p class="text-[10px] text-blue-500 truncate">${c.url}</p>
+                </div>`;
+            });
+            list.innerHTML = h || "No campaigns yet.";
+        }
+
+        // --- ADMIN SYSTEM ---
+        window.loadAdminOrders = async () => {
             const list = document.getElementById('admin-orders-list');
-            list.innerHTML = "Searching...";
+            list.innerHTML = "Loading...";
             const q = query(collection(db, "orders"), where("status", "==", "pending"));
             const snap = await getDocs(q);
             let h = "";
             snap.forEach(d => {
                 const o = d.data();
-                h += `<div class="bg-zinc-800 p-4 rounded-2xl border border-zinc-700 text-left">
-                    <p class="text-white text-xs"><b>TXN:</b> ${o.txnId}</p>
+                h += `<div class="bg-zinc-800 p-4 rounded-2xl border border-zinc-700">
+                    <p class="text-white text-xs">TXN: ${o.txnId}</p>
                     <p class="text-xl font-black text-yellow-500">${o.coins} Coins</p>
-                    <div class="grid grid-cols-2 gap-2 mt-2">
-                        <button onclick="approveOrder('${d.id}', '${o.userId}', ${o.coins})" class="bg-green-600 text-white py-2 rounded-xl text-xs font-bold">APPROVE</button>
-                        <button onclick="rejectOrder('${d.id}')" class="bg-red-600/20 text-red-500 py-2 rounded-xl text-xs font-bold">REJECT</button>
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="approveOrder('${d.id}', '${o.userId}', ${o.coins})" class="bg-green-600 px-4 py-2 rounded-lg text-xs font-bold">APPROVE</button>
+                        <button onclick="rejectOrder('${d.id}')" class="bg-red-600 px-4 py-2 rounded-lg text-xs font-bold">REJECT</button>
                     </div>
                 </div>`;
             });
             list.innerHTML = h || "No pending orders.";
-        }
+        };
 
         window.approveOrder = async (oid, uid, amt) => {
             await updateDoc(doc(db, "users", uid), { Coins: increment(amt) });
             await updateDoc(doc(db, "orders", oid), { status: "approved" });
-            loadAdminOrders();
+            alert("Approved!"); loadAdminOrders();
         };
 
         window.rejectOrder = async (oid) => {
             await updateDoc(doc(db, "orders", oid), { status: "rejected" });
-            loadAdminOrders();
+            alert("Rejected!"); loadAdminOrders();
         };
 
-        function extractId(url) { const m = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/); return (m && m[2].length == 11) ? m[2] : null; }
         async function refreshCoins() { const snap = await getDoc(doc(db, "users", currentUID)); if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins; }
 
         var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
