@@ -261,20 +261,42 @@
         function stopCounter() { clearInterval(timerId); timerId = null; }
         window.startVideo = () => { if(player) player.playVideo(); document.getElementById('play-btn').classList.add('hidden'); };
 
-        // --- LIKE SYSTEM ---
-        window.openYoutubeForLike = () => {
-            window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
-        };
+        // --- LIKE SYSTEM FIX ---
+window.openYoutubeForLike = () => {
+    if (!currentVideoId) {
+        alert("Video load ho raha hai, wait karein...");
+        return;
+    }
+    // Isse video new tab mein khulegi taaki user like kar sake
+    window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
+};
 
-        window.verifyLike = async () => {
-            const btn = document.getElementById('verify-btn');
-            btn.disabled = true; btn.innerHTML = "Verifying...";
-            setTimeout(async () => {
-                await updateDoc(doc(db, "users", currentUID), { Coins: increment(100) });
-                alert("Verified! +100 Coins"); refreshCoins(); loadNextVideo();
-                btn.disabled = false; btn.innerHTML = '<i class="fas fa-heart"></i> LIKE & VERIFY (+100 🪙)';
-            }, 3000);
-        };
+window.verifyLike = async () => {
+    const btn = document.getElementById('verify-btn'); // Ab ID match karegi
+    if (!btn) return;
+
+    btn.disabled = true;
+    btn.innerHTML = "Verifying...";
+
+    // 3 second ka fake verification delay
+    setTimeout(async () => {
+        try {
+            await updateDoc(doc(db, "users", currentUID), { 
+                Coins: increment(100) 
+            });
+            alert("Verified! +100 Coins added to your account.");
+            refreshCoins();
+            loadNextVideo(); // Agla video load karein
+        } catch (err) {
+            console.error("Error updating coins:", err);
+            alert("Kuch error aaya, please login check karein.");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-heart"></i> 2. VERIFY LIKE (+100 🪙)';
+        }
+    }, 3000);
+};
+
 
         // --- ADMIN & STORE ---
         window.submitOrder = async () => {
