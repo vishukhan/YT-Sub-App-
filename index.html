@@ -66,12 +66,16 @@
                     </div>
                 </div>
 
-                <div id="like-area" class="hidden mt-6">
-                    <button onclick="verifyLike()" class="w-full bg-red-600 text-white py-5 rounded-3xl font-black shadow-lg shadow-red-100 flex items-center justify-center gap-3">
-                        <i class="fas fa-heart"></i> LIKE & VERIFY (+100 🪙)
-                    </button>
-                </div>
-            </div>
+                <div id="like-area" class="hidden mt-6 space-y-3">
+    <button onclick="openYoutubeForLike()" class="w-full bg-blue-600 text-white py-4 rounded-3xl font-bold flex items-center justify-center gap-3">
+        <i class="fab fa-youtube"></i> 1. OPEN VIDEO
+    </button>
+    
+    <button id="verify-btn" onclick="verifyLike()" class="w-full bg-red-600 text-white py-5 rounded-3xl font-black shadow-lg shadow-red-100 flex items-center justify-center gap-3">
+        <i class="fas fa-heart"></i> 2. VERIFY LIKE (+100 🪙)
+    </button>
+</div>
+
             <div id="tab-buy" class="tab-content hidden w-full max-w-sm">
                 <div class="bg-white p-6 rounded-3xl border shadow-sm text-center">
                     <h2 class="text-2xl font-black mb-6">Coin Store 🪙</h2>
