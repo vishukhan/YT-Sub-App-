@@ -82,12 +82,18 @@
                             <img src="payment-qr.png" alt="Scan QR" class="w-full h-full object-contain" onerror="this.src='https://via.placeholder.com/200?text=Upload+QR+To+Github'">
                         </div>
                         <p class="text-xs font-bold text-blue-400 uppercase mb-1">UPI ID</p>
-                        <p class="text-sm font-black text-blue-700 select-all">vishu@upi</p>
+                        <p class="text-sm font-black text-blue-700 select-all">vishalkhan@fam</p>
                     </div>
                     <div class="space-y-4 text-left">
                         <select id="payAmount" class="w-full p-4 bg-gray-50 rounded-2xl border font-bold">
-                            <option value="5000">5,000 Coins - ₹10</option>
-                            <option value="12000">12,000 Coins - ₹20</option>
+                            <option value="500">500 Coins - ₹10</option>
+                            <option value="1000">1000 Coins - ₹20</option>
+                            <option value="5000">5000 Coins - ₹90</option>
+                            <option value="10000">10000 Coins - ₹170</option>
+                            <option value="15000">15000 Coins - ₹260</option>
+                            <option value="30000">30000 Coins - ₹510</option>
+                            <option value="50000">50000 Coins - ₹890</option>
+                            <option value="100000">100000 Coins - ₹1600</option>
                         </select>
                         <input id="payId" type="text" placeholder="Transaction ID (12 Digits)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
                         <button onclick="submitOrder()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Submit Payment</button>
