@@ -89,14 +89,28 @@
                     </div>
                     <div class="space-y-4 text-left">
                         <select id="payAmount" class="w-full p-4 bg-gray-50 rounded-2xl border font-bold">
-                            <option value="500">500 Coins - ₹10</option>
-                            <option value="1000">1000 Coins - ₹20</option>
-                            <option value="5000">5000 Coins - ₹90</option>
-                            <option value="10000">10000 Coins - ₹170</option>
-                            <option value="15000">15000 Coins - ₹260</option>
-                            <option value="30000">30000 Coins - ₹510</option>
-                            <option value="50000">50000 Coins - ₹890</option>
-                            <option value="100000">100000 Coins - ₹1600</option>
+                            <option value="500">500 Coins - ₹9</option>
+                            <option value="1000">1000 Coins - ₹19</option>
+                            <option value="1500">1500 Coins - ₹29</option>
+                            <option value="2000">2000 Coins - ₹39</option>
+                            <option value="2500">2500 Coins - ₹49</option>
+                            <option value="3000">3000Coins - ₹59</option>
+                            <option value="3500">3500 Coins - ₹69</option>
+                            <option value="4000">4000 Coins - ₹79</option>
+                            <option value="4500">4500 Coins - ₹89</option>
+                            <option value="5000">5000 Coins - ₹99</option>
+                            <option value="5500">5500 Coins - ₹109</option>
+                            <option value="6000">6000 Coins - ₹119</option>
+                            <option value="7000">7000 Coins - ₹139</option>
+                            <option value="8000">8000 Coins - ₹159</option>
+                            <option value="9000">9000 Coins - ₹179</option>
+                            <option value="10000">10000 Coins - ₹199</option>
+                            <option value="50000">50000 Coins - ₹999</option> 
+                            <option value="100000">100000 Coins - ₹1999</option>
+                            <option value="150000">150000 Coins - ₹2999</option>
+                            <option value="200000">200000 Coins - ₹3999</option>
+                            <option value="500000">500000 Coins - ₹9999</option>
+                            <option value="1000000">1000000 Coins - ₹19999</option>
                         </select>
                         <input id="payId" type="text" placeholder="Transaction ID (12 Digits)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
                         <button onclick="submitOrder()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Submit Payment</button>
@@ -198,7 +212,7 @@
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
             try { 
                 const res = await createUserWithEmailAndPassword(auth, e, p);
-                await setDoc(doc(db, "users", res.user.uid), { Coins: 500, email: e });
+                await setDoc(doc(db, "users", res.user.uid), { Coins: 100, email: e });
                 alert("Account Created!");
             } catch(err) { alert(err.message); }
         };
