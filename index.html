@@ -343,33 +343,87 @@
         };
 
         // --- CAMPAIGN SYSTEM ---
-        window.addCampaign = async () => {
-            const url = document.getElementById('campUrl').value;
-            const type = document.getElementById('campType').value;
-            const qty = parseInt(document.getElementById('campQty').value);
-            const totalCost = window.updatePrice();
+        // 1. Campaign add karne ka updated code
+window.addCampaign = async () => {
+    const url = document.getElementById('campUrl').value;
+    const type = document.getElementById('campType').value;
+    const qty = parseInt(document.getElementById('campQty').value);
+    const totalCost = window.updatePrice();
 
-            if(!url.includes("youtu")) return alert("Invalid YouTube Link!");
+    if(!url.includes("youtu")) return alert("Sahi YouTube link dalein!");
 
-            try {
-                const userSnap = await getDoc(doc(db, "users", currentUID));
-                if(userSnap.data().Coins < totalCost) return alert(`Need ${totalCost} coins!`);
+    try {
+        const userRef = doc(db, "users", currentUID);
+        const userSnap = await getDoc(userRef);
+        
+        if(userSnap.data().Coins < totalCost) {
+            return alert(`Coins kam hain! Aapko ${totalCost} coins chahiye.`);
+        }
 
-                await updateDoc(doc(db, "users", currentUID), { Coins: increment(-totalCost) });
-                await addDoc(collection(db, "campaigns"), { 
-                    userId: currentUID, 
-                    url, 
-                    type, 
-                    qty, 
-                    status: "active",
-                    createdAt: serverTimestamp() 
-                });
+        // Coins deduct karein
+        await updateDoc(userRef, {
+            Coins: increment(-totalCost)
+        });
 
-                alert("Campaign Added!");
-                document.getElementById('campUrl').value = "";
-                refreshCoins(); showMyCampaigns();
-            } catch(e) { alert("Error: " + e.message); }
-        };
+        // Campaign save karein (serverTimestamp fix ke saath)
+        await addDoc(collection(db, "campaigns"), {
+            userId: currentUID,
+            url: url,
+            type: type,
+            qty: qty,
+            count: 0, // Shuruat mein 0 views
+            status: "active",
+            createdAt: new Date() // serverTimestamp error hatane ke liye
+        });
+
+        alert("Campaign Add ho gaya!");
+        document.getElementById('campUrl').value = "";
+        refreshCoins();
+        window.showMyCampaigns(); // List update karein
+    } catch(e) {
+        alert("Error: " + e.message);
+    }
+};
+
+// 2. Campaign list (Progress Bar ke saath)
+window.showMyCampaigns = async () => {
+    const list = document.getElementById('my-campaigns-list');
+    if(!list) return;
+    
+    list.innerHTML = "<p class='text-center text-xs text-gray-400'>Loading...</p>";
+    
+    try {
+        const q = query(collection(db, "campaigns"), where("userId", "==", currentUID));
+        const snap = await getDocs(q);
+        let h = "";
+        
+        snap.forEach(d => {
+            const c = d.data();
+            const done = c.count || 0;
+            const target = c.qty || 100;
+            const percent = Math.min(Math.round((done / target) * 100), 100);
+
+            h += `
+            <div class="bg-white p-4 rounded-3xl border border-gray-100 shadow-sm mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">${c.type}</span>
+                    <span class="text-[10px] font-black text-gray-400">${percent}%</span>
+                </div>
+                <div class="flex justify-between items-end mb-2">
+                    <p class="font-black text-lg">${done} <span class="text-gray-300 text-sm font-normal">/ ${target} Units</span></p>
+                </div>
+                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-red-600 transition-all duration-700" style="width: ${percent}%"></div>
+                </div>
+                <p class="text-[9px] text-blue-400 truncate mt-2 opacity-60">${c.url}</p>
+            </div>`;
+        });
+        list.innerHTML = h || "<p class='text-center text-gray-400 text-xs py-10'>No campaigns found.</p>";
+    } catch(e) {
+        console.error(e);
+    }
+};
+
 
         // --- ADMIN SYSTEM ---
         window.loadAdminOrders = async () => {
