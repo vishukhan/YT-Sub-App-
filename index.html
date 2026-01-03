@@ -331,38 +331,45 @@
             document.getElementById('payId').value = "";
         };
 
+        // --- DYNAMIC PRICE CALCULATION ---
+        window.updatePrice = () => {
+            const type = document.getElementById('campType').value;
+            const qty = parseInt(document.getElementById('campQty').value);
+            const btn = document.getElementById('campBtn');
+            const costPerUnit = (type === 'view') ? 2 : 3; // Rate: View=6, Like=10
+            const totalCost = qty * costPerUnit;
+            btn.innerText = `ADD CAMPAIGN (${totalCost} 🪙)`;
+            return totalCost;
+        };
+
         // --- CAMPAIGN SYSTEM ---
         window.addCampaign = async () => {
             const url = document.getElementById('campUrl').value;
             const type = document.getElementById('campType').value;
             const qty = parseInt(document.getElementById('campQty').value);
-            const cost = qty * 2; // Simple cost calculation
+            const totalCost = window.updatePrice();
 
-            const userSnap = await getDoc(doc(db, "users", currentUID));
-            if(userSnap.data().Coins < cost) return alert("Not enough coins!");
+            if(!url.includes("youtu")) return alert("Invalid YouTube Link!");
 
-            await updateDoc(doc(db, "users", currentUID), { Coins: increment(-cost) });
-            await addDoc(collection(db, "campaigns"), { userId: currentUID, url, type, qty, status: "active" });
-            alert("Campaign Added!");
-            refreshCoins(); showMyCampaigns();
+            try {
+                const userSnap = await getDoc(doc(db, "users", currentUID));
+                if(userSnap.data().Coins < totalCost) return alert(`Need ${totalCost} coins!`);
+
+                await updateDoc(doc(db, "users", currentUID), { Coins: increment(-totalCost) });
+                await addDoc(collection(db, "campaigns"), { 
+                    userId: currentUID, 
+                    url, 
+                    type, 
+                    qty, 
+                    status: "active",
+                    createdAt: serverTimestamp() 
+                });
+
+                alert("Campaign Added!");
+                document.getElementById('campUrl').value = "";
+                refreshCoins(); showMyCampaigns();
+            } catch(e) { alert("Error: " + e.message); }
         };
-
-        async function showMyCampaigns() {
-            const list = document.getElementById('my-campaigns-list');
-            list.innerHTML = "Loading...";
-            const q = query(collection(db, "campaigns"), where("userId", "==", currentUID));
-            const snap = await getDocs(q);
-            let h = "";
-            snap.forEach(d => {
-                const c = d.data();
-                h += `<div class="bg-white p-4 rounded-2xl border shadow-sm">
-                    <p class="text-xs font-bold text-gray-400">${c.type.toUpperCase()}</p>
-                    <p class="font-black">${c.qty} Units</p>
-                    <p class="text-[10px] text-blue-500 truncate">${c.url}</p>
-                </div>`;
-            });
-            list.innerHTML = h || "No campaigns yet.";
-        }
 
         // --- ADMIN SYSTEM ---
         window.loadAdminOrders = async () => {
