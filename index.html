@@ -333,6 +333,28 @@
         window.stopCounter();
     };
 
+
+        // --- BUY / ORDERS ---
+        window.submitOrder = async () => {
+            const amt = parseInt(document.getElementById('payAmount').value);
+            const tid = document.getElementById('payId').value;
+            if(tid.length < 5) return alert("Enter valid Txn ID");
+            await addDoc(collection(db, "orders"), { userId: currentUID, coins: amt, txnId: tid, status: "pending", time: new Date() });
+            alert("Order submitted! Wait for admin approval.");
+            document.getElementById('payId').value = "";
+        };
+
+        // --- DYNAMIC PRICE CALCULATION ---
+        window.updatePrice = () => {
+            const type = document.getElementById('campType').value;
+            const qty = parseInt(document.getElementById('campQty').value);
+            const btn = document.getElementById('campBtn');
+            const costPerUnit = (type === 'view') ? 2 : 3; // Rate: View=6, Like=10
+            const totalCost = qty * costPerUnit;
+            btn.innerText = `ADD CAMPAIGN (${totalCost} 🪙)`;
+            return totalCost;
+        };
+
     window.addCampaign = async () => {
         const url = document.getElementById('campUrl').value;
         const type = document.getElementById('campType').value;
