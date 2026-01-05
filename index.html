@@ -189,43 +189,31 @@
             <button id="btn-admin" onclick="switchTab('admin')" class="hidden nav-btn flex flex-col items-center p-2 text-black-600"><i class="fas fa-user-shield text-lg"></i><span class="text-[10px] mt-1 font-bold">ADMIN</span></button>
         </nav>
     </div>
-
+    
+    
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDETvfZ00aSzxOj8oAjqHxHSbnbINCjy4g",
-            authDomain: "yt-sub-app-b76a9.firebaseapp.com",
-            projectId: "yt-sub-app-b76a9",
-            storageBucket: "yt-sub-app-b76a9.firebasestorage.app",
-            messagingSenderId: "293476420",
-            appId: "1:293476420:web:a5111a8a6785dae4344411"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyDETvfZ00aSzxOj8oAjqHxHSbnbINCjy4g",
+        authDomain: "yt-sub-app-b76a9.firebaseapp.com",
+        projectId: "yt-sub-app-b76a9",
+        storageBucket: "yt-sub-app-b76a9.firebasestorage.app",
+        messagingSenderId: "293476420",
+        appId: "1:293476420:web:a5111a8a6785dae4344411"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        const ADMIN_EMAIL = "vk8976914@gmail.com";
-       // const adminVideos = ['oWAHV36EcDI', '_benoy6ixfk', 'wvmU8mB3Zgs'];
-        let player, timerId = null, timeLeft = 60, currentUID = null, currentMode = 'view', currentVideoId = '';
-
-        onAuthStateChanged(auth, u => {
-            if(u) {
-                currentUID = u.uid;
-                document.getElementById('auth-screen').classList.add('hidden');
-                document.getElementById('app-screen').classList.remove('hidden');
-                if(u.email === ADMIN_EMAIL) document.getElementById('btn-admin').classList.remove('hidden');
-                refreshCoins(); loadNextVideo();
-            } else {
-                document.getElementById('auth-screen').classList.remove('hidden');
-                document.getElementById('app-screen').classList.add('hidden');
-            }
-        });
-
-        // --- AUTH ---
+    const ADMIN_EMAIL = "vk8976914@gmail.com";
+    let player, timerId = null, timeLeft = 60, currentUID = null, currentMode = 'view';
+    let currentVideoId = '', currentCampaignId = null;
+    
+    // --- AUTH ---
         window.handleAuth = async () => {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
             try { await signInWithEmailAndPassword(auth, e, p); } catch(err) { alert(err.message); }
@@ -242,225 +230,225 @@
 
         window.handleLogout = async () => { if(confirm("Logout?")) { await signOut(auth); location.reload(); } };
 
-        // --- NAVIGATION ---
-        window.switchTab = (t) => {
-            currentMode = t;
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            
-            const likeArea = document.getElementById('like-area');
-            const watchStats = document.getElementById('watch-stats');
-            const tabTitle = document.getElementById('tab-title');
 
-            if (t === 'view' || t === 'like') {
-                document.getElementById('tab-main').classList.remove('hidden');
-                document.getElementById('btn-' + t).classList.add('active');
-                if(t === 'like') {
-                    likeArea.classList.remove('hidden'); watchStats.classList.add('hidden');
-                    tabTitle.innerText = "Like & Earn Mode"; stopCounter();
-                } else {
-                    likeArea.classList.add('hidden'); watchStats.classList.remove('hidden');
-                    tabTitle.innerText = "Auto Play Mode On"; loadNextVideo();
+    // --- 1. YOUTUBE ID EXTRACTOR (Fixed for Shorts) ---
+    function extractId(url) {
+        const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?v=)|(shorts\/)|(\?v=))([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[9].trim().length === 11) ? match[9].trim() : null;
+    }
+
+    // --- 2. BUTTON LOCK/UNLOCK LOGIC ---
+    window.openYoutubeForLike = () => {
+        if(!currentVideoId) return alert("Please wait for video to load!");
+        
+        // Open Video Link
+        window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
+        
+        // Unlock Verify Button
+        const verifyBtn = document.getElementById('verify-btn');
+        if(verifyBtn) {
+            verifyBtn.disabled = false;
+            verifyBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-600');
+            verifyBtn.classList.add('bg-green-600'); // Button active color
+        }
+    };
+
+    window.verifyLike = async () => {
+        const btn = document.getElementById('verify-btn');
+        if(btn.disabled) return;
+
+        btn.disabled = true;
+        btn.innerText = "VERIFYING...";
+
+        setTimeout(async () => {
+            try {
+                await updateDoc(doc(db, "users", currentUID), { Coins: increment(100) });
+                if(currentCampaignId) {
+                    await updateDoc(doc(db, "campaigns", currentCampaignId), { count: increment(1) });
                 }
-            } else {
-                document.getElementById('tab-' + t).classList.remove('hidden');
-                document.getElementById('btn-' + t).classList.add('active');
-                if(t === 'admin') loadAdminOrders();
-                if(t === 'campaign') showMyCampaigns();
-                stopCounter();
+                alert("Verified! +100 Coins Received.");
+                refreshCoins();
+                loadNextVideo(); // This will auto-lock the button again
+            } catch(e) {
+                alert("Error: " + e.message);
+                btn.disabled = false;
             }
-        };
+        }, 2000);
+    };
 
-        // --- VIDEO SYSTEM ---
-        async function loadNextVideo() {
-            stopCounter(); timeLeft = 60; document.getElementById('timer').innerText = "60";
-            let pool = [...adminVideos];
-            currentVideoId = pool[Math.floor(Math.random() * pool.length)];
+    // --- 3. VIDEO LOADING SYSTEM ---
+    async function loadNextVideo() {
+        window.stopCounter();
+        
+        // RESET VERIFY BUTTON (LOCK IT)
+        const verifyBtn = document.getElementById('verify-btn');
+        if(verifyBtn) {
+            verifyBtn.disabled = true;
+            verifyBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-gray-600');
+            verifyBtn.classList.remove('bg-green-600');
+            verifyBtn.innerHTML = '<i class="fas fa-heart"></i> 2. VERIFY LIKE (+100 🪙)';
+        }
+
+        try {
+            const q = query(collection(db, "campaigns"), 
+                      where("status", "==", "active"), 
+                      where("type", "==", currentMode), limit(10));
+            const snap = await getDocs(q);
+            let pool = [];
+            snap.forEach(doc => pool.push({ id: doc.id, ...doc.data() }));
+
+            if(pool.length > 0) {
+                const s = pool[Math.floor(Math.random() * pool.length)];
+                currentVideoId = extractId(s.url);
+                currentCampaignId = s.id;
+            } else {
+                currentVideoId = 'oWAHV36EcDI'; // Default
+                currentCampaignId = null;
+            }
+
             if(player && player.loadVideoById) {
                 player.loadVideoById({ videoId: currentVideoId });
-                player.mute(); player.playVideo();
+                player.mute();
             }
-        }
+        } catch(e) { console.error(e); }
+    }
 
-        window.onYouTubeIframeAPIReady = () => {
-            player = new YT.Player('player', { 
-                height: '100%', width: '100%', videoId: adminVideos[0],
-                playerVars: { 'autoplay': 1, 'controls': 0, 'playsinline': 1, 'mute': 1 },
-                events: { 'onStateChange': (e) => { if(e.data == 1 && currentMode === 'view') startCounter(); } }
-            });
-        };
+    // --- 4. OTHER GLOBAL FUNCTIONS (Tabs, Admin, Campaign) ---
+    window.switchTab = (t) => {
+        currentMode = t;
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+        
+        const contentId = (t === 'view' || t === 'like') ? 'tab-main' : 'tab-' + t;
+        document.getElementById(contentId).classList.remove('hidden');
+        document.getElementById('btn-' + t).classList.add('active');
 
-        function startCounter() {
-            if(timerId) return;
-            timerId = setInterval(async () => {
-                timeLeft--; document.getElementById('timer').innerText = timeLeft;
-                if(timeLeft <= 0) {
-                    clearInterval(timerId); timerId = null;
-                    await updateDoc(doc(db, "users", currentUID), { Coins: increment(60) });
-                    refreshCoins(); loadNextVideo();
-                }
-            }, 1000);
-        }
+        if(t === 'view' || t === 'like') {
+            document.getElementById('like-area').classList.toggle('hidden', t !== 'like');
+            document.getElementById('watch-stats').classList.toggle('hidden', t === 'like');
+            loadNextVideo();
+        } else if(t === 'campaign') window.showMyCampaigns();
+        else if(t === 'admin') window.loadAdminOrders();
+        window.stopCounter();
+    };
 
-        function stopCounter() { clearInterval(timerId); timerId = null; }
-        window.startVideo = () => { if(player) player.playVideo(); document.getElementById('play-btn').classList.add('hidden'); };
+    window.addCampaign = async () => {
+        const url = document.getElementById('campUrl').value;
+        const type = document.getElementById('campType').value;
+        const qty = parseInt(document.getElementById('campQty').value);
+        const vId = extractId(url);
+        if(!vId) return alert("Invalid YouTube link!");
 
-        // --- LIKE SYSTEM ---
-        window.openYoutubeForLike = () => {
-            window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
-        };
-
-        window.verifyLike = async () => {
-            const btn = document.getElementById('verify-btn');
-            btn.disabled = true; btn.innerHTML = "Verifying...";
-            setTimeout(async () => {
-                await updateDoc(doc(db, "users", currentUID), { Coins: increment(100) });
-                alert("Verified! +100 Coins");
-                refreshCoins(); loadNextVideo();
-                btn.disabled = false; btn.innerHTML = '<i class="fas fa-heart"></i> 2. VERIFY LIKE (+100 🪙)';
-            }, 3000);
-        };
-
-        // --- BUY / ORDERS ---
-        window.submitOrder = async () => {
-            const amt = parseInt(document.getElementById('payAmount').value);
-            const tid = document.getElementById('payId').value;
-            if(tid.length < 5) return alert("Enter valid Txn ID");
-            await addDoc(collection(db, "orders"), { userId: currentUID, coins: amt, txnId: tid, status: "pending", time: new Date() });
-            alert("Order submitted! Wait for admin approval.");
-            document.getElementById('payId').value = "";
-        };
-
-        // --- DYNAMIC PRICE CALCULATION ---
-        window.updatePrice = () => {
-            const type = document.getElementById('campType').value;
-            const qty = parseInt(document.getElementById('campQty').value);
-            const btn = document.getElementById('campBtn');
-            const costPerUnit = (type === 'view') ? 2 : 3; // Rate: View=6, Like=10
-            const totalCost = qty * costPerUnit;
-            btn.innerText = `ADD CAMPAIGN (${totalCost} 🪙)`;
-            return totalCost;
-        };
-
-        // --- CAMPAIGN SYSTEM ---
-        // 1. Campaign add karne ka updated code
-window.addCampaign = async () => {
-    const url = document.getElementById('campUrl').value;
-    const type = document.getElementById('campType').value;
-    const qty = parseInt(document.getElementById('campQty').value);
-    const totalCost = window.updatePrice();
-
-    if(!url.includes("youtu")) return alert("Sahi YouTube link dalein!");
-
-    try {
         const userRef = doc(db, "users", currentUID);
         const userSnap = await getDoc(userRef);
-        
-        if(userSnap.data().Coins < totalCost) {
-            return alert(`Coins kam hain! Aapko ${totalCost} coins chahiye.`);
-        }
+        const totalCost = (type === 'view' ? 2 : 3) * qty;
 
-        // Coins deduct karein
-        await updateDoc(userRef, {
-            Coins: increment(-totalCost)
-        });
+        if(userSnap.data().Coins < totalCost) return alert("No coins!");
 
-        // Campaign save karein (serverTimestamp fix ke saath)
+        await updateDoc(userRef, { Coins: increment(-totalCost) });
         await addDoc(collection(db, "campaigns"), {
-            userId: currentUID,
-            url: url,
-            type: type,
-            qty: qty,
-            count: 0, // Shuruat mein 0 views
-            status: "active",
-            createdAt: new Date() // serverTimestamp error hatane ke liye
+            userId: currentUID, url: url, type: type, qty: qty,
+            count: 0, status: "active", createdAt: new Date()
         });
+        alert("Campaign Added!"); refreshCoins(); window.showMyCampaigns();
+    };
 
-        alert("Campaign Add ho gaya!");
-        document.getElementById('campUrl').value = "";
-        refreshCoins();
-        window.showMyCampaigns(); // List update karein
-    } catch(e) {
-        alert("Error: " + e.message);
-    }
-};
-
-// 2. Campaign list (Progress Bar ke saath)
-window.showMyCampaigns = async () => {
-    const list = document.getElementById('my-campaigns-list');
-    if(!list) return;
-    
-    list.innerHTML = "<p class='text-center text-xs text-gray-400'>Loading...</p>";
-    
-    try {
+    window.showMyCampaigns = async () => {
+        const list = document.getElementById('my-campaigns-list');
+        list.innerHTML = "Loading...";
         const q = query(collection(db, "campaigns"), where("userId", "==", currentUID));
         const snap = await getDocs(q);
         let h = "";
-        
         snap.forEach(d => {
             const c = d.data();
-            const done = c.count || 0;
-            const target = c.qty || 100;
-            const percent = Math.min(Math.round((done / target) * 100), 100);
-
-            h += `
-            <div class="bg-white p-4 rounded-3xl border border-gray-100 shadow-sm mb-4">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">${c.type}</span>
-                    <span class="text-[10px] font-black text-gray-400">${percent}%</span>
-                </div>
-                <div class="flex justify-between items-end mb-2">
-                    <p class="font-black text-lg">${done} <span class="text-gray-300 text-sm font-normal">/ ${target} Units</span></p>
-                </div>
-                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div class="h-full bg-red-600 transition-all duration-700" style="width: ${percent}%"></div>
-                </div>
-                <p class="text-[9px] text-blue-400 truncate mt-2 opacity-60">${c.url}</p>
+            const percent = Math.min(Math.round(((c.count || 0) / c.qty) * 100), 100);
+            h += `<div class="bg-white p-4 rounded-3xl border mb-3">
+                <div class="flex justify-between text-[10px] font-bold mb-1 uppercase"><span>${c.type}</span> <span>${percent}%</span></div>
+                <div class="w-full h-1.5 bg-gray-100 rounded-full mb-2 overflow-hidden"><div class="h-full bg-red-600" style="width:${percent}%"></div></div>
+                <p class="text-xs font-black">${c.count || 0} / ${c.qty}</p>
             </div>`;
         });
-        list.innerHTML = h || "<p class='text-center text-gray-400 text-xs py-10'>No campaigns found.</p>";
-    } catch(e) {
-        console.error(e);
+        list.innerHTML = h || "No Campaigns Found.";
+    };
+
+    window.loadAdminOrders = async () => {
+        const list = document.getElementById('admin-orders-list');
+        const q = query(collection(db, "orders"), where("status", "==", "pending"));
+        const snap = await getDocs(q);
+        let h = "";
+        snap.forEach(d => {
+            const o = d.data();
+            h += `<div class="bg-zinc-800 p-4 rounded-2xl mb-2">
+                <p class="text-white text-[10px] opacity-50">${o.email}</p>
+                <p class="text-yellow-500 font-bold">${o.txnId}</p>
+                <p class="text-xl text-white">${o.coins} 🪙</p>
+                <div class="flex gap-2 mt-2">
+                    <button onclick="approveOrder('${d.id}', '${o.userId}', ${o.coins})" class="bg-green-600 flex-1 py-2 rounded-lg text-xs">APPROVE</button>
+                    <button onclick="rejectOrder('${d.id}')" class="bg-red-600 flex-1 py-2 rounded-lg text-xs">REJECT</button>
+                </div>
+            </div>`;
+        });
+        list.innerHTML = h || "Clean!";
+    };
+
+    window.approveOrder = async (oid, uid, amt) => {
+        await updateDoc(doc(db, "users", uid), { Coins: increment(amt) });
+        await updateDoc(doc(db, "orders", oid), { status: "approved" });
+        alert("Done!"); window.loadAdminOrders();
+    };
+
+    window.rejectOrder = async (oid) => {
+        await updateDoc(doc(db, "orders", oid), { status: "rejected" });
+        alert("Rejected!"); window.loadAdminOrders();
+    };
+
+    window.startVideo = () => { if(player) player.playVideo(); document.getElementById('play-btn').classList.add('hidden'); };
+    window.stopCounter = () => { clearInterval(timerId); timerId = null; };
+
+    // --- 5. INITIALIZATION ---
+    async function refreshCoins() { 
+        const snap = await getDoc(doc(db, "users", currentUID)); 
+        if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins; 
     }
-};
+
+    onAuthStateChanged(auth, u => {
+        if(u) {
+            currentUID = u.uid;
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.remove('hidden');
+            if(u.email === ADMIN_EMAIL) document.getElementById('btn-admin').classList.remove('hidden');
+            refreshCoins(); loadNextVideo();
+        } else {
+            document.getElementById('auth-screen').classList.remove('hidden');
+        }
+    });
+
+    window.onYouTubeIframeAPIReady = () => {
+        player = new YT.Player('player', { height: '100%', width: '100%', videoId: 'oWAHV36EcDI',
+            playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'mute': 1 },
+            events: { 'onStateChange': (e) => { if(e.data == 1 && currentMode === 'view') startCounter(); } }
+        });
+    };
+
+    function startCounter() {
+        if(timerId) return;
+        timerId = setInterval(async () => {
+            timeLeft--; document.getElementById('timer').innerText = timeLeft;
+            if(timeLeft <= 0) {
+                window.stopCounter();
+                await updateDoc(doc(db, "users", currentUID), { Coins: increment(60) });
+                if(currentCampaignId) await updateDoc(doc(db, "campaigns", currentCampaignId), { count: increment(1) });
+                refreshCoins(); loadNextVideo();
+            }
+        }, 1000);
+    }
+
+    var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+</script>
 
 
-        // --- ADMIN SYSTEM ---
-        window.loadAdminOrders = async () => {
-            const list = document.getElementById('admin-orders-list');
-            list.innerHTML = "Loading...";
-            const q = query(collection(db, "orders"), where("status", "==", "pending"));
-            const snap = await getDocs(q);
-            let h = "";
-            snap.forEach(d => {
-                const o = d.data();
-                h += `<div class="bg-zinc-800 p-4 rounded-2xl border border-zinc-700">
-                    <p class="text-white text-xs">TXN: ${o.txnId}</p>
-                    <p class="text-xl font-black text-yellow-500">${o.coins} Coins</p>
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="approveOrder('${d.id}', '${o.userId}', ${o.coins})" class="bg-green-600 px-4 py-2 rounded-lg text-xs font-bold">APPROVE</button>
-                        <button onclick="rejectOrder('${d.id}')" class="bg-red-600 px-4 py-2 rounded-lg text-xs font-bold">REJECT</button>
-                    </div>
-                </div>`;
-            });
-            list.innerHTML = h || "No pending orders.";
-        };
 
-        window.approveOrder = async (oid, uid, amt) => {
-            await updateDoc(doc(db, "users", uid), { Coins: increment(amt) });
-            await updateDoc(doc(db, "orders", oid), { status: "approved" });
-            alert("Approved!"); loadAdminOrders();
-        };
-
-        window.rejectOrder = async (oid) => {
-            await updateDoc(doc(db, "orders", oid), { status: "rejected" });
-            alert("Rejected!"); loadAdminOrders();
-        };
-
-        async function refreshCoins() { const snap = await getDoc(doc(db, "users", currentUID)); if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins; }
-
-        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
-        document.head.appendChild(tag);
-    </script>
 </body>
 </html>
