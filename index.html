@@ -6,6 +6,8 @@
     <title>Vishu Social Booster App 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="manifest" href="./manifest.json">
+
     <style>
         body { font-family: 'Inter', sans-serif; background: #f9fafb; user-select: none; }
         .video-box { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 24px; overflow: hidden; }
@@ -29,19 +31,73 @@
     </div>
 
     <div id="app-screen" class="hidden w-full max-w-md">
-        <header class="w-full p-4 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center"><i class="fas fa-play text-white text-xs"></i></div>
-                <span class="font-black text-xl tracking-tighter">YTSUB</span>
+    
+    <header class="w-full p-4 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b">
+    <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="text-xl text-gray-700 focus:outline-none p-1">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-play text-white text-[10px]"></i>
             </div>
-            <div class="flex items-center gap-3">
-                <div class="bg-yellow-100 px-3 py-1.5 rounded-full flex items-center gap-2 border border-yellow-200">
-                    <span class="text-yellow-600 font-bold">🪙</span>
-                    <span id="coinDisplay" class="font-black text-sm text-yellow-700">0</span>
-                </div>
-                <button onclick="handleLogout()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><i class="fas fa-sign-out-alt text-xs"></i></button>
-            </div>
-        </header>
+            <span class="font-black text-xl tracking-tighter">YTSUB</span>
+        </div>
+    </div>
+    
+
+    <div class="flex items-center gap-2">
+        <div class="bg-yellow-100 px-3 py-1.5 rounded-full flex items-center gap-2 border border-yellow-200 shadow-sm">
+            <span class="text-yellow-600 font-bold text-sm">🪙</span>
+            <span id="coinDisplay" class="font-black text-sm text-yellow-700">0</span>
+        
+</header>
+
+
+<div id="sidebar overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-[60] hidden backdrop-blur-sm"></div>
+<div id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-[70] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <div class="p-6 bg-gray-50 border-b">
+        <div class="w-16 h-16 bg-zinc-800 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mb-3 shadow-lg">
+            V
+        </div>
+        <h3 class="font-black text-lg">Vishu Khan</h3>
+        <p class="text-xs text-gray-500 truncate" id="userEmailSidebar">user@email.com</p>
+    </div>
+
+    <div class="flex-1 overflow-y-auto py-4">
+        <a href="#" onclick="switchTab('buy')" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+            <i class="fas fa-plus-circle w-6"></i> <span class="font-bold text-sm">Buy Points</span>
+        </a>
+        <a href="#" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+            <i class="fas fa-crown w-6"></i> <span class="font-bold text-sm">Become a VIP Member</span>
+        </a>
+        <a href="#" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+            <i class="fas fa-dice w-6"></i> <span class="font-bold text-sm">Shake & Win</span>
+        </a>
+        <hr class="my-2 border-gray-100">
+        <a href="#" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-red-50 transition-colors">
+            <i class="fas fa-question-circle w-6"></i> <span class="font-bold text-sm">FAQ</span>
+        </a>
+        <a href="#" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-red-50 transition-colors">
+            <i class="fas fa-shield-alt w-6"></i> <span class="font-bold text-sm">Privacy Policy</span>
+        </a>
+        <a href="#" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-red-50 transition-colors">
+            <i class="fas fa-share-alt w-6"></i> <span class="font-bold text-sm">Share the App</span>
+        </a>
+        
+        <button id="installBtn" class="hidden flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors w-full text-left">
+    <i class="fas fa-download w-6"></i> <span class="font-bold text-sm">Download App</span>
+</button>
+
+    </div>
+
+    <div class="p-4 border-t">
+        <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 bg-gray-100 py-3 rounded-xl text-red-600 font-bold hover:bg-red-600 hover:text-white transition-all">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</div>
+
 
         <main class="flex-1 p-4 flex flex-col items-center w-full">
             
@@ -420,6 +476,36 @@ window.verifyLike = async () => {
             await updateDoc(doc(db, "orders", oid), { status: "rejected" });
             alert("Order Rejected!"); window.loadAdminOrders();
         };
+        
+        
+        window.toggleSidebar = () => {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar overlay');
+    
+    if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+    } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+    }
+    
+    // Email update in sidebar
+    if(auth.currentUser) {
+        document.getElementById('userEmailSidebar').innerText = auth.currentUser.email;
+    }
+};
+
+// Jab koi tab switch kare toh sidebar band ho jaye
+const originalSwitchTab = window.switchTab;
+window.switchTab = (t) => {
+    originalSwitchTab(t);
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar.classList.contains('-translate-x-full')) {
+        toggleSidebar();
+    }
+};
+
 
 
         // YT API Init
@@ -433,6 +519,30 @@ window.verifyLike = async () => {
 
         var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
         document.head.appendChild(tag);
+        
+        let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Browser ko default popup dikhane se rokein
+    e.preventDefault();
+    deferredPrompt = e;
+    // Button ko show karein
+    installBtn.classList.remove('hidden');
+});
+
+installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            console.log('User ne app install kar li');
+        }
+        deferredPrompt = null;
+        installBtn.classList.add('hidden');
+    }
+});
+
     </script>
 </body>
-</html>
+    </html>
