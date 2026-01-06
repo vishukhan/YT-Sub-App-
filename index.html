@@ -387,6 +387,41 @@ window.verifyLike = async () => {
             }
         });
 
+
+
+         // --- ADMIN LOGIC ---
+        window.loadAdminOrders = async () => {
+            const list = document.getElementById('admin-orders-list');
+            const q = query(collection(db, "orders"), where("status", "==", "pending"));
+            const snap = await getDocs(q);
+            let h = "";
+            snap.forEach(d => {
+                const o = d.data();
+                h += `<div class="bg-zinc-800 p-4 rounded-2xl">
+                    <p class="text-[10px] opacity-50">${o.email}</p>
+                    <p class="text-yellow-500 font-bold">${o.txnId}</p>
+                    <p class="text-xl">${o.coins} 🪙</p>
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="approveOrder('${d.id}', '${o.userId}', ${o.coins})" class="bg-green-600 flex-1 py-2 rounded-lg text-xs">APPROVE</button>
+                        <button onclick="rejectOrder('${d.id}')" class="bg-red-600 flex-1 py-2 rounded-lg text-xs">REJECT</button>
+                    </div>
+                </div>`;
+            });
+            list.innerHTML = h || "No pending orders.";
+        };
+
+        window.approveOrder = async (oid, uid, amt) => {
+            await updateDoc(doc(db, "users", uid), { Coins: increment(amt) });
+            await updateDoc(doc(db, "orders", oid), { status: "approved" });
+            alert("Order Approved!"); window.loadAdminOrders(); refreshCoins();
+        };
+
+        window.rejectOrder = async (oid) => {
+            await updateDoc(doc(db, "orders", oid), { status: "rejected" });
+            alert("Order Rejected!"); window.loadAdminOrders();
+        };
+
+
         // YT API Init
         window.onYouTubeIframeAPIReady = () => {
             player = new YT.Player('player', { 
