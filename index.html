@@ -253,22 +253,41 @@
 
         // --- LIKE LOGIC ---
         window.openYoutubeForLike = () => {
-            window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
-            const btn = document.getElementById('verify-btn');
-            btn.disabled = false; btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            btn.classList.add('bg-green-600');
-        };
+         window.openYoutubeForLike = () => {
+    if(!currentVideoId) return alert("Video load nahi hui!");
 
-        window.verifyLike = async () => {
-            const btn = document.getElementById('verify-btn');
-            btn.innerText = "VERIFYING...";
-            setTimeout(async () => {
-                await updateDoc(doc(db, "users", currentUID), { Coins: increment(100) });
-                if(currentCampaignId) await updateDoc(doc(db, "campaigns", currentCampaignId), { count: increment(1) });
-                btn.innerText = "2. VERIFY (+100 🪙)";
-                refreshCoins(); alert("Verified!"); loadNextVideo();
-            }, 2000);
-        };
+    // Video ID ko saaf karein (kabhi kabhi extra spaces error dete hain)
+    const vidId = currentVideoId.trim();
+
+    // 1. Android Intent: Ye Direct App ke andar sahi video kholta hai
+    const androidIntent = `intent://www.youtube.com/watch?v=${vidId}#Intent;package=com.google.android.youtube;scheme=https;end`;
+    
+    // 2. iOS/Universal Link: Ye unavailable error se bachata hai
+    const universalLink = `https://www.youtube.com/watch?v=${vidId}`;
+
+    // Browser check
+    const isAndroid = /Android/i.test(navigator.userAgent);
+
+    if (isAndroid) {
+        // Android par Intent use karein, agar fail ho toh link par jaye
+        window.location.href = androidIntent;
+        
+        // Backup: Agar intent 1 second mein kaam nahi kiya toh browser link khole
+        setTimeout(() => {
+            window.open(universalLink, '_blank');
+        }, 1000);
+    } else {
+        // iPhone ya PC ke liye direct link
+        window.open(universalLink, '_blank');
+    }
+
+    // Verify button ko active karein
+    const btn = document.getElementById('verify-btn');
+    btn.disabled = false; 
+    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+    btn.classList.add('bg-green-600');
+};
+
 
         // --- CAMPAIGN LOGIC ---
         window.updatePrice = () => {
