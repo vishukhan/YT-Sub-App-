@@ -77,10 +77,11 @@
         <i class="far fa-smile w-6"></i> <span class="font-medium text-sm">Shake & Win</span>
     </a>
 
-    <div onclick="downloadPrompt()" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 cursor-pointer">
+    <div id="installBtn" onclick="handleDownload()" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 cursor-pointer">
     <i class="fas fa-download w-6 text-green-600"></i> 
     <span class="font-medium text-sm">Download App</span>
 </div>
+
 
 </div>
 
@@ -520,30 +521,34 @@ window.switchTab = (t) => {
         
         
         
-    // 1. Browser se install ka signal pakadne ke liye
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        console.log("App install hone ke liye taiyar hai!");
-    });
+    
+let deferredPrompt;
 
-    // 2. Button dabane par chalne wala function
-    function downloadPrompt() {
-        if (deferredPrompt) {
-            // Agar browser allow kare toh install popup dikhao
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User ne install kar liya');
-                }
-                deferredPrompt = null;
-            });
-        } else {
-            // Agar turant install nahi ho raha toh guide dikhao
-            alert("App Install karne ka tarika:\n\n1. Chrome ke upar 3 dots (⋮) par click karein.\n2. 'Install App' ya 'Add to Home Screen' chunein.\n\nIsse app aapke mobile menu mein aa jayegi!");
-        }
+// 1. Browser se install prompt capture karna
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    console.log("Install prompt ready");
+});
+
+// 2. Button click hone par kya hoga
+function handleDownload() {
+    if (deferredPrompt) {
+        // Agar PWA ready hai toh browser ka popup dikhao
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted');
+            }
+            deferredPrompt = null;
+        });
+    } else {
+        // Agar PWA ready nahi hai toh ye alert 100% kaam karega
+        alert("App Download/Install karne ke liye:\n\n1. Chrome Menu (3 dots ⋮) par click karein.\n2. 'Install App' ya 'Add to Home Screen' chunein.\n\nIsse app hamesha ke liye aapke phone mein aa jayegi!");
     }
+}
+
+
 
 
 
