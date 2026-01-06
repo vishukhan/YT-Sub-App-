@@ -77,9 +77,11 @@
         <i class="far fa-smile w-6"></i> <span class="font-medium text-sm">Shake & Win</span>
     </a>
 
-    <button onclick="installAppPrompt()" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-green-50 w-full text-left">
-        <i class="fas fa-download w-6 text-green-600"></i> <span class="font-medium text-sm">Download App</span>
-    </button>
+    <div onclick="downloadPrompt()" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 cursor-pointer">
+    <i class="fas fa-download w-6 text-green-600"></i> 
+    <span class="font-medium text-sm">Download App</span>
+</div>
+
 </div>
 
 
@@ -512,19 +514,22 @@ window.switchTab = (t) => {
         var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
         document.head.appendChild(tag);
         
+        
+        
+        //   app download btn 
+        
+        
         let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
 });
 
-function installAppPrompt() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-    } else {
-        alert("App install karne ke liye Chrome menu (3 dots) par click karein aur 'Install App' chunein.");
-    }
+// Is function ko apne <script> mein daal dein
+function downloadPrompt() {
+    alert("App Install karne ke liye:\n1. Chrome ke upar 3 dots (⋮) par click karein.\n2. 'Install App' ya 'Add to Home Screen' par click karein.\n\nBas! App aapke phone mein aa jayegi.");
 }
+
 
 
     </script>
