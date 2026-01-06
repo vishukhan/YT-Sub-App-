@@ -1,7 +1,8 @@
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    fetch(event.request).catch(function() {
-      return caches.match(event.request);
-    })
-  );
+self.addEventListener('install', (e) => {
+  console.log('Service Worker: Installed');
 });
+
+self.addEventListener('fetch', (e) => {
+  // Ye empty fetch handler zaroori hai PWA installable banane ke liye
+});
+
