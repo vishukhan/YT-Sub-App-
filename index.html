@@ -272,6 +272,38 @@
     btn.classList.add('bg-green-600');
 };
 
+// --- VERIFY LIKE LOGIC ---
+window.verifyLike = async () => {
+    const btn = document.getElementById('verify-btn');
+    
+    // Check agar button disabled to nahi (security check)
+    if(btn.disabled) return;
+
+    try {
+        // 1. User ko coins dein (100 coins reward)
+        await updateDoc(doc(db, "users", currentUID), { 
+            Coins: increment(100) 
+        });
+
+        // 2. Campaign ka count badhayein
+        if(currentCampaignId) {
+            await updateDoc(doc(db, "campaigns", currentCampaignId), { 
+                count: increment(1) 
+            });
+        }
+
+        // 3. UI Update karein
+        refreshCoins();
+        alert("Verification Successful! +100 🪙");
+
+        // 4. Agli video load karein
+        loadNextVideo();
+
+    } catch (error) {
+        console.error("Verification error:", error);
+        alert("Kuch error aayi, phir se koshish karein.");
+    }
+};
 
         // --- TAB SWITCHING ---
         window.switchTab = (t) => {
