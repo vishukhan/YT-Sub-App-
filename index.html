@@ -519,16 +519,33 @@ window.switchTab = (t) => {
         //   app download btn 
         
         
-        let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-});
+        
+    // 1. Browser se install ka signal pakadne ke liye
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        console.log("App install hone ke liye taiyar hai!");
+    });
 
-// Is function ko apne <script> mein daal dein
-function downloadPrompt() {
-    alert("App Install karne ke liye:\n1. Chrome ke upar 3 dots (⋮) par click karein.\n2. 'Install App' ya 'Add to Home Screen' par click karein.\n\nBas! App aapke phone mein aa jayegi.");
-}
+    // 2. Button dabane par chalne wala function
+    function downloadPrompt() {
+        if (deferredPrompt) {
+            // Agar browser allow kare toh install popup dikhao
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User ne install kar liya');
+                }
+                deferredPrompt = null;
+            });
+        } else {
+            // Agar turant install nahi ho raha toh guide dikhao
+            alert("App Install karne ka tarika:\n\n1. Chrome ke upar 3 dots (⋮) par click karein.\n2. 'Install App' ya 'Add to Home Screen' chunein.\n\nIsse app aapke mobile menu mein aa jayegi!");
+        }
+    }
+
+
 
 
 
