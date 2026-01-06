@@ -547,11 +547,14 @@ function handleDownload() {
         alert("App Download/Install karne ke liye:\n\n1. Chrome Menu (3 dots ⋮) par click karein.\n2. 'Install App' ya 'Add to Home Screen' chunein.\n\nIsse app hamesha ke liye aapke phone mein aa jayegi!");
     }
 }
-
-
-
-
-
+// Service Worker Register karna
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Service Worker Registered!', reg))
+            .catch(err => console.log('Service Worker Error!', err));
+    });
+}
 
 
     </script>
