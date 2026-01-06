@@ -46,7 +46,7 @@
         <main class="flex-1 p-4 flex flex-col items-center w-full">
             
             <div id="tab-main" class="tab-content w-full max-w-[360px]">
-                <h2 class="text-center font-bold mb-4 text-zinc-500 uppercase text-[10px] tracking-widest">Auto Play Mode</h2>
+                <h2 id="mode-title" class="text-center font-bold mb-4 text-zinc-500 uppercase text-[10px] tracking-widest">Auto Play Mode</h2>
                 <div class="video-box">
                     <div id="player"></div>
                     <div id="play-btn" class="play-overlay" onclick="startVideo()">
@@ -82,21 +82,11 @@
                         <p class="text-sm font-bold text-blue-700">UPI: vishalkhan@fam</p>
                     </div>
                     <select id="payAmount" class="w-full p-4 bg-gray-50 rounded-2xl border font-bold mb-3">
-                       <option value="500">500 Coins - ₹9</option>
+                      <option value="500">500 Coins - ₹9</option>
                             <option value="1000">1000 Coins - ₹19</option>
-                          //  <option value="1500">1500 Coins - ₹29</option>
-                            <option value="2000">2000 Coins - ₹39</option>
-                           // <option value="2500">2500 Coins - ₹49</option>
-                        //    <option value="3000">3000Coins - ₹59</option>
-                         //   <option value="3500">3500 Coins - ₹69</option>
-                          //  <option value="4000">4000 Coins - ₹79</option>
-                          //  <option value="4500">4500 Coins - ₹89</option>
+                          //  
                             <option value="5000">5000 Coins - ₹99</option>
-                          //  <option value="5500">5500 Coins - ₹109</option>
-                           // <option value="6000">6000 Coins - ₹119</option>
-                          //  <option value="7000">7000 Coins - ₹139</option>
-                            //<option value="8000">8000 Coins - ₹159</option>
-                         //   <option value="9000">9000 Coins - ₹179</option>
+                          
                             <option value="10000">10000 Coins - ₹199</option>
                             <option value="50000">50000 Coins - ₹999</option> 
                             <option value="100000">100000 Coins - ₹1999</option>
@@ -117,22 +107,15 @@
                     <div class="grid grid-cols-2 gap-3 mb-4">
                         <select id="campType" onchange="updatePrice()" class="p-4 bg-gray-50 rounded-2xl border font-bold"><option value="view">Views</option><option value="like">Likes</option></select>
                         <select id="campQty" onchange="updatePrice()" class="p-4 bg-gray-50 rounded-2xl border font-bold">
-                        <option value="100">100</option>
+                          <option value="100">100</option>
                         <option value="500">500</option>
                         <option value="1000">1000</option>
-                       // <option value="1500">1500</option>
-                        <option value="2000">2000</option>
-                       // <option value="2500">2500</option>
                         <option value="5000">5000</option>
+                        
                         <option value="10000">10000</option>
-                       // <option value="11000">11000</option>
-                        //<option value="15000">15000</option>
-                        <option value="20000">20000</option>
-                      //  <option value="25000">25000</option>
-                        <option value="30000">30000</option>
-                     //   <option value="35000">35000</option>
-                      //  <option value="40000">40000</option>
-                       // <option value="50000">50000</option>
+                        <option value="50000">50000</option>
+                        <option value="100000">100000</option>
+                       <option value="1000000">1000000</option>
                         </select>
                     </div>
                     <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold">ADD (200 🪙)</button>
@@ -146,7 +129,6 @@
                     <div id="admin-orders-list" class="space-y-4"></div>
                 </div>
             </div>
-
         </main>
 
         <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t flex justify-around p-2 z-50">
@@ -161,7 +143,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, limit, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDETvfZ00aSzxOj8oAjqHxHSbnbINCjy4g",
@@ -197,42 +179,52 @@
 
         window.handleLogout = async () => { if(confirm("Logout?")) { await signOut(auth); location.reload(); } };
 
-        // --- CORE VIDEO & TIMER LOGIC (Fixed for 0 Countdown) ---
+        // --- HELPER: Extract ID ---
         function extractId(url) {
+            if(!url) return 'oWAHV36EcDI';
             const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?v=)|(shorts\/)|(\?v=))([^#\&\?]*).*/;
             const match = url.match(regExp);
-            return (match && match[9].trim().length === 11) ? match[9].trim() : null;
+            return (match && match[9].trim().length === 11) ? match[9].trim() : 'oWAHV36EcDI';
         }
 
+        // --- VIDEO LOADING LOGIC ---
         async function loadNextVideo() {
             window.stopCounter();
             timeLeft = 60;
             document.getElementById('timer').innerText = "60";
             document.getElementById('play-btn').classList.remove('hidden');
             
-            // Like Button Reset
+            // Reset Verify Button
             const btn = document.getElementById('verify-btn');
-            btn.disabled = true; btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.disabled = true; 
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.classList.remove('bg-green-600');
 
             try {
+                // Fetch video based on mode (view or like)
                 const q = query(collection(db, "campaigns"), where("status", "==", "active"), where("type", "==", currentMode), limit(10));
                 const snap = await getDocs(q);
                 let pool = []; snap.forEach(d => pool.push({id: d.id, ...d.data()}));
                 
                 if(pool.length > 0) {
-                    const s = pool[Math.floor(Math.random() * pool.length)];
-                    currentVideoId = extractId(s.url);
-                    currentCampaignId = s.id;
+                    const selected = pool[Math.floor(Math.random() * pool.length)];
+                    currentVideoId = extractId(selected.url);
+                    currentCampaignId = selected.id;
                 } else {
-                    currentVideoId = 'oWAHV36EcDI'; // Default
+                    currentVideoId = 'oWAHV36EcDI'; // Fallback
                     currentCampaignId = null;
                 }
-                if(player) player.loadVideoById(currentVideoId);
-            } catch(e) { console.log(e); }
+                
+                // Update Player
+                if(player && player.loadVideoById) {
+                    player.loadVideoById(currentVideoId);
+                }
+            } catch(e) { console.error("Error loading video:", e); }
         }
 
+        // --- TIMER LOGIC ---
         function startCounter() {
-            if(timerId) return;
+            if(timerId || currentMode === 'like') return; 
             timerId = setInterval(async () => {
                 timeLeft--;
                 document.getElementById('timer').innerText = Math.max(0, timeLeft);
@@ -242,7 +234,7 @@
                     await updateDoc(doc(db, "users", currentUID), { Coins: increment(60) });
                     if(currentCampaignId) await updateDoc(doc(db, "campaigns", currentCampaignId), { count: increment(1) });
                     refreshCoins();
-                    alert("Time Up! +60 Coins");
+                    alert("Success! +60 Coins");
                     loadNextVideo();
                 }
             }, 1000);
@@ -251,37 +243,29 @@
         window.stopCounter = () => { clearInterval(timerId); timerId = null; };
         window.startVideo = () => { player.playVideo(); document.getElementById('play-btn').classList.add('hidden'); };
 
-        // --- LIKE LOGIC ---
+        // --- UPDATED LIKE LOGIC ---
         window.openYoutubeForLike = () => {
-         window.openYoutubeForLike = () => {
     if(!currentVideoId) return alert("Video load nahi hui!");
 
-    // Video ID ko saaf karein (kabhi kabhi extra spaces error dete hain)
-    const vidId = currentVideoId.trim();
+    // 1. Pehle YouTube App kholne ki koshish karein (Android/iOS Intent)
+    const appUrl = `vnd.youtube:${currentVideoId}`;
+    const webUrl = `https://www.youtube.com/watch?v=${currentVideoId}`;
 
-    // 1. Android Intent: Ye Direct App ke andar sahi video kholta hai
-    const androidIntent = `intent://www.youtube.com/watch?v=${vidId}#Intent;package=com.google.android.youtube;scheme=https;end`;
+    // Ek temporary link banakar click karwayenge
+    const a = document.createElement('a');
+    a.href = appUrl;
     
-    // 2. iOS/Universal Link: Ye unavailable error se bachata hai
-    const universalLink = `https://www.youtube.com/watch?v=${vidId}`;
+    // Check karein agar app khul sakti hai, nahi toh browser par fallback karein
+    window.location.href = appUrl;
 
-    // Browser check
-    const isAndroid = /Android/i.test(navigator.userAgent);
+    // 500ms baad check karein, agar page nahi badla toh browser mein kholein
+    setTimeout(() => {
+        if (!document.hidden) {
+            window.open(webUrl, '_blank');
+        }
+    }, 500);
 
-    if (isAndroid) {
-        // Android par Intent use karein, agar fail ho toh link par jaye
-        window.location.href = androidIntent;
-        
-        // Backup: Agar intent 1 second mein kaam nahi kiya toh browser link khole
-        setTimeout(() => {
-            window.open(universalLink, '_blank');
-        }, 1000);
-    } else {
-        // iPhone ya PC ke liye direct link
-        window.open(universalLink, '_blank');
-    }
-
-    // Verify button ko active karein
+    // Verify button activate karein
     const btn = document.getElementById('verify-btn');
     btn.disabled = false; 
     btn.classList.remove('opacity-50', 'cursor-not-allowed');
@@ -289,7 +273,33 @@
 };
 
 
-        // --- CAMPAIGN LOGIC ---
+        // --- TAB SWITCHING ---
+        window.switchTab = (t) => {
+            currentMode = t;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            const contentId = (t === 'view' || t === 'like') ? 'tab-main' : 'tab-' + t;
+            document.getElementById(contentId).classList.remove('hidden');
+            document.getElementById('btn-' + t).classList.add('active');
+
+            if(t === 'view' || t === 'like') {
+                document.getElementById('mode-title').innerText = t === 'view' ? "Auto Play Mode" : "Like Video Mode";
+                document.getElementById('like-area').classList.toggle('hidden', t !== 'like');
+                document.getElementById('watch-stats').classList.toggle('hidden', t === 'like');
+                loadNextVideo();
+            } else if (t === 'campaign') window.showMyCampaigns();
+            else if (t === 'admin') window.loadAdminOrders();
+            
+            window.stopCounter();
+        };
+
+        // --- CORE FUNCTIONS (COINS, CAMPAIGNS, ADMIN) ---
+        async function refreshCoins() { 
+            const snap = await getDoc(doc(db, "users", currentUID)); 
+            if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins; 
+        }
+
         window.updatePrice = () => {
             const type = document.getElementById('campType').value;
             const qty = parseInt(document.getElementById('campQty').value);
@@ -302,17 +312,13 @@
             const url = document.getElementById('campUrl').value;
             const type = document.getElementById('campType').value;
             const qty = parseInt(document.getElementById('campQty').value);
+            if(!url.includes('youtu')) return alert("Invalid Link");
             const cost = window.updatePrice();
-            
             const userSnap = await getDoc(doc(db, "users", currentUID));
             if(userSnap.data().Coins < cost) return alert("Insufficient Coins!");
-
             await updateDoc(doc(db, "users", currentUID), { Coins: increment(-cost) });
-            await addDoc(collection(db, "campaigns"), {
-                userId: currentUID, url, type, qty, count: 0, status: "active", createdAt: new Date()
-            });
-            alert("Campaign Launched!");
-            refreshCoins(); window.showMyCampaigns();
+            await addDoc(collection(db, "campaigns"), { userId: currentUID, url, type, qty, count: 0, status: "active", createdAt: new Date() });
+            alert("Campaign Added!"); refreshCoins(); window.showMyCampaigns();
         };
 
         window.showMyCampaigns = async () => {
@@ -323,84 +329,19 @@
             let h = "";
             snap.forEach(d => {
                 const c = d.data();
-                const progress = Math.round((c.count / c.qty) * 100);
-                h += `<div class="bg-white p-4 rounded-2xl border">
-                    <div class="flex justify-between text-[10px] font-bold uppercase mb-1"><span>${c.type}</span> <span>${progress}%</span></div>
-                    <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-red-600" style="width:${progress}%"></div></div>
-                    <p class="text-xs font-black mt-1">${c.count} / ${c.qty}</p>
-                </div>`;
+                const prog = Math.round((c.count / c.qty) * 100);
+                h += `<div class="bg-white p-4 rounded-2xl border mb-2"><div class="flex justify-between text-[10px] font-bold uppercase mb-1"><span>${c.type}</span> <span>${prog}%</span></div><div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-red-600" style="width:${prog}%"></div></div><p class="text-xs font-black mt-1">${c.count} / ${c.qty}</p></div>`;
             });
             list.innerHTML = h || "No active campaigns.";
         };
 
-        // --- STORE LOGIC ---
         window.submitOrder = async () => {
             const amt = parseInt(document.getElementById('payAmount').value);
             const tid = document.getElementById('payId').value;
             if(tid.length < 10) return alert("Enter valid Transaction ID");
-            
-            await addDoc(collection(db, "orders"), {
-                userId: currentUID, email: auth.currentUser.email, coins: amt, txnId: tid, status: "pending", time: new Date()
-            });
-            alert("Order Submitted! Waiting for Admin.");
-            document.getElementById('payId').value = "";
+            await addDoc(collection(db, "orders"), { userId: currentUID, email: auth.currentUser.email, coins: amt, txnId: tid, status: "pending", time: new Date() });
+            alert("Order Submitted!"); document.getElementById('payId').value = "";
         };
-
-        // --- ADMIN LOGIC ---
-        window.loadAdminOrders = async () => {
-            const list = document.getElementById('admin-orders-list');
-            const q = query(collection(db, "orders"), where("status", "==", "pending"));
-            const snap = await getDocs(q);
-            let h = "";
-            snap.forEach(d => {
-                const o = d.data();
-                h += `<div class="bg-zinc-800 p-4 rounded-2xl">
-                    <p class="text-[10px] opacity-50">${o.email}</p>
-                    <p class="text-yellow-500 font-bold">${o.txnId}</p>
-                    <p class="text-xl">${o.coins} 🪙</p>
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="approveOrder('${d.id}', '${o.userId}', ${o.coins})" class="bg-green-600 flex-1 py-2 rounded-lg text-xs">APPROVE</button>
-                        <button onclick="rejectOrder('${d.id}')" class="bg-red-600 flex-1 py-2 rounded-lg text-xs">REJECT</button>
-                    </div>
-                </div>`;
-            });
-            list.innerHTML = h || "No pending orders.";
-        };
-
-        window.approveOrder = async (oid, uid, amt) => {
-            await updateDoc(doc(db, "users", uid), { Coins: increment(amt) });
-            await updateDoc(doc(db, "orders", oid), { status: "approved" });
-            alert("Order Approved!"); window.loadAdminOrders(); refreshCoins();
-        };
-
-        window.rejectOrder = async (oid) => {
-            await updateDoc(doc(db, "orders", oid), { status: "rejected" });
-            alert("Order Rejected!"); window.loadAdminOrders();
-        };
-
-        // --- UI NAVIGATION ---
-        window.switchTab = (t) => {
-            currentMode = t;
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            
-            const contentId = (t === 'view' || t === 'like') ? 'tab-main' : 'tab-' + t;
-            document.getElementById(contentId).classList.remove('hidden');
-            document.getElementById('btn-' + t).classList.add('active');
-
-            if(t === 'view' || t === 'like') {
-                document.getElementById('like-area').classList.toggle('hidden', t !== 'like');
-                document.getElementById('watch-stats').classList.toggle('hidden', t === 'like');
-                loadNextVideo();
-            } else if (t === 'campaign') window.showMyCampaigns();
-            else if (t === 'admin') window.loadAdminOrders();
-            window.stopCounter();
-        };
-
-        async function refreshCoins() { 
-            const snap = await getDoc(doc(db, "users", currentUID)); 
-            if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins; 
-        }
 
         onAuthStateChanged(auth, u => {
             if(u) {
@@ -414,12 +355,12 @@
             }
         });
 
-        // YT API
+        // YT API Init
         window.onYouTubeIframeAPIReady = () => {
             player = new YT.Player('player', { 
                 height: '100%', width: '100%', videoId: 'oWAHV36EcDI',
                 playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'mute': 1 },
-                events: { 'onStateChange': (e) => { if(e.data == 1 && currentMode === 'view') startCounter(); else stopCounter(); } }
+                events: { 'onStateChange': (e) => { if(e.data == 1) startCounter(); else stopCounter(); } }
             });
         };
 
