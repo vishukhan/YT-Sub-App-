@@ -4,21 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vishu Social Booster App 2026</title>
-<meta name="title" content="Vishu Social Booster App 2026 | Free YouTube Subscribers & Instagram Followers 2026">
-<meta name="description" content="Grow your social media presence with Vishu Social Booster App. Get free YouTube subscribers, watch time, and real Instagram followers. Safe, secure, and coin-based promotion app.">
-<meta name="keywords" content="get free youtube subscribers, sub4sub app, free instagram followers, boost youtube channel, social booster, get 1000 subscribers free, real insta followers, coin based social promotion, watch time booster">
-<meta name="author" content="Vishu Social Booster Team">
-<meta name="robots" content="index, follow">
-
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://yourwebsite.com/"> <meta property="og:title" content="Social Booster - Grow Your Channel & Profile Free">
-<meta property="og:description" content="Official Sub4Sub and Instagram Follower exchange platform. Earn coins and promote your links.">
-<meta property="og:image" content="https://yourwebsite.com/logo.png">
-
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:title" content="Social Booster | YouTube & Instagram Growth">
-<meta property="twitter:description" content="Join 10k+ users to boost your social media presence for free.">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -33,21 +18,14 @@
 <body class="flex flex-col items-center min-h-screen pb-24">
 
     <div id="auth-screen" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center p-6 text-center overflow-y-auto">
-    <div class="w-full max-w-sm space-y-4 my-auto">
-        <h2 class="text-4xl font-black mb-2 italic">YT<span class="text-red-600">SUB</span></h2>
-        <p class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-6">Boost YouTube Watch Time & Subscribers</p>
-        
-        <input id="email" type="email" placeholder="Email Address" class="w-full p-4 bg-gray-100 rounded-2xl outline-none border focus:border-red-500">
-        <input id="pass" type="password" placeholder="Password" class="w-full p-4 bg-gray-100 rounded-2xl outline-none border focus:border-red-500">
-        <button onclick="handleAuth()" class="w-full bg-black text-white py-4 rounded-2xl font-bold shadow-lg">Login to Account</button>
-        <button onclick="signupUser()" class="w-full text-gray-500 py-2 font-medium">Create New Account</button>
-    </div>
-
-    <footer class="mt-10 p-6 text-center text-[10px] text-gray-400 leading-relaxed max-w-xs">
-        <p>Vishu Social Booster App 2026: The best tool for <b>Free YouTube Subscribers</b>, <b>YouTube Watch Time</b>,
-        Join thousands of creators using our coin-based exchange to get 1000 subscribers and 4000 hours watch time safely. 
-        © 2026 YTSub Booster App.</p>
-    </footer>
+        <div class="w-full max-w-sm space-y-4 my-auto">
+            <h2 class="text-4xl font-black mb-2 italic">YT<span class="text-red-600">SUB</span></h2>
+            <p class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-6">Boost YouTube Growth</p>
+            <input id="email" type="email" placeholder="Email Address" class="w-full p-4 bg-gray-100 rounded-2xl outline-none border focus:border-red-500">
+            <input id="pass" type="password" placeholder="Password" class="w-full p-4 bg-gray-100 rounded-2xl outline-none border focus:border-red-500">
+            <button onclick="handleAuth()" class="w-full bg-black text-white py-4 rounded-2xl font-bold shadow-lg">Login</button>
+            <button onclick="signupUser()" class="w-full text-gray-500 py-2 font-medium">Create New Account</button>
+        </div>
     </div>
 
     <div id="app-screen" class="hidden w-full max-w-md">
@@ -65,10 +43,10 @@
             </div>
         </header>
 
-        <main class="flex-1 p-4 flex flex-col items-center overflow-y-auto w-full">
+        <main class="flex-1 p-4 flex flex-col items-center w-full">
             
             <div id="tab-main" class="tab-content w-full max-w-[360px]">
-                <h2 id="tab-title" class="text-center font-bold mb-4 text-zinc-500 uppercase text-[10px] tracking-widest">Auto Play Mode On</h2>
+                <h2 class="text-center font-bold mb-4 text-zinc-500 uppercase text-[10px] tracking-widest">Auto Play Mode</h2>
                 <div class="video-box">
                     <div id="player"></div>
                     <div id="play-btn" class="play-overlay" onclick="startVideo()">
@@ -79,103 +57,93 @@
                 </div>
                 
                 <div id="watch-stats" class="mt-4 grid grid-cols-2 gap-4 text-center">
-                    <div class="bg-white p-4 rounded-3xl border border-gray-50 shadow-sm">
+                    <div class="bg-white p-4 rounded-3xl border shadow-sm">
                         <p class="text-[10px] font-bold text-gray-400">SECONDS</p>
                         <p id="timer" class="text-3xl font-black">60</p>
                     </div>
-                    <div class="bg-white p-4 rounded-3xl border border-gray-50 shadow-sm">
+                    <div class="bg-white p-4 rounded-3xl border shadow-sm">
                         <p class="text-[10px] font-bold text-gray-400">REWARD</p>
                         <p id="reward-text" class="text-3xl font-black text-green-600">+60</p>
                     </div>
                 </div>
 
                 <div id="like-area" class="hidden mt-6 space-y-3">
-                    <button onclick="openYoutubeForLike()" class="w-full bg-blue-600 text-white py-4 rounded-3xl font-bold flex items-center justify-center gap-3">
-                        <i class="fab fa-youtube"></i> 1. OPEN VIDEO
-                    </button>
-                    <button id="verify-btn" onclick="verifyLike()" class="w-full bg-red-600 text-white py-5 rounded-3xl font-black shadow-lg shadow-red-100 flex items-center justify-center gap-3">
-                        <i class="fas fa-heart"></i> 2. VERIFY LIKE (+100 🪙)
-                    </button>
+                    <button onclick="openYoutubeForLike()" class="w-full bg-blue-600 text-white py-4 rounded-3xl font-bold">1. OPEN VIDEO</button>
+                    <button id="verify-btn" onclick="verifyLike()" class="w-full bg-gray-400 text-white py-4 rounded-3xl font-bold opacity-50 cursor-not-allowed" disabled>2. VERIFY (+100 🪙)</button>
                 </div>
             </div>
 
-       
             <div id="tab-buy" class="tab-content hidden w-full max-w-sm">
-                <div class="bg-white p-6 rounded-3xl border shadow-sm text-center">
-                    <h2 class="text-2xl font-black mb-6">Coin Store 🪙</h2>
-                    <div class="bg-blue-50 p-4 rounded-2xl mb-6 border border-blue-100">
-                        <div class="w-44 h-44 bg-white mx-auto mb-3 flex items-center justify-center rounded-xl overflow-hidden shadow-inner">
-                            <img src="payment-qr.png" alt="Scan QR" class="w-full h-full object-contain" onerror="this.src='https://via.placeholder.com/200?text=Upload+QR+To+Github'">
-                        </div>
-                        <p class="text-xs font-bold text-blue-400 uppercase mb-1">UPI ID</p>
-                        <p class="text-sm font-black text-blue-700 select-all">vishalkhan@fam</p>
+                <div class="bg-white p-6 rounded-3xl border text-center">
+                    <h2 class="text-xl font-black mb-4">Coin Store 🪙</h2>
+                    <div class="bg-blue-50 p-4 rounded-2xl mb-4">
+                        <p class="text-[10px] font-bold text-blue-400 uppercase">Scan to Pay</p>
+                        <img src="payment-qr.png" class="w-32 h-32 mx-auto my-2 border rounded-lg" onerror="this.src='https://via.placeholder.com/150?text=QR+Code'">
+                        <p class="text-sm font-bold text-blue-700">UPI: vishalkhan@fam</p>
                     </div>
-                    <div class="space-y-4 text-left">
-                        <select id="payAmount" class="w-full p-4 bg-gray-50 rounded-2xl border font-bold">
-                            <option value="500">500 Coins - ₹9</option>
+                    <select id="payAmount" class="w-full p-4 bg-gray-50 rounded-2xl border font-bold mb-3">
+                       <option value="500">500 Coins - ₹9</option>
                             <option value="1000">1000 Coins - ₹19</option>
-                            <option value="1500">1500 Coins - ₹29</option>
+                         <option value="1500">1500 Coins - ₹29</option>
                             <option value="2000">2000 Coins - ₹39</option>
-                            <option value="2500">2500 Coins - ₹49</option>
-                            <option value="3000">3000Coins - ₹59</option>
+                           <option value="2500">2500 Coins - ₹49</option>
+                       <option value="3000">3000Coins - ₹59</option>
                             <option value="3500">3500 Coins - ₹69</option>
                             <option value="4000">4000 Coins - ₹79</option>
-                            <option value="4500">4500 Coins - ₹89</option>
+                          //  <option value="4500">4500 Coins - ₹89</option>
                             <option value="5000">5000 Coins - ₹99</option>
-                            <option value="5500">5500 Coins - ₹109</option>
-                            <option value="6000">6000 Coins - ₹119</option>
-                            <option value="7000">7000 Coins - ₹139</option>
-                            <option value="8000">8000 Coins - ₹159</option>
-                            <option value="9000">9000 Coins - ₹179</option>
+                          //  <option value="5500">5500 Coins - ₹109</option>
+                           // <option value="6000">6000 Coins - ₹119</option> 
+                          //  <option value="7000">7000 Coins - ₹139</option>
+                            //<option value="8000">8000 Coins - ₹159</option>
+                         //   <option value="9000">9000 Coins - ₹179</option>
                             <option value="10000">10000 Coins - ₹199</option>
                             <option value="50000">50000 Coins - ₹999</option> 
                             <option value="100000">100000 Coins - ₹1999</option>
-                            <option value="150000">150000 Coins - ₹2999</option>
+                          //  <option value="150000">150000 Coins - ₹2999</option>
                             <option value="200000">200000 Coins - ₹3999</option>
                             <option value="500000">500000 Coins - ₹9999</option>
                             <option value="1000000">1000000 Coins - ₹19999</option>
-                        </select>
-                        <input id="payId" type="text" placeholder="Transaction ID (12 Digits)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
-                        <button onclick="submitOrder()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Submit Payment</button>
-                    </div>
+                    </select>
+                    <input id="payId" type="text" placeholder="Transaction ID (12 Digits)" class="w-full p-4 bg-gray-50 rounded-2xl border mb-3 outline-none">
+                    <button onclick="submitOrder()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Submit Payment</button>
                 </div>
             </div>
             
             <div id="tab-campaign" class="tab-content hidden w-full max-w-sm">
-                <div class="bg-white p-6 rounded-3xl border mb-6 shadow-sm">
+                <div class="bg-white p-6 rounded-3xl border mb-6">
                     <h2 class="text-xl font-black mb-4">New Campaign</h2>
-                    <input id="campUrl" type="text" placeholder="Paste Video Link" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none mb-4">
+                    <input id="campUrl" type="text" placeholder="Paste YouTube Video Link" class="w-full p-4 bg-gray-50 rounded-2xl border mb-4">
                     <div class="grid grid-cols-2 gap-3 mb-4">
                         <select id="campType" onchange="updatePrice()" class="p-4 bg-gray-50 rounded-2xl border font-bold"><option value="view">Views</option><option value="like">Likes</option></select>
                         <select id="campQty" onchange="updatePrice()" class="p-4 bg-gray-50 rounded-2xl border font-bold">
                         <option value="100">100</option>
                         <option value="500">500</option>
                         <option value="1000">1000</option>
-                        <option value="1500">1500</option>
+                       // <option value="1500">1500</option>
                         <option value="2000">2000</option>
-                        <option value="2500">2500</option>
+                       // <option value="2500">2500</option>
                         <option value="5000">5000</option>
                         <option value="10000">10000</option>
-                        <option value="11000">11000</option>
-                        <option value="15000">15000</option>
+                       // <option value="11000">11000</option>
+                        //<option value="15000">15000</option>
                         <option value="20000">20000</option>
-                        <option value="25000">25000</option>
+                      //  <option value="25000">25000</option>
                         <option value="30000">30000</option>
-                        <option value="35000">35000</option>
-                        <option value="40000">40000</option>
-                        <option value="50000">50000</option></select>
+                     //   <option value="35000">35000</option>
+                      //  <option value="40000">40000</option>
+                       // <option value="50000">50000</option>
+                        </select>
                     </div>
-                    <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold">ADD CAMPAIGN (200 🪙)</button>
+                    <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold">ADD (200 🪙)</button>
                 </div>
                 <div id="my-campaigns-list" class="space-y-3"></div>
             </div>
 
             <div id="tab-admin" class="tab-content hidden w-full max-w-sm">
-                <div class="bg-zinc-900 text-white p-6 rounded-3xl shadow-xl">
-                    <h2 class="text-xl font-black mb-4 italic text-red-500">Admin Approvals</h2>
-                    <div id="admin-orders-list" class="space-y-4">
-                        <p class="text-gray-500 text-center py-10">Loading orders...</p>
-                    </div>
+                <div class="bg-zinc-900 text-white p-6 rounded-3xl">
+                    <h2 class="text-xl font-black mb-4 text-red-500">Admin Panel</h2>
+                    <div id="admin-orders-list" class="space-y-4"></div>
                 </div>
             </div>
 
@@ -186,34 +154,33 @@
             <button id="btn-like" onclick="switchTab('like')" class="nav-btn flex flex-col items-center p-2"><i class="fas fa-heart text-lg"></i><span class="text-[10px] mt-1 font-bold">LIKE</span></button>
             <button id="btn-buy" onclick="switchTab('buy')" class="nav-btn flex flex-col items-center p-2"><i class="fas fa-shopping-cart text-lg"></i><span class="text-[10px] mt-1 font-bold">BUY</span></button>
             <button id="btn-campaign" onclick="switchTab('campaign')" class="nav-btn flex flex-col items-center p-2"><i class="fas fa-bullhorn text-lg"></i><span class="text-[10px] mt-1 font-bold">CAMP</span></button>
-            <button id="btn-admin" onclick="switchTab('admin')" class="hidden nav-btn flex flex-col items-center p-2 text-black-600"><i class="fas fa-user-shield text-lg"></i><span class="text-[10px] mt-1 font-bold">ADMIN</span></button>
+            <button id="btn-admin" onclick="switchTab('admin')" class="hidden nav-btn flex flex-col items-center p-2"><i class="fas fa-user-shield text-lg"></i><span class="text-[10px] mt-1 font-bold">ADMIN</span></button>
         </nav>
     </div>
     
-    
     <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, limit, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDETvfZ00aSzxOj8oAjqHxHSbnbINCjy4g",
-        authDomain: "yt-sub-app-b76a9.firebaseapp.com",
-        projectId: "yt-sub-app-b76a9",
-        storageBucket: "yt-sub-app-b76a9.firebasestorage.app",
-        messagingSenderId: "293476420",
-        appId: "1:293476420:web:a5111a8a6785dae4344411"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyDETvfZ00aSzxOj8oAjqHxHSbnbINCjy4g",
+            authDomain: "yt-sub-app-b76a9.firebaseapp.com",
+            projectId: "yt-sub-app-b76a9",
+            storageBucket: "yt-sub-app-b76a9.firebasestorage.app",
+            messagingSenderId: "293476420",
+            appId: "1:293476420:web:a5111a8a6785dae4344411"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-    const ADMIN_EMAIL = "vk8976914@gmail.com";
-    let player, timerId = null, timeLeft = 60, currentUID = null, currentMode = 'view';
-    let currentVideoId = '', currentCampaignId = null;
-    
-    // --- AUTH ---
+        const ADMIN_EMAIL = "vk8976914@gmail.com";
+        let player, timerId = null, timeLeft = 60, currentUID = null, currentMode = 'view';
+        let currentVideoId = '', currentCampaignId = null;
+
+        // --- AUTH LOGIC ---
         window.handleAuth = async () => {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
             try { await signInWithEmailAndPassword(auth, e, p); } catch(err) { alert(err.message); }
@@ -224,253 +191,221 @@
             try { 
                 const res = await createUserWithEmailAndPassword(auth, e, p);
                 await setDoc(doc(db, "users", res.user.uid), { Coins: 100, email: e });
-                alert("Account Created!");
+                alert("Welcome! 100 Bonus Coins Added.");
             } catch(err) { alert(err.message); }
         };
 
         window.handleLogout = async () => { if(confirm("Logout?")) { await signOut(auth); location.reload(); } };
 
-
-    // --- 1. YOUTUBE ID EXTRACTOR (Fixed for Shorts) ---
-    function extractId(url) {
-        const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?v=)|(shorts\/)|(\?v=))([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[9].trim().length === 11) ? match[9].trim() : null;
-    }
-
-    // --- 2. BUTTON LOCK/UNLOCK LOGIC ---
-    window.openYoutubeForLike = () => {
-        if(!currentVideoId) return alert("Please wait for video to load!");
-        
-        // Open Video Link
-        window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
-        
-        // Unlock Verify Button
-        const verifyBtn = document.getElementById('verify-btn');
-        if(verifyBtn) {
-            verifyBtn.disabled = false;
-            verifyBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-600');
-            verifyBtn.classList.add('bg-green-600'); // Button active color
+        // --- CORE VIDEO & TIMER LOGIC (Fixed for 0 Countdown) ---
+        function extractId(url) {
+            const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?v=)|(shorts\/)|(\?v=))([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[9].trim().length === 11) ? match[9].trim() : null;
         }
-    };
 
-    window.verifyLike = async () => {
-        const btn = document.getElementById('verify-btn');
-        if(btn.disabled) return;
+        async function loadNextVideo() {
+            window.stopCounter();
+            timeLeft = 60;
+            document.getElementById('timer').innerText = "60";
+            document.getElementById('play-btn').classList.remove('hidden');
+            
+            // Like Button Reset
+            const btn = document.getElementById('verify-btn');
+            btn.disabled = true; btn.classList.add('opacity-50', 'cursor-not-allowed');
 
-        btn.disabled = true;
-        btn.innerText = "VERIFYING...";
-
-        setTimeout(async () => {
             try {
-                await updateDoc(doc(db, "users", currentUID), { Coins: increment(100) });
-                if(currentCampaignId) {
-                    await updateDoc(doc(db, "campaigns", currentCampaignId), { count: increment(1) });
+                const q = query(collection(db, "campaigns"), where("status", "==", "active"), where("type", "==", currentMode), limit(10));
+                const snap = await getDocs(q);
+                let pool = []; snap.forEach(d => pool.push({id: d.id, ...d.data()}));
+                
+                if(pool.length > 0) {
+                    const s = pool[Math.floor(Math.random() * pool.length)];
+                    currentVideoId = extractId(s.url);
+                    currentCampaignId = s.id;
+                } else {
+                    currentVideoId = 'oWAHV36EcDI'; // Default
+                    currentCampaignId = null;
                 }
-                alert("Verified! +100 Coins Received.");
-                refreshCoins();
-                loadNextVideo(); // This will auto-lock the button again
-            } catch(e) {
-                alert("Error: " + e.message);
-                btn.disabled = false;
-            }
-        }, 2000);
-    };
-
-    // --- 3. VIDEO LOADING SYSTEM ---
-    async function loadNextVideo() {
-        window.stopCounter();
-        
-        // RESET VERIFY BUTTON (LOCK IT)
-        const verifyBtn = document.getElementById('verify-btn');
-        if(verifyBtn) {
-            verifyBtn.disabled = true;
-            verifyBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-gray-600');
-            verifyBtn.classList.remove('bg-green-600');
-            verifyBtn.innerHTML = '<i class="fas fa-heart"></i> 2. VERIFY LIKE (+100 🪙)';
+                if(player) player.loadVideoById(currentVideoId);
+            } catch(e) { console.log(e); }
         }
 
-        try {
-            const q = query(collection(db, "campaigns"), 
-                      where("status", "==", "active"), 
-                      where("type", "==", currentMode), limit(10));
-            const snap = await getDocs(q);
-            let pool = [];
-            snap.forEach(doc => pool.push({ id: doc.id, ...doc.data() }));
+        function startCounter() {
+            if(timerId) return;
+            timerId = setInterval(async () => {
+                timeLeft--;
+                document.getElementById('timer').innerText = Math.max(0, timeLeft);
+                
+                if(timeLeft <= 0) {
+                    window.stopCounter();
+                    await updateDoc(doc(db, "users", currentUID), { Coins: increment(60) });
+                    if(currentCampaignId) await updateDoc(doc(db, "campaigns", currentCampaignId), { count: increment(1) });
+                    refreshCoins();
+                    alert("Time Up! +60 Coins");
+                    loadNextVideo();
+                }
+            }, 1000);
+        }
 
-            if(pool.length > 0) {
-                const s = pool[Math.floor(Math.random() * pool.length)];
-                currentVideoId = extractId(s.url);
-                currentCampaignId = s.id;
-            } else {
-                currentVideoId = 'oWAHV36EcDI'; // Default
-                currentCampaignId = null;
-            }
+        window.stopCounter = () => { clearInterval(timerId); timerId = null; };
+        window.startVideo = () => { player.playVideo(); document.getElementById('play-btn').classList.add('hidden'); };
 
-            if(player && player.loadVideoById) {
-                player.loadVideoById({ videoId: currentVideoId });
-                player.mute();
-            }
-        } catch(e) { console.error(e); }
-    }
-
-    // --- 4. OTHER GLOBAL FUNCTIONS (Tabs, Admin, Campaign) ---
-    window.switchTab = (t) => {
-        currentMode = t;
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-        
-        const contentId = (t === 'view' || t === 'like') ? 'tab-main' : 'tab-' + t;
-        document.getElementById(contentId).classList.remove('hidden');
-        document.getElementById('btn-' + t).classList.add('active');
-
-        if(t === 'view' || t === 'like') {
-            document.getElementById('like-area').classList.toggle('hidden', t !== 'like');
-            document.getElementById('watch-stats').classList.toggle('hidden', t === 'like');
-            loadNextVideo();
-        } else if(t === 'campaign') window.showMyCampaigns();
-        else if(t === 'admin') window.loadAdminOrders();
-        window.stopCounter();
-    };
-
-
-        // --- BUY / ORDERS ---
-        window.submitOrder = async () => {
-            const amt = parseInt(document.getElementById('payAmount').value);
-            const tid = document.getElementById('payId').value;
-            if(tid.length < 5) return alert("Enter valid Txn ID");
-            await addDoc(collection(db, "orders"), { userId: currentUID, coins: amt, txnId: tid, status: "pending", time: new Date() });
-            alert("Order submitted! Wait for admin approval.");
-            document.getElementById('payId').value = "";
+        // --- LIKE LOGIC ---
+        window.openYoutubeForLike = () => {
+            window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
+            const btn = document.getElementById('verify-btn');
+            btn.disabled = false; btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.classList.add('bg-green-600');
         };
 
-        // --- DYNAMIC PRICE CALCULATION ---
+        window.verifyLike = async () => {
+            const btn = document.getElementById('verify-btn');
+            btn.innerText = "VERIFYING...";
+            setTimeout(async () => {
+                await updateDoc(doc(db, "users", currentUID), { Coins: increment(100) });
+                if(currentCampaignId) await updateDoc(doc(db, "campaigns", currentCampaignId), { count: increment(1) });
+                btn.innerText = "2. VERIFY (+100 🪙)";
+                refreshCoins(); alert("Verified!"); loadNextVideo();
+            }, 2000);
+        };
+
+        // --- CAMPAIGN LOGIC ---
         window.updatePrice = () => {
             const type = document.getElementById('campType').value;
             const qty = parseInt(document.getElementById('campQty').value);
-            const btn = document.getElementById('campBtn');
-            const costPerUnit = (type === 'view') ? 2 : 3; // Rate: View=6, Like=10
-            const totalCost = qty * costPerUnit;
-            btn.innerText = `ADD CAMPAIGN (${totalCost} 🪙)`;
-            return totalCost;
+            const cost = (type === 'view' ? 2 : 5) * qty;
+            document.getElementById('campBtn').innerText = `ADD (${cost} 🪙)`;
+            return cost;
         };
 
-    window.addCampaign = async () => {
-        const url = document.getElementById('campUrl').value;
-        const type = document.getElementById('campType').value;
-        const qty = parseInt(document.getElementById('campQty').value);
-        const vId = extractId(url);
-        if(!vId) return alert("Invalid YouTube link!");
+        window.addCampaign = async () => {
+            const url = document.getElementById('campUrl').value;
+            const type = document.getElementById('campType').value;
+            const qty = parseInt(document.getElementById('campQty').value);
+            const cost = window.updatePrice();
+            
+            const userSnap = await getDoc(doc(db, "users", currentUID));
+            if(userSnap.data().Coins < cost) return alert("Insufficient Coins!");
 
-        const userRef = doc(db, "users", currentUID);
-        const userSnap = await getDoc(userRef);
-        const totalCost = (type === 'view' ? 2 : 3) * qty;
+            await updateDoc(doc(db, "users", currentUID), { Coins: increment(-cost) });
+            await addDoc(collection(db, "campaigns"), {
+                userId: currentUID, url, type, qty, count: 0, status: "active", createdAt: new Date()
+            });
+            alert("Campaign Launched!");
+            refreshCoins(); window.showMyCampaigns();
+        };
 
-        if(userSnap.data().Coins < totalCost) return alert("No coins!");
+        window.showMyCampaigns = async () => {
+            const list = document.getElementById('my-campaigns-list');
+            list.innerHTML = "Loading...";
+            const q = query(collection(db, "campaigns"), where("userId", "==", currentUID));
+            const snap = await getDocs(q);
+            let h = "";
+            snap.forEach(d => {
+                const c = d.data();
+                const progress = Math.round((c.count / c.qty) * 100);
+                h += `<div class="bg-white p-4 rounded-2xl border">
+                    <div class="flex justify-between text-[10px] font-bold uppercase mb-1"><span>${c.type}</span> <span>${progress}%</span></div>
+                    <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-red-600" style="width:${progress}%"></div></div>
+                    <p class="text-xs font-black mt-1">${c.count} / ${c.qty}</p>
+                </div>`;
+            });
+            list.innerHTML = h || "No active campaigns.";
+        };
 
-        await updateDoc(userRef, { Coins: increment(-totalCost) });
-        await addDoc(collection(db, "campaigns"), {
-            userId: currentUID, url: url, type: type, qty: qty,
-            count: 0, status: "active", createdAt: new Date()
-        });
-        alert("Campaign Added!"); refreshCoins(); window.showMyCampaigns();
-    };
+        // --- STORE LOGIC ---
+        window.submitOrder = async () => {
+            const amt = parseInt(document.getElementById('payAmount').value);
+            const tid = document.getElementById('payId').value;
+            if(tid.length < 10) return alert("Enter valid Transaction ID");
+            
+            await addDoc(collection(db, "orders"), {
+                userId: currentUID, email: auth.currentUser.email, coins: amt, txnId: tid, status: "pending", time: new Date()
+            });
+            alert("Order Submitted! Waiting for Admin.");
+            document.getElementById('payId').value = "";
+        };
 
-    window.showMyCampaigns = async () => {
-        const list = document.getElementById('my-campaigns-list');
-        list.innerHTML = "Loading...";
-        const q = query(collection(db, "campaigns"), where("userId", "==", currentUID));
-        const snap = await getDocs(q);
-        let h = "";
-        snap.forEach(d => {
-            const c = d.data();
-            const percent = Math.min(Math.round(((c.count || 0) / c.qty) * 100), 100);
-            h += `<div class="bg-white p-4 rounded-3xl border mb-3">
-                <div class="flex justify-between text-[10px] font-bold mb-1 uppercase"><span>${c.type}</span> <span>${percent}%</span></div>
-                <div class="w-full h-1.5 bg-gray-100 rounded-full mb-2 overflow-hidden"><div class="h-full bg-red-600" style="width:${percent}%"></div></div>
-                <p class="text-xs font-black">${c.count || 0} / ${c.qty}</p>
-            </div>`;
-        });
-        list.innerHTML = h || "No Campaigns Found.";
-    };
+        // --- ADMIN LOGIC ---
+        window.loadAdminOrders = async () => {
+            const list = document.getElementById('admin-orders-list');
+            const q = query(collection(db, "orders"), where("status", "==", "pending"));
+            const snap = await getDocs(q);
+            let h = "";
+            snap.forEach(d => {
+                const o = d.data();
+                h += `<div class="bg-zinc-800 p-4 rounded-2xl">
+                    <p class="text-[10px] opacity-50">${o.email}</p>
+                    <p class="text-yellow-500 font-bold">${o.txnId}</p>
+                    <p class="text-xl">${o.coins} 🪙</p>
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="approveOrder('${d.id}', '${o.userId}', ${o.coins})" class="bg-green-600 flex-1 py-2 rounded-lg text-xs">APPROVE</button>
+                        <button onclick="rejectOrder('${d.id}')" class="bg-red-600 flex-1 py-2 rounded-lg text-xs">REJECT</button>
+                    </div>
+                </div>`;
+            });
+            list.innerHTML = h || "No pending orders.";
+        };
 
-    window.loadAdminOrders = async () => {
-        const list = document.getElementById('admin-orders-list');
-        const q = query(collection(db, "orders"), where("status", "==", "pending"));
-        const snap = await getDocs(q);
-        let h = "";
-        snap.forEach(d => {
-            const o = d.data();
-            h += `<div class="bg-zinc-800 p-4 rounded-2xl mb-2">
-                <p class="text-white text-[10px] opacity-50">${o.email}</p>
-                <p class="text-yellow-500 font-bold">${o.txnId}</p>
-                <p class="text-xl text-white">${o.coins} 🪙</p>
-                <div class="flex gap-2 mt-2">
-                    <button onclick="approveOrder('${d.id}', '${o.userId}', ${o.coins})" class="bg-green-600 flex-1 py-2 rounded-lg text-xs">APPROVE</button>
-                    <button onclick="rejectOrder('${d.id}')" class="bg-red-600 flex-1 py-2 rounded-lg text-xs">REJECT</button>
-                </div>
-            </div>`;
-        });
-        list.innerHTML = h || "Clean!";
-    };
+        window.approveOrder = async (oid, uid, amt) => {
+            await updateDoc(doc(db, "users", uid), { Coins: increment(amt) });
+            await updateDoc(doc(db, "orders", oid), { status: "approved" });
+            alert("Order Approved!"); window.loadAdminOrders(); refreshCoins();
+        };
 
-    window.approveOrder = async (oid, uid, amt) => {
-        await updateDoc(doc(db, "users", uid), { Coins: increment(amt) });
-        await updateDoc(doc(db, "orders", oid), { status: "approved" });
-        alert("Done!"); window.loadAdminOrders();
-    };
+        window.rejectOrder = async (oid) => {
+            await updateDoc(doc(db, "orders", oid), { status: "rejected" });
+            alert("Order Rejected!"); window.loadAdminOrders();
+        };
 
-    window.rejectOrder = async (oid) => {
-        await updateDoc(doc(db, "orders", oid), { status: "rejected" });
-        alert("Rejected!"); window.loadAdminOrders();
-    };
+        // --- UI NAVIGATION ---
+        window.switchTab = (t) => {
+            currentMode = t;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            const contentId = (t === 'view' || t === 'like') ? 'tab-main' : 'tab-' + t;
+            document.getElementById(contentId).classList.remove('hidden');
+            document.getElementById('btn-' + t).classList.add('active');
 
-    window.startVideo = () => { if(player) player.playVideo(); document.getElementById('play-btn').classList.add('hidden'); };
-    window.stopCounter = () => { clearInterval(timerId); timerId = null; };
+            if(t === 'view' || t === 'like') {
+                document.getElementById('like-area').classList.toggle('hidden', t !== 'like');
+                document.getElementById('watch-stats').classList.toggle('hidden', t === 'like');
+                loadNextVideo();
+            } else if (t === 'campaign') window.showMyCampaigns();
+            else if (t === 'admin') window.loadAdminOrders();
+            window.stopCounter();
+        };
 
-    // --- 5. INITIALIZATION ---
-    async function refreshCoins() { 
-        const snap = await getDoc(doc(db, "users", currentUID)); 
-        if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins; 
-    }
-
-    onAuthStateChanged(auth, u => {
-        if(u) {
-            currentUID = u.uid;
-            document.getElementById('auth-screen').classList.add('hidden');
-            document.getElementById('app-screen').classList.remove('hidden');
-            if(u.email === ADMIN_EMAIL) document.getElementById('btn-admin').classList.remove('hidden');
-            refreshCoins(); loadNextVideo();
-        } else {
-            document.getElementById('auth-screen').classList.remove('hidden');
+        async function refreshCoins() { 
+            const snap = await getDoc(doc(db, "users", currentUID)); 
+            if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins; 
         }
-    });
 
-    window.onYouTubeIframeAPIReady = () => {
-        player = new YT.Player('player', { height: '100%', width: '100%', videoId: 'oWAHV36EcDI',
-            playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'mute': 1 },
-            events: { 'onStateChange': (e) => { if(e.data == 1 && currentMode === 'view') startCounter(); } }
-        });
-    };
-
-    function startCounter() {
-        if(timerId) return;
-        timerId = setInterval(async () => {
-            timeLeft--; document.getElementById('timer').innerText = timeLeft;
-            if(timeLeft <= 0) {
-                window.stopCounter();
-                await updateDoc(doc(db, "users", currentUID), { Coins: increment(60) });
-                if(currentCampaignId) await updateDoc(doc(db, "campaigns", currentCampaignId), { count: increment(1) });
+        onAuthStateChanged(auth, u => {
+            if(u) {
+                currentUID = u.uid;
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.remove('hidden');
+                if(u.email === ADMIN_EMAIL) document.getElementById('btn-admin').classList.remove('hidden');
                 refreshCoins(); loadNextVideo();
+            } else {
+                document.getElementById('auth-screen').classList.remove('hidden');
             }
-        }, 1000);
-    }
+        });
 
-    var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
-</script>
+        // YT API
+        window.onYouTubeIframeAPIReady = () => {
+            player = new YT.Player('player', { 
+                height: '100%', width: '100%', videoId: 'oWAHV36EcDI',
+                playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'mute': 1 },
+                events: { 'onStateChange': (e) => { if(e.data == 1 && currentMode === 'view') startCounter(); else stopCounter(); } }
+            });
+        };
 
-
-
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(tag);
+    </script>
 </body>
 </html>
