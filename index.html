@@ -84,6 +84,16 @@
     </div>
     <span class="font-medium text-sm">Privacy Policy</span>
 </a>
+      
+        
+        
+        <a href="faq.html" onclick="saveSidebarState()" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-all">
+    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+        <i class="fas fa-question-circle text-blue-600 text-sm"></i>
+    </div>
+    <span class="font-medium text-sm">Frequently Asked Questions</span>
+</a>
+
 
 
 
@@ -605,6 +615,27 @@ window.onload = function() {
         document.body.style.overflow = 'auto'; // Screen scroll unlock
     }
 }
+
+
+    
+// Sidebar ko yaad rakhne ke liye function
+function saveSidebarState() {
+    localStorage.setItem('openSidebar', 'true');
+}
+
+// Page load hote hi check karein
+window.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('openSidebar') === 'true') {
+        const sidebar = document.getElementById('sidebarMenu'); // Apni Sidebar ID check karein
+        const overlay = document.getElementById('overlay');
+        
+        if(sidebar) sidebar.classList.remove('-translate-x-full');
+        if(overlay) overlay.classList.remove('hidden');
+
+        // Khulne ke baad nishani mita dein
+        localStorage.removeItem('openSidebar');
+    }
+});
 
 
 
