@@ -86,15 +86,7 @@
 
     <div class="flex-1 overflow-y-auto py-4">
 
-     <a href="#" onclick="switchTab('views')" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 border-t border-gray-100">
-    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-        <i class="fas fa-play text-blue-600 text-xs"></i>
-    </div>
-    <div class="flex flex-col">
-        <span class="font-medium text-sm">Watch & Earn</span>
-        <span class="text-[10px] text-blue-500 font-medium">Get coins by viewing</span>
-    </div>
-</a>
+     
 
 <a href="#" onclick="switchTab('like')" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 border-t border-gray-100">
     <div class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
@@ -193,8 +185,9 @@
                         </div>
                     </div>
                 </div>
-                <div id= "tab-views" >
+                
                 <div id="watch-stats" class="mt-4 grid grid-cols-2 gap-4 text-center">
+                  
                     <div class="bg-white p-4 rounded-3xl border shadow-sm">
                         <p class="text-[10px] font-bold text-gray-400">SECONDS</p>
                         <p id="timer" class="text-3xl font-black">60</p>
@@ -204,13 +197,13 @@
                         <p id="reward-text" class="text-3xl font-black text-green-600">+60</p>
                     </div>
                 </div>
-                </div>             
+                
 
                 <div id="like-area" class="hidden mt-6 space-y-3">
                     <button onclick="openYoutubeForLike()" class="w-full bg-blue-600 text-white py-4 rounded-3xl font-bold">1. OPEN VIDEO</button>
                     <button id="verify-btn" onclick="verifyLike()" class="w-full bg-gray-400 text-white py-4 rounded-3xl font-bold opacity-50 cursor-not-allowed" disabled>2. VERIFY (+100 🪙)</button>
                 </div>
-            </div>
+         
 
             <div id="tab-buy" class="tab-content hidden w-full max-w-sm">
                 <div class="bg-white p-6 rounded-3xl border text-center">
