@@ -626,7 +626,7 @@ function saveSidebarState() {
 // Page load hote hi check karein
 window.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('openSidebar') === 'true') {
-        const sidebar = document.getElementById('sidebarMenu'); // Apni Sidebar ID check karein
+        const sidebar = document.getElementById('sidebar'); // Apni Sidebar ID check karein
         const overlay = document.getElementById('overlay');
         
         if(sidebar) sidebar.classList.remove('-translate-x-full');
@@ -636,6 +636,7 @@ window.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('openSidebar');
     }
 });
+
 
 
 
