@@ -577,6 +577,20 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+        //privacy policy's 
+
+        function togglePrivacyModal() {
+    const modal = document.getElementById('privacyModal');
+    if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Screen scroll lock
+    } else {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto'; // Screen scroll unlock
+    }
+}
+
+
 
     </script>
 </body>
