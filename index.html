@@ -578,6 +578,18 @@ if ('serviceWorker' in navigator) {
 }
 
         //privacy policy's 
+        
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('sidebar') === 'open') {
+        // Yahan apne sidebar ko kholne wala function call karein
+        // Agar aapke sidebar ki id 'sidebar' hai, toh:
+        document.getElementById('sidebar').classList.remove('-translate-x-full');
+        // Agar overlay/dark background hai toh use bhi dikhayein
+        document.getElementById('overlay').classList.remove('hidden');
+    }
+}
+        
 
         function togglePrivacyModal() {
     const modal = document.getElementById('privacyModal');
