@@ -701,26 +701,25 @@ window.addEventListener('DOMContentLoaded', () => {
              
 ////share
 window.shareApp = async () => {
+    // Isme humne link ko 'text' ke andar hi daal diya hai
+    // Taaki browser use 'URL' ki tarah treat karke preview na dikhaye
     const shareData = {
         title: 'YT-SUB-APP',
-        text: 'Hey! Check out this amazing app to grow your YouTube channel for free. Download now!',
-        url: 'https://github.com/vishukhan/YT-Sub-App-/raw/main/YT-SUB-APP.apk' // Apni APK ka sahi link yahan daalein
+        text: 'Hey! Join YT-SUB-APP to grow your YouTube channel for free. Download now!\n\nLink: https://github.com/vishukhan/YT-Sub-App-/raw/main/YT-SUB-APP.apk'
     };
 
     try {
-        // Agar browser share support karta hai
         if (navigator.share) {
             await navigator.share(shareData);
-            console.log('App shared successfully');
         } else {
-            // Fallback: Agar browser support nahi karta toh link copy ho jaye
-            navigator.clipboard.writeText(shareData.url);
-            alert("Share link copied to clipboard!");
+            navigator.clipboard.writeText(shareData.text);
+            alert("Share link copied!");
         }
-    } catch (err) {
-        console.log('Error sharing:', err);
+    } catch (err) { 
+        console.log("Sharing failed", err); 
     }
 };
+
 
 
 
