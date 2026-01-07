@@ -92,7 +92,14 @@
     </div>
 
 
-        
+        <script>
+        function goBackWithSidebar() {
+            // Yeh browser ko bata raha hai ki sidebar kholna hai
+            localStorage.setItem('openSidebar', 'true');
+            // Yeh wapas homepage par le jayega
+            window.location.href = 'index.html';
+        }
+        </script>
 
 </body>
 </html>
