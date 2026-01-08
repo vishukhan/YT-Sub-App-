@@ -28,7 +28,6 @@
 <meta property="og:image:height" content="630">
 
 
-
          
          
   <script src="https://cdn.tailwindcss.com"></script>
@@ -822,20 +821,17 @@ window.redeemGiftCode = async () => {
 
               /////share 
               window.shareApp = async () => {
-    const shareData = {
-        title: 'YT-SUB-APP',
-        text: 'Hey! Join YT-SUB-APP to grow your YouTube channel for free. Download now!',
-        url: 'https://github.com/vishukhan/YT-Sub-App-/raw/main/YT-SUB-APP.apk'
-    };
     try {
-        if (navigator.share) {
-            await navigator.share(shareData);
-        } else {
-            navigator.clipboard.writeText(shareData.url);
-            alert("Share link copied!");
-        }
-    } catch (err) { console.log(err); }
+        await navigator.share({
+            title: 'YT-SUB-APP', // Title chota rakhein
+            text: 'Hey! Join YT-SUB-APP to grow your YouTube channel for free.',
+            url: 'https://vishukhan.github.io/YT-Sub-App-/' // Page ka main link dein, APK ka nahi
+        });
+    } catch (err) {
+        console.log('Error:', err);
+    }
 };
+
 
 
 
