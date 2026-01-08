@@ -311,9 +311,7 @@
         </div>
     </div>
 </div>
-
-    
-    <script type="module">
+     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, limit, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -754,7 +752,7 @@ window.redeemGiftCode = async () => {
     const codeInput = document.getElementById('giftInput');
     const code = codeInput.value.trim().toUpperCase();
 
-    if (!code) return alert("Pehle code enter karein!");
+    if (!code) return alert("Please enter the code first!");
 
     try {
         const userRef = doc(db, "users", currentUID);
@@ -767,13 +765,13 @@ window.redeemGiftCode = async () => {
 
         // A. Check karein code valid hai ya nahi
         if (!codeSnap.exists() || codeSnap.data().status !== "active") {
-            return alert("Ye code galat hai ya expire ho gaya hai!");
+            return alert("This code is incorrect or has expired!");
         }
 
         // B. FIX: Check karein user ne pehle use toh nahi kiya
         const redeemedCodes = userSnap.data().redeemedCodes || [];
         if (redeemedCodes.includes(code)) {
-            return alert("Aap ye code ek baar pehle hi use kar chuke hain!");
+            return alert("You've already used this code once!");
         }
 
         const rewardAmount = codeSnap.data().coins;
@@ -785,7 +783,7 @@ window.redeemGiftCode = async () => {
         });
 
         // D. Success Alert
-        alert(`Mubarak ho! ${rewardAmount} 🪙 mil gaye.`);
+        alert(`Congratulations! ${rewardAmount} 🪙 added on your account.`);
 
         // E. BLUR FIX: Alert ke baad modal band karein
         window.closeGiftModal();
@@ -799,10 +797,6 @@ window.redeemGiftCode = async () => {
         alert("Server error! Phir se try karein.");
     }
 };
-
-
-
-
 
 
 
