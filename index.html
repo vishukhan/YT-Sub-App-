@@ -136,6 +136,20 @@
 </a>
 
 
+
+<button onclick="showGiftCodeModal()" class="w-full flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-orange-50 border-t border-gray-100 transition-all text-left">
+    <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+        <i class="fas fa-gift text-orange-600 text-xs"></i>
+    </div>
+    
+    <div class="flex flex-col">
+        <span class="font-medium text-sm">Gift Code</span>
+        <span class="text-[10px] text-orange-600 font-medium">Redeem for free coins</span>
+    </div>
+</button>
+
+
+
     
 
 
@@ -170,17 +184,6 @@
         <span class="text-[10px] text-green-600 font-medium">Fast Direct Download</span>
     </div>
 </a>
-
-         <button onclick="shareApp()" class="w-full flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-all text-left">
-    <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-        <i class="fas fa-share-nodes text-green-600 text-xs"></i>
-    </div>
-    <div class="flex flex-col">
-        <span class="font-medium text-sm">Invite Friends</span>
-        <span class="text-[10px] text-green-600 font-medium">Share & grow together</span>
-    </div>
-</button>
-
 
 
 
@@ -295,11 +298,25 @@
             <button id="btn-admin" onclick="switchTab('admin')" class="hidden nav-btn flex flex-col items-center p-2"><i class="fas fa-user-shield text-lg"></i><span class="text-[10px] mt-1 font-bold">ADMIN</span></button>
         </nav>
     </div>
+    <div id="giftModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-xs rounded-3xl p-6 shadow-2xl scale-in">
+        <h2 class="text-xl font-black mb-2 text-center">🎁 Redeem Gift</h2>
+        <p class="text-gray-500 text-[10px] text-center mb-4 uppercase font-bold tracking-widest">Enter your promo code</p>
+        
+        <input id="giftInput" type="text" placeholder="Example: FREE100" class="w-full p-4 bg-gray-100 rounded-2xl border-2 border-transparent focus:border-orange-500 outline-none text-center font-bold mb-4 uppercase">
+        
+        <div class="flex gap-2">
+            <button onclick="closeGiftModal()" class="flex-1 py-3 text-gray-400 font-bold text-sm">Cancel</button>
+            <button onclick="redeemGiftCode()" class="flex-[2] bg-orange-600 text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-orange-200">Redeem Now</button>
+        </div>
+    </div>
+</div>
+
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, limit, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDETvfZ00aSzxOj8oAjqHxHSbnbINCjy4g",
@@ -710,26 +727,83 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
-             
-////share
-window.shareApp = async () => {
-    try {
-        const shareData = {
-            title: 'YT-SUB-APP',
-            text: 'Hey! Join YT-SUB-APP to grow your YouTube channel for free. Download now!',
-            url: window.location.href // GitHub file link ki jagah apne main page ka link dein
-        };
 
-        if (navigator.share) {
-            await navigator.share(shareData);
-        } else {
-            navigator.clipboard.writeText(shareData.url);
-            alert("Link Copied!");
-        }
-    } catch (err) {
-        console.log('Error sharing:', err);
+/////////gift code  
+
+
+
+// 1. Modal band karne ka function (Blur hatane ke liye)
+window.closeGiftModal = () => {
+    const modal = document.getElementById('giftModal');
+    if (modal) {
+        modal.classList.add('hidden'); // Modal hide hote hi blur gayab ho jayega
     }
 };
+
+// 2. Gift Code kholne ka function
+window.showGiftCodeModal = () => {
+    const modal = document.getElementById('giftModal');
+    if (modal) modal.classList.remove('hidden');
+    // Sidebar ko band karne ka logic
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) sidebar.classList.add('-translate-x-full');
+};
+
+// 3. Main Redeem Logic (Duplicate Check + Fix)
+window.redeemGiftCode = async () => {
+    const codeInput = document.getElementById('giftInput');
+    const code = codeInput.value.trim().toUpperCase();
+
+    if (!code) return alert("Pehle code enter karein!");
+
+    try {
+        const userRef = doc(db, "users", currentUID);
+        const codeRef = doc(db, "giftCodes", code);
+        
+        const [codeSnap, userSnap] = await Promise.all([
+            getDoc(codeRef),
+            getDoc(userRef)
+        ]);
+
+        // A. Check karein code valid hai ya nahi
+        if (!codeSnap.exists() || codeSnap.data().status !== "active") {
+            return alert("Ye code galat hai ya expire ho gaya hai!");
+        }
+
+        // B. FIX: Check karein user ne pehle use toh nahi kiya
+        const redeemedCodes = userSnap.data().redeemedCodes || [];
+        if (redeemedCodes.includes(code)) {
+            return alert("Aap ye code ek baar pehle hi use kar chuke hain!");
+        }
+
+        const rewardAmount = codeSnap.data().coins;
+
+        // C. Update Database (Coins + List mein code add karein)
+        await updateDoc(userRef, {
+            Coins: increment(rewardAmount),
+            redeemedCodes: arrayUnion(code) // Ye repeat hone se rokega
+        });
+
+        // D. Success Alert
+        alert(`Mubarak ho! ${rewardAmount} 🪙 mil gaye.`);
+
+        // E. BLUR FIX: Alert ke baad modal band karein
+        window.closeGiftModal();
+        codeInput.value = "";
+        
+        // Coins refresh karein
+        if(typeof refreshCoins === 'function') refreshCoins();
+
+    } catch (err) {
+        console.error("Redeem Error:", err);
+        alert("Server error! Phir se try karein.");
+    }
+};
+
+
+
+
+
 
 
 
