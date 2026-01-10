@@ -54,19 +54,53 @@
 body {
     padding-bottom: 70px; /* Ad ki height ke hisab se jagah */
 }
-
-/* Ad container ko styling dein */
-#banner-ad-container {
-    width: 100%;
-    height: 50px;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Bottom Navigation ko sabse upar rakhne ke liye */
+.bottom-nav {
     position: fixed;
-    bottom: 60px; /* Bottom navigation ke upar rakhne ke liye */
-    z-index: 999;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000; /* Isse nav bar ad ke upar rahega */
+    background: #fff;
+    border-top: 1px solid #ddd;
 }
+
+/* Sidebar ka main container */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Shuruat mein screen se bahar */
+    width: 250px;
+    height: 100%;
+    background: #111;
+    z-index: 2000 !important; /* Ad aur Nav bar se bada number */
+    transition: 0.3s ease;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+}
+
+/* Jab sidebar khule (Active class) */
+.sidebar.active {
+    left: 0;
+    z-index: 20;
+}
+
+/* Background ka kaala parda (Overlay) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 10; /* Sidebar ke theek niche par Ad ke upar */
+    display: none;
+}
+#banner-ad-container {
+    position: fixed;
+    bottom: 105px; /* Bottom Nav bar ki height ke upar */
+    width: 100%;
+    z-index: 1; /* Iska z-index sidebar se kam rahega */
+}
+
 
     </style>
 </head>
