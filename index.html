@@ -40,6 +40,34 @@
         .nav-btn.active { color: #ef4444; border-top: 2px solid #ef4444; }
         .tab-content { animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+   
+   
+.ad-card {
+   // background: #1a1a1a;
+    //border: 1px solid #ca8a04;
+   // border-radius: 12px;
+    margin: 50px;
+    padding: 10px;
+}
+   
+   /* Screen ke niche thodi jagah chhodein taaki ad buttons ko na chhupaye */
+body {
+    padding-bottom: 70px; /* Ad ki height ke hisab se jagah */
+}
+
+/* Ad container ko styling dein */
+#banner-ad-container {
+    width: 100%;
+    height: 50px;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 60px; /* Bottom navigation ke upar rakhne ke liye */
+    z-index: 999;
+}
+
     </style>
 </head>
 <body class="flex flex-col items-center min-h-screen pb-24">
@@ -217,6 +245,8 @@
 
         <main class="flex-1 p-4 flex flex-col items-center w-full">
             
+            
+
             <div id="tab-main" class="tab-content w-full max-w-[360px]">
                 <h2 id="mode-title" class="text-center font-bold mb-4 text-zinc-500 uppercase text-[10px] tracking-widest">Auto Play Mode</h2>
                 <div class="video-box">
@@ -237,13 +267,27 @@
                         <p class="text-[10px] font-bold text-gray-400">REWARD</p>
                         <p id="reward-text" class="text-3xl font-black text-green-600">+60</p>
                     </div>
+                      <div id="banner-ad-container">
+    <span class="text-[10px] text-gray-500">Sponsored Ad</span>
+</div>
                 </div>
+                
+                
+             
+
 
                 <div id="like-area" class="hidden mt-6 space-y-3">
                     <button onclick="openYoutubeForLike()" class="w-full bg-blue-600 text-white py-4 rounded-3xl font-bold">1. OPEN VIDEO</button>
                     <button id="verify-btn" onclick="verifyLike()" class="w-full bg-gray-400 text-white py-4 rounded-3xl font-bold opacity-50 cursor-not-allowed" disabled>2. VERIFY (+100 🪙)</button>
+                     <div class="ad-card">
+    <button onclick="showVideoAd()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 rounded-lg text-sm transition-all">
+        🎥 WATCH AD (+200 🪙)
+    </button>
+</div>
+
                 </div>
             </div>
+            
 
             <div id="tab-buy" class="tab-content hidden w-full max-w-sm">
                 <div class="bg-white p-6 rounded-3xl border text-center">
@@ -269,7 +313,12 @@
                     </select>
                     <input id="payId" type="text" placeholder="Transaction ID (12 Digits)" class="w-full p-4 bg-gray-50 rounded-2xl border mb-3 outline-none">
                     <button onclick="submitOrder()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Submit Payment</button>
+                    
                 </div>
+                
+                  <div id="banner-ad-container">
+    <span class="text-[10px] text-gray-500">Sponsored Ad</span>
+</div>
             </div>
             
             <div id="tab-campaign" class="tab-content hidden w-full max-w-sm">
@@ -290,8 +339,10 @@
                        <option value="1000000">1000000</option>
                         </select>
                     </div>
+                   
                     <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold">ADD (200 🪙)</button>
                 </div>
+                
                 <div id="my-campaigns-list" class="space-y-3"></div>
             </div>
 
@@ -834,6 +885,21 @@ window.redeemGiftCode = async () => {
 
 
 
+window.showVideoAd = () => {
+    // Check if the builder's ad function exists
+    if (window.WTN && window.WTN.showRewardedAd) {
+        window.WTN.showRewardedAd();
+        // Coins update ka logic builder ke callback mein jayega
+    } else {
+        // Sirf testing ke liye (Delete this after testing)
+        alert("Ad SDK loading... Please wait.");
+        setTimeout(async () => {
+            await updateDoc(doc(db, "users", currentUID), { Coins: increment(200) });
+            refreshCoins();
+            alert("200 Coins Added! ✅");
+        }, 3000);
+    }
+};
 
 
 
