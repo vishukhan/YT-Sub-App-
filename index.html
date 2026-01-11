@@ -926,7 +926,7 @@ window.showVideoAd = () => {
         // Coins update ka logic builder ke callback mein jayega
     } else {
         // Sirf testing ke liye (Delete this after testing)
-        alert("Ad SDK loading... Please wait.");
+        alert("Ad Loading... Please wait.");
         setTimeout(async () => {
             await updateDoc(doc(db, "users", currentUID), { Coins: increment(200) });
             refreshCoins();
