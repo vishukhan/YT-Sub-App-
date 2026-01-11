@@ -604,7 +604,7 @@ window.verifyLike = async () => {
         window.updatePrice = () => {
             const type = document.getElementById('campType').value;
             const qty = parseInt(document.getElementById('campQty').value);
-            const cost = (type === 'view' ? 2 : 5) * qty;
+            const cost = (type === 'view' ? 10 : 15) * qty;
             document.getElementById('campBtn').innerText = `ADD (${cost} 🪙)`;
             return cost;
         };
