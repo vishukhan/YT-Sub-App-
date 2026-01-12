@@ -28,7 +28,9 @@
 <meta property="og:image:height" content="630">
 
 
-         
+         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-8998502865274385"
+     crossorigin="anonymous"></script>
+
          
   <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -300,11 +302,15 @@ body {
                     <div class="bg-white p-4 rounded-3xl border shadow-sm">
                         <p class="text-[10px] font-bold text-gray-400">REWARD</p>
                         <p id="reward-text" class="text-3xl font-black text-green-600">+60</p>
-                    </div>
-                      <div id="banner-ad-container">
+                    <<div id="banner-ad-container" class="flex flex-col items-center justify-center border-t border-gray-200 py-2">
     <span class="text-[10px] text-gray-500">Sponsored Ad</span>
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:320px;height:50px"
+         data-ad-client="ca-app-pub-8998502865274385"
+         data-ad-slot="3454095970"></ins>
+    
 </div>
-                </div>
+
                 
                 
              
@@ -350,10 +356,15 @@ body {
                     
                 </div>
                 
-                  <div id="banner-ad-container">
+                  <div id="banner-ad-container" class="flex flex-col items-center justify-center border-t border-gray-200 py-2">
     <span class="text-[10px] text-gray-500">Sponsored Ad</span>
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:320px;height:50px"
+         data-ad-client="ca-app-pub-8998502865274385"
+         data-ad-slot="3454095970"></ins>
+    
 </div>
-            </div>
+
             
             <div id="tab-campaign" class="tab-content hidden w-full max-w-sm">
                 <div class="bg-white p-6 rounded-3xl border mb-6">
@@ -919,20 +930,35 @@ window.redeemGiftCode = async () => {
 
 
 
-window.showVideoAd = () => {
-    // Check if the builder's ad function exists
-    if (window.WTN && window.WTN.showRewardedAd) {
-        window.WTN.showRewardedAd();
-        // Coins update ka logic builder ke callback mein jayega
-    } else {
-        // Sirf testing ke liye (Delete this after testing)
-        alert("Ad Loading... Please wait.");
-        setTimeout(async () => {
-            await updateDoc(doc(db, "users", currentUID), { Coins: increment(200) });
-            refreshCoins();
-            alert("200 Coins Added! ✅");
-        }, 3000);
-    }
+// Aapki naye account ki Rewarded ID
+const MY_REWARD_ID = 'ca-app-pub-8998502865274385/9993268372';
+
+window.showVideoAd = async () => {
+    console.log("Loading Ad Unit: " + MY_REWARD_ID);
+
+    // 1. Pehle user ko message dikhayein
+    alert("Ad is loading... Reward will be added after watching.");
+
+    // 2. Ad khatam hone ka simulation (Real SDK implementation ke liye)
+    // Jab app Play Store/Live hogi, tab yahan real ad trigger hoga
+    setTimeout(async () => {
+        try {
+            // 3. Database mein coins update karein
+            await updateDoc(doc(db, "users", currentUID), { 
+                Coins: increment(200) 
+            });
+
+            // 4. UI refresh karein taaki naye coins dikhein
+            if (typeof refreshCoins === "function") {
+                refreshCoins();
+            }
+
+            alert("Badhai ho! 200 Coins aapke account mein add ho gaye hain. ✅");
+        } catch (error) {
+            console.error("Error updating coins: ", error);
+            alert("Kuch galti hui, coins add nahi ho paye.");
+        }
+    }, 5000); // 5 seconds ka wait (Ad simulation)
 };
 
 
