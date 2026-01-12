@@ -28,9 +28,7 @@
 <meta property="og:image:height" content="630">
 
 
-         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-8998502865274385"
-     crossorigin="anonymous"></script>
-
+         
          
   <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -56,6 +54,7 @@
 body {
     padding-bottom: 70px; /* Ad ki height ke hisab se jagah */
 }
+
 /* Bottom Navigation ko sabse upar rakhne ke liye */
 .bottom-nav {
     position: fixed;
@@ -102,6 +101,7 @@ body {
     width: 100%;
     z-index: 1; /* Iska z-index sidebar se kam rahega */
 }
+
 
 
     </style>
@@ -242,7 +242,8 @@ body {
 
 
 
-        <a href="https://github.com/vishukhan/YT-Sub-App-/raw/main/YT-SUB-APP.apk" download class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-green-50 transition-all border-t">
+        
+    <a href="https://github.com/vishukhan/YT-Sub-App-/raw/main/YT-SUB-APP.apk" download class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-green-50 transition-all border-t">
     <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
         <i class="fas fa-download text-green-600"></i>
     </div>
@@ -251,7 +252,6 @@ body {
         <span class="text-[10px] text-green-600 font-medium">Fast Direct Download</span>
     </div>
 </a>
-
 
 
 
@@ -302,15 +302,14 @@ body {
                     <div class="bg-white p-4 rounded-3xl border shadow-sm">
                         <p class="text-[10px] font-bold text-gray-400">REWARD</p>
                         <p id="reward-text" class="text-3xl font-black text-green-600">+60</p>
-                    <<div id="banner-ad-container" class="flex flex-col items-center justify-center border-t border-gray-200 py-2">
+                    </div>
+                         <div id="banner-ad-container" class="flex flex-col items-center justify-center border-t border-gray-200 py-2">
     <span class="text-[10px] text-gray-500">Sponsored Ad</span>
     <ins class="adsbygoogle"
          style="display:inline-block;width:320px;height:50px"
          data-ad-client="ca-app-pub-8998502865274385"
          data-ad-slot="3454095970"></ins>
-    
-</div>
-
+</div>           </div>
                 
                 
              
@@ -319,11 +318,14 @@ body {
                 <div id="like-area" class="hidden mt-6 space-y-3">
                     <button onclick="openYoutubeForLike()" class="w-full bg-blue-600 text-white py-4 rounded-3xl font-bold">1. OPEN VIDEO</button>
                     <button id="verify-btn" onclick="verifyLike()" class="w-full bg-gray-400 text-white py-4 rounded-3xl font-bold opacity-50 cursor-not-allowed" disabled>2. VERIFY (+100 🪙)</button>
-                     <div class="ad-card">
-    <button onclick="showVideoAd()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 rounded-lg text-sm transition-all">
-        🎥 WATCH AD (+200 🪙)
-    </button>
-</div>
+  
+    <div class="ad-card mt-4">
+                        <button onclick="watchAdClicked()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 rounded-xl text-sm transition-all shadow-md">
+                            🎥 WATCH VIDEO AD (+200 🪙)
+                        </button>
+                    </div>
+                </div>
+            </div>
 
                 </div>
             </div>
@@ -356,15 +358,14 @@ body {
                     
                 </div>
                 
-                  <div id="banner-ad-container" class="flex flex-col items-center justify-center border-t border-gray-200 py-2">
+                    <div id="banner-ad-container" class="flex flex-col items-center justify-center border-t border-gray-200 py-2">
     <span class="text-[10px] text-gray-500">Sponsored Ad</span>
     <ins class="adsbygoogle"
          style="display:inline-block;width:320px;height:50px"
          data-ad-client="ca-app-pub-8998502865274385"
          data-ad-slot="3454095970"></ins>
-    
 </div>
-
+            </div>
             
             <div id="tab-campaign" class="tab-content hidden w-full max-w-sm">
                 <div class="bg-white p-6 rounded-3xl border mb-6">
@@ -385,7 +386,7 @@ body {
                         </select>
                     </div>
                    
-                    <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold">ADD (1000 🪙)</button>
+                    <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold">ADD (200 🪙)</button>
                 </div>
                 
                 <div id="my-campaigns-list" class="space-y-3"></div>
@@ -615,7 +616,7 @@ window.verifyLike = async () => {
         window.updatePrice = () => {
             const type = document.getElementById('campType').value;
             const qty = parseInt(document.getElementById('campQty').value);
-            const cost = (type === 'view' ? 10 : 15) * qty;
+            const cost = (type === 'view' ? 2 : 5) * qty;
             document.getElementById('campBtn').innerText = `ADD (${cost} 🪙)`;
             return cost;
         };
@@ -930,44 +931,60 @@ window.redeemGiftCode = async () => {
 
 
 
-// Aapki naye account ki Rewarded ID
-const MY_REWARD_ID = 'ca-app-pub-8998502865274385/9993268372';
 
-window.showVideoAd = async () => {
+
+// Module script ke andar ye lines add karein
+window.db = db;
+window.doc = doc;
+window.updateDoc = updateDoc;
+window.increment = increment;
+
+
+        // --- ADMOB REWARDED LOGIC (FIXED) ---
+        window.showVideoAd = async () => {
+    const MY_REWARD_ID = "ca-app-pub-8998502865274385/9993268372";
     console.log("Loading Ad Unit: " + MY_REWARD_ID);
 
-    // 1. Pehle user ko message dikhayein
-    alert("Ad is loading... Reward will be added after watching.");
-
-    // 2. Ad khatam hone ka simulation (Real SDK implementation ke liye)
-    // Jab app Play Store/Live hogi, tab yahan real ad trigger hoga
-    setTimeout(async () => {
-        try {
-            // 3. Database mein coins update karein
-            await updateDoc(doc(db, "users", currentUID), { 
-                Coins: increment(200) 
-            });
-
-            // 4. UI refresh karein taaki naye coins dikhein
-            if (typeof refreshCoins === "function") {
-                refreshCoins();
+    if (window.JSInterface && window.JSInterface.showInterstitialAd) {
+        window.JSInterface.showInterstitialAd(); 
+    } else {
+        alert("Ad is loading... Please wait 5 seconds.");
+        
+        setTimeout(async () => {
+            try {
+                // Window object se functions call karein taaki TypeError na aaye
+                const userRef = window.doc(window.db, "users", currentUID);
+                await window.updateDoc(userRef, { 
+                    Coins: window.increment(200) 
+                });
+                
+                if (typeof refreshCoins === "function") refreshCoins();
+                alert("200 Coins Added! ✅");
+            } catch (error) {
+                console.error("Reward Error:", error);
             }
-
-            alert("Badhai ho! 200 Coins aapke account mein add ho gaye hain. ✅");
-        } catch (error) {
-            console.error("Error updating coins: ", error);
-            alert("Kuch galti hui, coins add nahi ho paye.");
-        }
-    }, 5000); // 5 seconds ka wait (Ad simulation)
+        }, 5000);
+    }
 };
 
+        window.watchAdClicked = () => {
+            let adCount = parseInt(localStorage.getItem('dailyAdCount') || "0");
+            let lastDate = localStorage.getItem('lastAdDate');
+            let today = new Date().toDateString();
+
+            if (lastDate !== today) { adCount = 0; localStorage.setItem('lastAdDate', today); }
+            if (adCount >= 10) { alert("Daily limit (10) reached! Try again tomorrow."); return; }
+            
+            window.showVideoAd();
+            adCount++;
+            localStorage.setItem('dailyAdCount', adCount);
+        };
 
 
-              // Banner Ad ko initialize karne ke liye
-(window.adsbygoogle = window.adsbygoogle || []).push({});
+
 
     </script>
         
 
 </body>
-    </html>
+             </html>
