@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.vishu.testingapp"
-        minSdkVersion 21    // Purane devices ke liye support
+        minSdkVersion 21    // Amazon devices aur purane phones ke liye support
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
