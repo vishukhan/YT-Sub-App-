@@ -1,0 +1,16 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.vishu.testingapp' // Ye line zaroori hai
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.vishu.testingapp"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+    }
+}
