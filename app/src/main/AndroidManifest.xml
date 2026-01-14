@@ -1,7 +1,11 @@
-<supports-screens 
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <supports-screens 
         android:smallScreens="true" 
         android:normalScreens="true" 
         android:largeScreens="true" 
         android:xlargeScreens="true" 
         android:anyDensity="true" />
 
+    <application
+        ... >
