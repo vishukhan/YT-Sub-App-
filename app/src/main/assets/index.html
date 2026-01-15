@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+         <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vishukhan YT SUB APP </title>
+<meta name="title" content="Vishu YT SUB APP | Free YouTube Subscribers Views & likes2026">
+<meta name="description" content="Grow your social media presence with Vishu Social Booster App. Get free YouTube subscribers, watch time, and real Instagram followers. Safe, secure, and coin-based promotion app.">
+<meta name="keywords" content=" Vishukhan YT SUB APP , get free youtube subscribers, YT-SUB-APP, sub4sub app, free instagram followers, boost youtube channel, social booster, get 1000 subscribers free, real insta followers, coin based social promotion, free youtube subscribers, free youtube watch time complete, youtube, Subscribers, Views,likes,comments,youtube channel monetize, youtube channel monetization, watch time booster">
+<meta name="author" content="Vishu Social Booster Team">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vishukhan.github.io/YT-Sub-App-/"> <meta property="og:title" content="Social Booster - Grow Your Channel & Profile Free">
+<meta property="og:description" content="Official Sub4Sub and Instagram Follower Likes Views exchange platform. Earn coins and promote your links.">
+<meta property="og:image" content="https://vishukhan.github.io/YT-Sub-App-/logo.png">
+
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:title" content="Social Booster | YouTube Growth">
+<meta property="twitter:description" content="Join 10k+ users to boost your social media presence for free.">
+
+
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/vishukhan/YT-Sub-App-/logo.png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/vishukhan/YT-Sub-App-/logo.png">
+
+<meta property="og:image" content="https://raw.githubusercontent.com/vishukhan/YT-Sub-App-/logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+
+         
+         
+  <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f9fafb; user-select: none; }
+        .video-box { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 24px; overflow: hidden; }
+        .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); z-index: 10; cursor: pointer; }
+        .nav-btn.active { color: #ef4444; border-top: 2px solid #ef4444; }
+        .tab-content { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+   
+   
+.ad-card {
+   // background: #1a1a1a;
+    //border: 1px solid #ca8a04;
+   // border-radius: 12px;
+    margin: 50px;
+    padding: 10px;
+}
+   
+   /* Screen ke niche thodi jagah chhodein taaki ad buttons ko na chhupaye */
+body {
+    padding-bottom: 70px; /* Ad ki height ke hisab se jagah */
+}
+
+/* Bottom Navigation ko sabse upar rakhne ke liye */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000; /* Isse nav bar ad ke upar rahega */
+    background: #fff;
+    border-top: 1px solid #ddd;
+}
+
+/* Sidebar ka main container */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Shuruat mein screen se bahar */
+    width: 250px;
+    height: 100%;
+    background: #111;
+    z-index: 2000 !important; /* Ad aur Nav bar se bada number */
+    transition: 0.3s ease;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+}
+
+/* Jab sidebar khule (Active class) */
+.sidebar.active {
+    left: 0;
+    z-index: 20;
+}
+
+/* Background ka kaala parda (Overlay) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 10; /* Sidebar ke theek niche par Ad ke upar */
+    display: none;
+}
+#banner-ad-container {
+    position: fixed;
+    bottom: 105px; /* Bottom Nav bar ki height ke upar */
+    width: 100%;
+    z-index: 1; /* Iska z-index sidebar se kam rahega */
+}
+
+
+
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen pb-24">
+
+    <div id="auth-screen" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center p-6 text-center overflow-y-auto">
+        <div class="w-full max-w-sm space-y-4 my-auto">
+            <h2 class="text-4xl font-black mb-2 italic">YT<span class="text-red-600">SUB</span></h2>
+            <p class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-6">Boost YouTube Growth</p>
+            <input id="email" type="email" placeholder="Email Address" class="w-full p-4 bg-gray-100 rounded-2xl outline-none border focus:border-red-500">
+            <input id="pass" type="password" placeholder="Password" class="w-full p-4 bg-gray-100 rounded-2xl outline-none border focus:border-red-500">
+            <button onclick="handleAuth()" class="w-full bg-black text-white py-4 rounded-2xl font-bold shadow-lg">Login</button>
+            <button onclick="signupUser()" class="w-full text-gray-500 py-2 font-medium">Create New Account</button>
+        </div>
+    </div>
+
+    <div id="app-screen" class="hidden w-full max-w-md">
+    
+    <header class="w-full p-4 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b">
+    <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="text-xl text-gray-700 focus:outline-none p-1">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-play text-white text-[10px]"></i>
+            </div>
+            <span class="font-black text-xl tracking-tighter">YTSUB</span>
+        </div>
+    </div>
+    
+
+    <div class="flex items-center gap-2">
+        <div class="bg-yellow-100 px-3 py-1.5 rounded-full flex items-center gap-2 border border-yellow-200 shadow-sm">
+            <span class="text-yellow-600 font-bold text-sm">🪙</span>
+            <span id="coinDisplay" class="font-black text-sm text-yellow-700">0</span>
+        
+</header>
+
+
+<div id="sidebar overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-[60] hidden backdrop-blur-sm"></div>
+<div id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-[70] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <div class="p-6 bg-gray-50 border-b">
+        <div class="w-16 h-16 bg-zinc-800 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mb-3 shadow-lg">
+            V
+        </div>
+        <h3 class="font-black text-lg">YT-SUB-APP</h3>
+        <p class="text-xs text-gray-500 truncate" id="userEmailSidebar">user@email.com</p>
+    </div>
+
+
+    <div class="flex-1 overflow-y-auto py-4">
+
+<a href="tg://resolve?domain=ytsubapp"  class="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors border-b border-gray-50">
+    <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+        <svg class="w-6 h-6 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.53-1.39.52-.46-.01-1.33-.26-1.98-.48-.8-.27-1.43-.42-1.37-.89.03-.25.38-.51 1.07-.78 4.2-1.82 7-3.03 8.41-3.63 4-.17 4.83.12 4.84 1.4z"/>
+        </svg>
+    </div>
+    <div class="flex-1">
+        <h3 class="text-sm font-bold text-gray-800">Telegram Channel</h3>
+        <p class="text-[10px] text-blue-500 font-medium">Join for Daily Gift Codes</p>
+    </div>
+</a>
+
+
+
+
+<a href="#" onclick="switchTab('like')" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 border-t border-gray-100">
+    <div class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
+        <i class="fas fa-heart text-pink-600 text-xs"></i>
+    </div>
+    <div class="flex flex-col">
+        <span class="font-medium text-sm">Like & Earn</span>
+        <span class="text-[10px] text-pink-500 font-medium">Get coins by liking</span>
+    </div>
+</a>
+
+        
+    <a href="#" onclick="switchTab('buy')" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-all">
+    <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+        <i class="fas fa-coins text-yellow-600 text-xs"></i>
+    </div>
+    <div class="flex flex-col">
+        <span class="font-medium text-sm">Buy Points</span>
+        <span class="text-[10px] text-yellow-600 font-medium tracking-wide">Get points instantly</span>
+    </div>
+</a>
+
+    
+    <a href="#" onclick="switchTab('campaign')" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-all">
+    <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+        <i class="fas fa-bullhorn text-red-600 text-xs"></i>
+    </div>
+    <div class="flex flex-col">
+        <span class="font-medium text-sm">Campaigns</span>
+        <span class="text-[10px] text-red-500 font-medium">Promote your channel</span>
+    </div>
+</a>
+
+
+
+<button onclick="showGiftCodeModal()" class="w-full flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-orange-50 border-t border-gray-100 transition-all text-left">
+    <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+        <i class="fas fa-gift text-orange-600 text-xs"></i>
+    </div>
+    
+    <div class="flex flex-col">
+        <span class="font-medium text-sm">Gift Code</span>
+        <span class="text-[10px] text-orange-600 font-medium">Redeem for free coins</span>
+    </div>
+</button>
+
+
+
+    
+
+
+        <a href="privacy.html" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-all">
+    <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+        <i class="fas fa-user-shield text-purple-600 text-sm"></i>
+    </div>
+    <span class="font-medium text-sm">Privacy Policy</span>
+</a>
+      
+        
+        
+        <a href="faq.html" onclick="saveSidebarState()" class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-all">
+    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+        <i class="fas fa-question-circle text-blue-600 text-sm"></i>
+    </div>
+    <span class="font-medium text-sm">Frequently Asked Questions</span>
+</a>
+
+
+
+
+
+
+        
+    <a href="https://github.com/vishukhan/YT-Sub-App-/raw/main/YT-SUB-APP.apk" download class="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-green-50 transition-all border-t">
+    <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+        <i class="fas fa-download text-green-600"></i>
+    </div>
+    <div class="flex flex-col">
+        <span class="font-bold text-sm text-gray-800">Download Official App</span>
+        <span class="text-[10px] text-green-600 font-medium">Fast Direct Download</span>
+    </div>
+</a>
+
+
+
+<button onclick="shareApp()" class="w-full flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-all text-left">
+    <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+        <i class="fas fa-share-nodes text-green-600 text-xs"></i>
+    </div>
+    <div class="flex flex-col">
+        <span class="font-medium text-sm">Invite Friends</span>
+        <span class="text-[10px] text-green-600 font-medium">Share & grow together</span>
+    </div>
+</button>
+
+
+
+
+</div>
+
+
+    <div class="p-4 border-t">
+        <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 bg-gray-100 py-3 rounded-xl text-red-600 font-bold hover:bg-red-600 hover:text-white transition-all">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</div>
+
+
+        <main class="flex-1 p-4 flex flex-col items-center w-full">
+            
+            
+
+            <div id="tab-main" class="tab-content w-full max-w-[360px]">
+                <h2 id="mode-title" class="text-center font-bold mb-4 text-zinc-500 uppercase text-[10px] tracking-widest">Auto Play Mode</h2>
+                <div class="video-box">
+                    <div id="player"></div>
+                    <div id="play-btn" class="play-overlay" onclick="startVideo()">
+                        <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40">
+                            <i class="fas fa-play text-white text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="watch-stats" class="mt-4 grid grid-cols-2 gap-4 text-center">
+                    <div class="bg-white p-4 rounded-3xl border shadow-sm">
+                        <p class="text-[10px] font-bold text-gray-400">SECONDS</p>
+                        <p id="timer" class="text-3xl font-black">60</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-3xl border shadow-sm">
+                        <p class="text-[10px] font-bold text-gray-400">REWARD</p>
+                        <p id="reward-text" class="text-3xl font-black text-green-600">+60</p>
+                    </div>
+                      <div id="banner-ad-container">
+    <span class="text-[10px] text-gray-500">Sponsored Ad</span>
+</div>
+                </div>
+                
+                
+             
+
+
+                <div id="like-area" class="hidden mt-6 space-y-3">
+                    <button onclick="openYoutubeForLike()" class="w-full bg-blue-600 text-white py-4 rounded-3xl font-bold">1. OPEN VIDEO</button>
+                    <button id="verify-btn" onclick="verifyLike()" class="w-full bg-gray-400 text-white py-4 rounded-3xl font-bold opacity-50 cursor-not-allowed" disabled>2. VERIFY (+100 🪙)</button>
+                     <div class="ad-card">
+    <button onclick="showVideoAd()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 rounded-lg text-sm transition-all">
+        🎥 WATCH AD (+200 🪙)
+    </button>
+</div>
+
+                </div>
+            </div>
+            
+
+            <div id="tab-buy" class="tab-content hidden w-full max-w-sm">
+                <div class="bg-white p-6 rounded-3xl border text-center">
+                    <h2 class="text-xl font-black mb-4">Coin Store 🪙</h2>
+                    <div class="bg-blue-50 p-4 rounded-2xl mb-4">
+                        <p class="text-[10px] font-bold text-blue-400 uppercase">Scan to Pay</p>
+                        <img src="payment-qr.png" class="w-32 h-32 mx-auto my-2 border rounded-lg" onerror="this.src='https://via.placeholder.com/150?text=QR+Code'">
+                        <p class="text-sm font-bold text-blue-700">UPI: vishalkhan@fam</p>
+                    </div>
+                    <select id="payAmount" class="w-full p-4 bg-gray-50 rounded-2xl border font-bold mb-3">
+                      <option value="500">500 Coins - ₹9</option>
+                            <option value="1000">1000 Coins - ₹19</option>
+                          //  
+                            <option value="5000">5000 Coins - ₹99</option>
+                          
+                            <option value="10000">10000 Coins - ₹199</option>
+                            <option value="50000">50000 Coins - ₹999</option> 
+                            <option value="100000">100000 Coins - ₹1999</option>
+                          //  <option value="150000">150000 Coins - ₹2999</option>
+                            <option value="200000">200000 Coins - ₹3999</option>
+                            <option value="500000">500000 Coins - ₹9999</option>
+                            <option value="1000000">1000000 Coins - ₹19999</option>
+                    </select>
+                    <input id="payId" type="text" placeholder="Transaction ID (12 Digits)" class="w-full p-4 bg-gray-50 rounded-2xl border mb-3 outline-none">
+                    <button onclick="submitOrder()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Submit Payment</button>
+                    
+                </div>
+                
+                  <div id="banner-ad-container">
+    <span class="text-[10px] text-gray-500">Sponsored Ad</span>
+</div>
+            </div>
+            
+            <div id="tab-campaign" class="tab-content hidden w-full max-w-sm">
+                <div class="bg-white p-6 rounded-3xl border mb-6">
+                    <h2 class="text-xl font-black mb-4">New Campaign</h2>
+                    <input id="campUrl" type="text" placeholder="Paste YouTube Video Link" class="w-full p-4 bg-gray-50 rounded-2xl border mb-4">
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <select id="campType" onchange="updatePrice()" class="p-4 bg-gray-50 rounded-2xl border font-bold"><option value="view">Views</option><option value="like">Likes</option></select>
+                        <select id="campQty" onchange="updatePrice()" class="p-4 bg-gray-50 rounded-2xl border font-bold">
+                          <option value="100">100</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+                        <option value="5000">5000</option>
+                        
+                        <option value="10000">10000</option>
+                        <option value="50000">50000</option>
+                        <option value="100000">100000</option>
+                       <option value="1000000">1000000</option>
+                        </select>
+                    </div>
+                   
+                    <button id="campBtn" onclick="addCampaign()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold">ADD (200 🪙)</button>
+                </div>
+                
+                <div id="my-campaigns-list" class="space-y-3"></div>
+            </div>
+
+            <div id="tab-admin" class="tab-content hidden w-full max-w-sm">
+                <div class="bg-zinc-900 text-white p-6 rounded-3xl">
+                    <h2 class="text-xl font-black mb-4 text-red-500">Admin Panel</h2>
+                    <div id="admin-orders-list" class="space-y-4"></div>
+                </div>
+            </div>
+        </main>
+
+        <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t flex justify-around p-2 z-50">
+            <button id="btn-view" onclick="switchTab('view')" class="nav-btn active flex flex-col items-center p-2"><i class="fas fa-play text-lg"></i><span class="text-[10px] mt-1 font-bold">WATCH</span></button>
+            <button id="btn-like" onclick="switchTab('like')" class="nav-btn flex flex-col items-center p-2"><i class="fas fa-heart text-lg"></i><span class="text-[10px] mt-1 font-bold">LIKE</span></button>
+            <button id="btn-buy" onclick="switchTab('buy')" class="nav-btn flex flex-col items-center p-2"><i class="fas fa-shopping-cart text-lg"></i><span class="text-[10px] mt-1 font-bold">BUY</span></button>
+            <button id="btn-campaign" onclick="switchTab('campaign')" class="nav-btn flex flex-col items-center p-2"><i class="fas fa-bullhorn text-lg"></i><span class="text-[10px] mt-1 font-bold">CAMP</span></button>
+            <button id="btn-admin" onclick="switchTab('admin')" class="hidden nav-btn flex flex-col items-center p-2"><i class="fas fa-user-shield text-lg"></i><span class="text-[10px] mt-1 font-bold">ADMIN</span></button>
+        </nav>
+    </div>
+    <div id="giftModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-xs rounded-3xl p-6 shadow-2xl scale-in">
+        <h2 class="text-xl font-black mb-2 text-center">🎁 Redeem Gift</h2>
+        <p class="text-gray-500 text-[10px] text-center mb-4 uppercase font-bold tracking-widest">Enter your promo code</p>
+        
+        <input id="giftInput" type="text" placeholder="Example: FREE100" class="w-full p-4 bg-gray-100 rounded-2xl border-2 border-transparent focus:border-orange-500 outline-none text-center font-bold mb-4 uppercase">
+        
+        <div class="flex gap-2">
+            <button onclick="closeGiftModal()" class="flex-1 py-3 text-gray-400 font-bold text-sm">Cancel</button>
+            <button onclick="redeemGiftCode()" class="flex-[2] bg-orange-600 text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-orange-200">Redeem Now</button>
+        </div>
+    </div>
+</div>
+     <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs, query, where, limit, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDETvfZ00aSzxOj8oAjqHxHSbnbINCjy4g",
+            authDomain: "yt-sub-app-b76a9.firebaseapp.com",
+            projectId: "yt-sub-app-b76a9",
+            storageBucket: "yt-sub-app-b76a9.firebasestorage.app",
+            messagingSenderId: "293476420",
+            appId: "1:293476420:web:a5111a8a6785dae4344411"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const ADMIN_EMAIL = "vk8976914@gmail.com";
+        let player, timerId = null, timeLeft = 60, currentUID = null, currentMode = 'view';
+        let currentVideoId = '', currentCampaignId = null;
+
+        // --- AUTH LOGIC ---
+        window.handleAuth = async () => {
+            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
+            try { await signInWithEmailAndPassword(auth, e, p); } catch(err) { alert(err.message); }
+        };
+
+        window.signupUser = async () => {
+            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
+            try { 
+                const res = await createUserWithEmailAndPassword(auth, e, p);
+                await setDoc(doc(db, "users", res.user.uid), { Coins: 100, email: e });
+                alert("Welcome! 100 Bonus Coins Added.");
+            } catch(err) { alert(err.message); }
+        };
+
+        window.handleLogout = async () => { if(confirm("Logout?")) { await signOut(auth); location.reload(); } };
+
+        // --- HELPER: Extract ID ---
+        function extractId(url) {
+            if(!url) return 'oWAHV36EcDI';
+            const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?v=)|(shorts\/)|(\?v=))([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[9].trim().length === 11) ? match[9].trim() : 'oWAHV36EcDI';
+        }
+
+        // --- VIDEO LOADING LOGIC ---
+        async function loadNextVideo() {
+            window.stopCounter();
+            timeLeft = 60;
+            document.getElementById('timer').innerText = "60";
+            document.getElementById('play-btn').classList.remove('hidden');
+            
+            // Reset Verify Button
+            const btn = document.getElementById('verify-btn');
+            btn.disabled = true; 
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.classList.remove('bg-green-600');
+
+            try {
+                // Fetch video based on mode (view or like)
+                const q = query(collection(db, "campaigns"), where("status", "==", "active"), where("type", "==", currentMode), limit(10));
+                const snap = await getDocs(q);
+                let pool = []; snap.forEach(d => pool.push({id: d.id, ...d.data()}));
+                
+                if(pool.length > 0) {
+                    const selected = pool[Math.floor(Math.random() * pool.length)];
+                    currentVideoId = extractId(selected.url);
+                    currentCampaignId = selected.id;
+                } else {
+                    currentVideoId = 'oWAHV36EcDI'; // Fallback
+                    currentCampaignId = null;
+                }
+                
+                // Update Player
+                if(player && player.loadVideoById) {
+                    player.loadVideoById(currentVideoId);
+                }
+            } catch(e) { console.error("Error loading video:", e); }
+        }
+
+        // --- TIMER LOGIC ---
+        function startCounter() {
+            if(timerId || currentMode === 'like') return; 
+            timerId = setInterval(async () => {
+                timeLeft--;
+                document.getElementById('timer').innerText = Math.max(0, timeLeft);
+                
+                if(timeLeft <= 0) {
+                    window.stopCounter();
+                    await updateDoc(doc(db, "users", currentUID), { Coins: increment(60) });
+                    if(currentCampaignId) await updateDoc(doc(db, "campaigns", currentCampaignId), { count: increment(1) });
+                    refreshCoins();
+                    alert("Success! +60 Coins");
+                    loadNextVideo();
+                }
+            }, 1000);
+        }
+
+        window.stopCounter = () => { clearInterval(timerId); timerId = null; };
+        window.startVideo = () => { player.playVideo(); document.getElementById('play-btn').classList.add('hidden'); };
+
+        // --- UPDATED LIKE LOGIC ---
+        window.openYoutubeForLike = () => {
+    if(!currentVideoId) return alert("Video load nahi hui!");
+
+    // 1. Pehle YouTube App kholne ki koshish karein (Android/iOS Intent)
+    const appUrl = `vnd.youtube:${currentVideoId}`;
+    const webUrl = `https://www.youtube.com/watch?v=${currentVideoId}`;
+
+    // Ek temporary link banakar click karwayenge
+    const a = document.createElement('a');
+    a.href = appUrl;
+    
+    // Check karein agar app khul sakti hai, nahi toh browser par fallback karein
+    window.location.href = appUrl;
+
+    // 500ms baad check karein, agar page nahi badla toh browser mein kholein
+    setTimeout(() => {
+        if (!document.hidden) {
+            window.open(webUrl, '_blank');
+        }
+    }, 500);
+
+    // Verify button activate karein
+    const btn = document.getElementById('verify-btn');
+    btn.disabled = false; 
+    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+    btn.classList.add('bg-green-600');
+};
+
+// --- VERIFY LIKE LOGIC ---
+window.verifyLike = async () => {
+    const btn = document.getElementById('verify-btn');
+    
+    // Check agar button disabled to nahi (security check)
+    if(btn.disabled) return;
+
+    try {
+        // 1. User ko coins dein (100 coins reward)
+        await updateDoc(doc(db, "users", currentUID), { 
+            Coins: increment(100) 
+        });
+
+        // 2. Campaign ka count badhayein
+        if(currentCampaignId) {
+            await updateDoc(doc(db, "campaigns", currentCampaignId), { 
+                count: increment(1) 
+            });
+        }
+
+        // 3. UI Update karein
+        refreshCoins();
+        alert("Verification Successful! +100 🪙");
+
+        // 4. Agli video load karein
+        loadNextVideo();
+
+    } catch (error) {
+        console.error("Verification error:", error);
+        alert("Kuch error aayi, phir se koshish karein.");
+    }
+};
+
+        // --- TAB SWITCHING ---
+        window.switchTab = (t) => {
+            currentMode = t;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            const contentId = (t === 'view' || t === 'like') ? 'tab-main' : 'tab-' + t;
+            document.getElementById(contentId).classList.remove('hidden');
+            document.getElementById('btn-' + t).classList.add('active');
+
+            if(t === 'view' || t === 'like') {
+                document.getElementById('mode-title').innerText = t === 'view' ? "Auto Play Mode" : "Like Video Mode";
+                document.getElementById('like-area').classList.toggle('hidden', t !== 'like');
+                document.getElementById('watch-stats').classList.toggle('hidden', t === 'like');
+                loadNextVideo();
+            } else if (t === 'campaign') window.showMyCampaigns();
+            else if (t === 'admin') window.loadAdminOrders();
+            
+            window.stopCounter();
+        };
+
+        // --- CORE FUNCTIONS (COINS, CAMPAIGNS, ADMIN) ---
+        async function refreshCoins() { 
+            const snap = await getDoc(doc(db, "users", currentUID)); 
+            if(snap.exists()) document.getElementById('coinDisplay').innerText = snap.data().Coins; 
+        }
+
+        window.updatePrice = () => {
+            const type = document.getElementById('campType').value;
+            const qty = parseInt(document.getElementById('campQty').value);
+            const cost = (type === 'view' ? 2 : 5) * qty;
+            document.getElementById('campBtn').innerText = `ADD (${cost} 🪙)`;
+            return cost;
+        };
+
+        window.addCampaign = async () => {
+            const url = document.getElementById('campUrl').value;
+            const type = document.getElementById('campType').value;
+            const qty = parseInt(document.getElementById('campQty').value);
+            if(!url.includes('youtu')) return alert("Invalid Link");
+            const cost = window.updatePrice();
+            const userSnap = await getDoc(doc(db, "users", currentUID));
+            if(userSnap.data().Coins < cost) return alert("Insufficient Coins!");
+            await updateDoc(doc(db, "users", currentUID), { Coins: increment(-cost) });
+            await addDoc(collection(db, "campaigns"), { userId: currentUID, url, type, qty, count: 0, status: "active", createdAt: new Date() });
+            alert("Campaign Added!"); refreshCoins(); window.showMyCampaigns();
+        };
+
+        window.showMyCampaigns = async () => {
+            const list = document.getElementById('my-campaigns-list');
+            list.innerHTML = "Loading...";
+            const q = query(collection(db, "campaigns"), where("userId", "==", currentUID));
+            const snap = await getDocs(q);
+            let h = "";
+            snap.forEach(d => {
+                const c = d.data();
+                const prog = Math.round((c.count / c.qty) * 100);
+                h += `<div class="bg-white p-4 rounded-2xl border mb-2"><div class="flex justify-between text-[10px] font-bold uppercase mb-1"><span>${c.type}</span> <span>${prog}%</span></div><div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-red-600" style="width:${prog}%"></div></div><p class="text-xs font-black mt-1">${c.count} / ${c.qty}</p></div>`;
+            });
+            list.innerHTML = h || "No active campaigns.";
+        };
+
+        window.submitOrder = async () => {
+            const amt = parseInt(document.getElementById('payAmount').value);
+            const tid = document.getElementById('payId').value;
+            if(tid.length < 10) return alert("Enter valid Transaction ID");
+            await addDoc(collection(db, "orders"), { userId: currentUID, email: auth.currentUser.email, coins: amt, txnId: tid, status: "pending", time: new Date() });
+            alert("Order Submitted!"); document.getElementById('payId').value = "";
+        };
+
+        onAuthStateChanged(auth, u => {
+            if(u) {
+                currentUID = u.uid;
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.remove('hidden');
+                if(u.email === ADMIN_EMAIL) document.getElementById('btn-admin').classList.remove('hidden');
+                refreshCoins(); loadNextVideo();
+            } else {
+                document.getElementById('auth-screen').classList.remove('hidden');
+            }
+        });
+
+
+
+         // --- ADMIN LOGIC ---
+        window.loadAdminOrders = async () => {
+            const list = document.getElementById('admin-orders-list');
+            const q = query(collection(db, "orders"), where("status", "==", "pending"));
+            const snap = await getDocs(q);
+            let h = "";
+            snap.forEach(d => {
+                const o = d.data();
+                h += `<div class="bg-zinc-800 p-4 rounded-2xl">
+                    <p class="text-[10px] opacity-50">${o.email}</p>
+                    <p class="text-yellow-500 font-bold">${o.txnId}</p>
+                    <p class="text-xl">${o.coins} 🪙</p>
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="approveOrder('${d.id}', '${o.userId}', ${o.coins})" class="bg-green-600 flex-1 py-2 rounded-lg text-xs">APPROVE</button>
+                        <button onclick="rejectOrder('${d.id}')" class="bg-red-600 flex-1 py-2 rounded-lg text-xs">REJECT</button>
+                    </div>
+                </div>`;
+            });
+            list.innerHTML = h || "No pending orders.";
+        };
+
+        window.approveOrder = async (oid, uid, amt) => {
+            await updateDoc(doc(db, "users", uid), { Coins: increment(amt) });
+            await updateDoc(doc(db, "orders", oid), { status: "approved" });
+            alert("Order Approved!"); window.loadAdminOrders(); refreshCoins();
+        };
+
+        window.rejectOrder = async (oid) => {
+            await updateDoc(doc(db, "orders", oid), { status: "rejected" });
+            alert("Order Rejected!"); window.loadAdminOrders();
+        };
+        
+        
+        window.toggleSidebar = () => {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar overlay');
+    
+    if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+    } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+    }
+    
+    // Email update in sidebar
+    if(auth.currentUser) {
+        document.getElementById('userEmailSidebar').innerText = auth.currentUser.email;
+    }
+};
+
+// Jab koi tab switch kare toh sidebar band ho jaye
+const originalSwitchTab = window.switchTab;
+window.switchTab = (t) => {
+    originalSwitchTab(t);
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar.classList.contains('-translate-x-full')) {
+        toggleSidebar();
+    }
+};
+
+
+
+        // YT API Init
+        window.onYouTubeIframeAPIReady = () => {
+            player = new YT.Player('player', { 
+                height: '100%', width: '100%', videoId: 'oWAHV36EcDI',
+                playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'mute': 1 },
+                events: { 'onStateChange': (e) => { if(e.data == 1) startCounter(); else stopCounter(); } }
+            });
+        };
+
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(tag);
+        
+        
+        
+        //   app download btn 
+        
+        
+        
+    
+let deferredPrompt;
+
+// 1. Browser se install prompt capture karna
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    console.log("Install prompt ready");
+});
+
+// 2. Button click hone par kya hoga
+function handleDownload() {
+    if (deferredPrompt) {
+        // Agar PWA ready hai toh browser ka popup dikhao
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted');
+            }
+            deferredPrompt = null;
+        });
+    } else {
+        // Agar PWA ready nahi hai toh ye alert 100% kaam karega
+        alert("App Download/Install karne ke liye:\n\n1. Chrome Menu (3 dots ⋮) par click karein.\n2. 'Install App' ya 'Add to Home Screen' chunein.\n\nIsse app hamesha ke liye aapke phone mein aa jayegi!");
+    }
+}
+// Service Worker Register karna
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service Worker Registered!', reg))
+            .catch(err => console.log('Service Worker Error!', err));
+    });
+}
+
+        //privacy policy's 
+
+        
+        
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('sidebar') === 'open') {
+        // Yahan apne sidebar ko kholne wala function call karein
+        // Agar aapke sidebar ki id 'sidebar' hai, toh:
+        document.getElementById('sidebar').classList.remove('-translate-x-full');
+        // Agar overlay/dark background hai toh use bhi dikhayein
+        document.getElementById('overlay').classList.remove('hidden');
+    }
+}
+        
+
+        function togglePrivacyModal() {
+    const modal = document.getElementById('privacyModal');
+    if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Screen scroll lock
+    } else {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto'; // Screen scroll unlock
+    }
+}
+
+
+    
+// Sidebar ko yaad rakhne ke liye function
+function saveSidebarState() {
+    localStorage.setItem('openSidebar', 'true');
+}
+
+// Page load hote hi check karein
+window.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('openSidebar') === 'true') {
+        const sidebar = document.getElementById('sidebar'); // Apni Sidebar ID check karein
+        const overlay = document.getElementById('overlay');
+        
+        if(sidebar) sidebar.classList.remove('-translate-x-full');
+        if(overlay) overlay.classList.remove('hidden');
+
+        // Khulne ke baad nishani mita dein
+        localStorage.removeItem('openSidebar');
+    }
+});
+
+
+
+/////////gift code  
+
+
+
+// 1. Modal band karne ka function (Blur hatane ke liye)
+window.closeGiftModal = () => {
+    const modal = document.getElementById('giftModal');
+    if (modal) {
+        modal.classList.add('hidden'); // Modal hide hote hi blur gayab ho jayega
+    }
+};
+
+// 2. Gift Code kholne ka function
+window.showGiftCodeModal = () => {
+    const modal = document.getElementById('giftModal');
+    if (modal) modal.classList.remove('hidden');
+    // Sidebar ko band karne ka logic
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) sidebar.classList.add('-translate-x-full');
+};
+
+// 3. Main Redeem Logic (Duplicate Check + Fix)
+window.redeemGiftCode = async () => {
+    const codeInput = document.getElementById('giftInput');
+    const code = codeInput.value.trim().toUpperCase();
+
+    if (!code) return alert("Please enter the code first!");
+
+    try {
+        const userRef = doc(db, "users", currentUID);
+        const codeRef = doc(db, "giftCodes", code);
+        
+        const [codeSnap, userSnap] = await Promise.all([
+            getDoc(codeRef),
+            getDoc(userRef)
+        ]);
+
+        // A. Check karein code valid hai ya nahi
+        if (!codeSnap.exists() || codeSnap.data().status !== "active") {
+            return alert("This code is incorrect or has expired!");
+        }
+
+        // B. FIX: Check karein user ne pehle use toh nahi kiya
+        const redeemedCodes = userSnap.data().redeemedCodes || [];
+        if (redeemedCodes.includes(code)) {
+            return alert("You've already used this code once!");
+        }
+
+        const rewardAmount = codeSnap.data().coins;
+
+        // C. Update Database (Coins + List mein code add karein)
+        await updateDoc(userRef, {
+            Coins: increment(rewardAmount),
+            redeemedCodes: arrayUnion(code) // Ye repeat hone se rokega
+        });
+
+        // D. Success Alert
+        alert(`Congratulations! ${rewardAmount} 🪙 added on your account.`);
+
+        // E. BLUR FIX: Alert ke baad modal band karein
+        window.closeGiftModal();
+        codeInput.value = "";
+        
+        // Coins refresh karein
+        if(typeof refreshCoins === 'function') refreshCoins();
+
+    } catch (err) {
+        console.error("Redeem Error:", err);
+        alert("Server error! Phir se try karein.");
+    }
+};
+
+                //////Telegram 
+
+              window.openTelegram = () => {
+    window.location.href = "tg://resolve?domain=ytsubapp";
+};
+
+
+
+              /////share 
+              window.shareApp = async () => {
+    try {
+        await navigator.share({
+            title: 'YT-SUB-APP', // Title chota rakhein
+            text: 'Hey! Join YT-SUB-APP to grow your YouTube channel for free.',
+            url: 'https://vishukhan.github.io/YT-Sub-App-/' // Page ka main link dein, APK ka nahi
+        });
+    } catch (err) {
+        console.log('Error:', err);
+    }
+};
+
+
+
+// SDK error hatane ke liye
+window.showVideoAd = () => {
+    // Agar builder ki native ad ready hai
+    if (window.JSInterface && window.JSInterface.showInterstitialAd) {
+        window.JSInterface.showInterstitialAd(); 
+    } else {
+        // Testing mode agar builder link nahi hua
+        console.log("Ad SDK loading...");
+        alert("Watching Ad... Please wait 5 seconds.");
+        setTimeout(async () => {
+            await updateDoc(doc(db, "users", currentUID), { Coins: increment(200) });
+            refreshCoins();
+            alert("200 Coins Added! ✅");
+        }, 5000);
+    }
+};
+
+
+
+//////ad count
+
+
+
+let adCount = localStorage.getItem('dailyAdCount') || 0;
+let lastAdDate = localStorage.getItem('lastAdDate');
+let today = new Date().toDateString();
+
+// Agar din badal gaya hai toh count reset karein
+if (lastAdDate !== today) {
+    adCount = 0;
+    localStorage.setItem('dailyAdCount', 0);
+    localStorage.setItem('lastAdDate', today);
+}
+
+function watchAdClicked() {
+    if (adCount >= 10) {
+        alert("Aaj ki limit khatam! Kal wapas aana.");
+        return;
+    }
+    
+    // Yahan aapka AdMob show logic aayega
+    showVideoAd(); 
+    
+    // Ad khatam hone par count badhayein
+    adCount++;
+    localStorage.setItem('dailyAdCount', adCount);
+}
+
+
+
+
+    </script>
+        
+
+</body>
+    </html>
