@@ -329,7 +329,7 @@ body {
                     <button onclick="openYoutubeForLike()" class="w-full bg-blue-600 text-white py-4 rounded-3xl font-bold">1. OPEN VIDEO</button>
                     <button id="verify-btn" onclick="verifyLike()" class="w-full bg-gray-400 text-white py-4 rounded-3xl font-bold opacity-50 cursor-not-allowed" disabled>2. VERIFY (+100 🪙)</button>
                      <div class="ad-card">
-    <button onclick="showVideoAd()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 rounded-lg text-sm transition-all">
+    <button href="https://developdomicile.com/rmqwmunact?key=99ec060dc19a767acb0f69d8c489f633" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 rounded-lg text-sm transition-all">
         🎥 WATCH AD (+200 🪙)
     </button>
 </div>
@@ -935,6 +935,53 @@ window.redeemGiftCode = async () => {
 
 
 
+// SDK error hatane ke liye
+window.showVideoAd = () => {
+    // Agar builder ki native ad ready hai
+    if (window.JSInterface && window.JSInterface.showInterstitialAd) {
+        window.JSInterface.showInterstitialAd(); 
+    } else {
+        // Testing mode agar builder link nahi hua
+        console.log("Ad SDK loading...");
+        alert("Watching Ad... Please wait 5 seconds.");
+        setTimeout(async () => {
+            await updateDoc(doc(db, "users", currentUID), { Coins: increment(200) });
+            refreshCoins();
+            alert("200 Coins Added! ✅");
+        }, 5000);
+    }
+};
+
+
+
+//////ad count
+
+
+
+let adCount = localStorage.getItem('dailyAdCount') || 0;
+let lastAdDate = localStorage.getItem('lastAdDate');
+let today = new Date().toDateString();
+
+// Agar din badal gaya hai toh count reset karein
+if (lastAdDate !== today) {
+    adCount = 0;
+    localStorage.setItem('dailyAdCount', 0);
+    localStorage.setItem('lastAdDate', today);
+}
+
+function watchAdClicked() {
+    if (adCount >= 10) {
+        alert("Aaj ki limit khatam! Kal wapas aana.");
+        return;
+    }
+    
+    // Yahan aapka AdMob show logic aayega
+    showVideoAd(); 
+    
+    // Ad khatam hone par count badhayein
+    adCount++;
+    localStorage.setItem('dailyAdCount', adCount);
+              }
 
 
 
