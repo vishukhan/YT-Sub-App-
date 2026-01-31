@@ -305,9 +305,7 @@ body {
                         <p class="text-[10px] font-bold text-gray-400">REWARD</p>
                         <p id="reward-text" class="text-3xl font-black text-green-600">+60</p>
                     </div>
-                      <div id="banner-ad-container">
-    <span class="text-[10px] text-gray-500">Sponsored Ad</span>
-</div>
+                      
                 </div>
                 
                 
@@ -354,9 +352,7 @@ body {
                     
                 </div>
                 
-                  <div id="banner-ad-container">
-    <span class="text-[10px] text-gray-500">Sponsored Ad</span>
-</div>
+                  
             </div>
             
             <div id="tab-campaign" class="tab-content hidden w-full max-w-sm">
@@ -413,9 +409,7 @@ body {
         </div>
     </div>
 </div>
-
-
-             <div id="container-973d756feb11a2a23c7104e1005dd95b"></div>
+    <div id="container-973d756feb11a2a23c7104e1005dd95b"></div>
      <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -926,53 +920,6 @@ window.redeemGiftCode = async () => {
 
 
 
-// SDK error hatane ke liye
-window.showVideoAd = () => {
-    // Agar builder ki native ad ready hai
-    if (window.JSInterface && window.JSInterface.showInterstitialAd) {
-        window.JSInterface.showInterstitialAd(); 
-    } else {
-        // Testing mode agar builder link nahi hua
-        console.log("Ad SDK loading...");
-        alert("Watching Ad... Please wait 5 seconds.");
-        setTimeout(async () => {
-            await updateDoc(doc(db, "users", currentUID), { Coins: increment(200) });
-            refreshCoins();
-            alert("200 Coins Added! ✅");
-        }, 5000);
-    }
-};
-
-
-
-//////ad count
-
-
-
-let adCount = localStorage.getItem('dailyAdCount') || 0;
-let lastAdDate = localStorage.getItem('lastAdDate');
-let today = new Date().toDateString();
-
-// Agar din badal gaya hai toh count reset karein
-if (lastAdDate !== today) {
-    adCount = 0;
-    localStorage.setItem('dailyAdCount', 0);
-    localStorage.setItem('lastAdDate', today);
-}
-
-function watchAdClicked() {
-    if (adCount >= 10) {
-        alert("Aaj ki limit khatam! Kal wapas aana.");
-        return;
-    }
-    
-    // Yahan aapka AdMob show logic aayega
-    showVideoAd(); 
-    
-    // Ad khatam hone par count badhayein
-    adCount++;
-    localStorage.setItem('dailyAdCount', adCount);
-}
 
 
 
