@@ -921,16 +921,30 @@ window.redeemGiftCode = async () => {
 
               /////share 
             window.shareApp = async () => {
+    const shareData = {
+        title: 'YT-SUB-APP',
+        text: 'Hey! Join YT-SUB-APP to grow your YouTube channel for free.',
+        url: 'https://vishukhan.github.io/YT-Sub-App-/'
+    };
+
+    const fullMessage = encodeURIComponent(shareData.text + " " + shareData.url);
+
     try {
-        await navigator.share({
-            title: 'YT-SUB-APP', // Title chota rakhein
-            text: 'Hey! Join YT-SUB-APP to grow your YouTube channel for free.',
-            url: 'https://vishukhan.github.io/YT-Sub-App-/' // Page ka main link dein, APK ka nahi
-        });
+        // 1. Sabse pehle Browser ki Default Share Sheet try karein
+        if (navigator.share) {
+            await navigator.share(shareData);
+        } else {
+            throw new Error('Web Share not supported');
+        }
     } catch (err) {
-        console.log('Error:', err);
+        // 2. Agar fail hua, toh Android Universal Intent trigger karein
+        // Ye wahi link hai jo aapke Smali code modification ke baad 'Intent' open karega
+        const intentUrl = `intent:#Intent;action=android.intent.action.SEND;type=text/plain;S.android.intent.extra.TEXT=${fullMessage};end`;
+        
+        window.location.href = intentUrl;
     }
 };
+
 
 
 
