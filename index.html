@@ -920,16 +920,22 @@ window.redeemGiftCode = async () => {
 
 
               /////share 
-            window.shareApp = async () => {
-    try {
-        await navigator.share({
-            title: 'YT-SUB-APP', // Title chota rakhein
-            text: 'Hey! Join YT-SUB-APP to grow your YouTube channel for free.',
-            url: 'https://vishukhan.github.io/YT-Sub-App-/' // Page ka main link dein, APK ka nahi
-        });
-    } catch (err) {
-        console.log('Error:', err);
-    }
+            window.shareApp = () => {
+    const text = "Hey! Join YT-SUB-APP to grow your YouTube channel for free.";
+    const url = "https://vishukhan.github.io/YT-Sub-App-/";
+    const fullMessage = encodeURIComponent(text + " " + url);
+
+    // Ye links 'tg://' ya 'whatsapp://' ki tarah error nahi denge
+    // Kyunki ye 'https://' se shuru hote hain
+    const shareOptions = {
+        whatsapp: `https://api.whatsapp.com/send?text=${fullMessage}`,
+        telegram: `https://t.me/share/url?url=${url}&text=${encodeURIComponent(text)}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`
+    };
+
+    // Agar navigator.share kaam nahi kar raha (jo ki aapke app mein nahi kar raha)
+    // Toh hum user ko seedha WhatsApp par bhej denge (Ya aap pichla menu use kar sakte hain)
+    window.open(shareOptions.whatsapp, '_blank');
 };
 
 
