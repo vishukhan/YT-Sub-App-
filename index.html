@@ -920,12 +920,18 @@ window.redeemGiftCode = async () => {
 
 
               /////share 
-            window.shareApp = () => {
-    const shareText = "Hey! Join YT-SUB-APP: https://vishukhan.github.io/YT-Sub-App-/";
-    
-    // Ye link WebView ko force karta hai Android ki default share sheet kholne ke liye
-    window.location.href = "intent:#Intent;action=android.intent.action.SEND;type=text/plain;S.android.intent.extra.TEXT=" + encodeURIComponent(shareText) + ";end";
+            window.shareApp = async () => {
+    try {
+        await navigator.share({
+            title: 'YT-SUB-APP', // Title chota rakhein
+            text: 'Hey! Join YT-SUB-APP to grow your YouTube channel for free.',
+            url: 'https://vishukhan.github.io/YT-Sub-App-/' // Page ka main link dein, APK ka nahi
+        });
+    } catch (err) {
+        console.log('Error:', err);
+    }
 };
+
 
 
 
